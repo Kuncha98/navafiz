@@ -1,0 +1,15 @@
+# Ignore SQL files
+*.sql
+
+# Ignore asset folders
+nassets/
+assets/
+public-assets/
+
+# Optional (recommended for CI2)
+application/cache/*
+application/logs/*
+
+# OS files
+.DS_Store
+Thumbs.db

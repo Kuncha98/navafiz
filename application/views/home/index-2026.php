@@ -1,0 +1,468 @@
+<!-- Hero section -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="hero-card">
+            <h6 class="mb-3 text-uppercase">WELCOME TO NAVAFIZ</h6>
+            <h1>Where Recruiters Find Professionals <br> & Professionals Find Jobs </h1>
+            <p>
+                Navafiz Management Consultancies, established in 2013, specializes in recruitment services in the
+                U.A.E.
+            </p>
+            <a href="#services" class="btn btn-start">Get Started</a>
+        </div>
+    </div>
+</section>
+
+<!-- Services section -->
+<section class="services-section" id="services">
+    <div class="container position-relative z-1">
+
+        <!-- Section header -->
+        <div class="mb-4">
+            <p class="section-subtitle">A complete workforce platform.</p>
+            <h2 class="section-title">Connect. Hire. Grow.</h2>
+        </div>
+
+        <!--Nav pills -->
+        <ul class="nav nav-pills services-tabs mb-5 flex-column flex-lg-row" id="servicesTab" role="tablist">
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#hire">
+                    <i class="fas fa-credit-card"></i> Hire Talent
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#job">
+                    <i class="fas fa-file-invoice-dollar"></i> Find a Job
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#freelance">
+                    <i class="fas fa-graduation-cap"></i> Freelance Work
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mentor">
+                    <i class="fas fa-briefcase"></i> Become a Mentor
+                </button>
+            </li>
+
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content">
+
+            <!-- Tab 1 -->
+            <div class="tab-pane fade show active" id="hire">
+
+                <div class="service-content-wrapper">
+                    <div class="row align-items-center g-5">
+
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold mb-4">Find Verified Professionals Ready to Work</h3>
+                            <p>
+                                Access a growing network of skilled laborers and qualified professionals across
+                                multiple industries. Whether you need short-term staff or long-term employees,
+                                quickly connect with the right candidates.
+                            </p>
+
+                            <ul class="service-list mt-4">
+                                <li>
+                                    <p>Browse detailed professional profiles with verified skills</p>
+                                </li>
+                                <li>
+                                    <p>Filter candidates by industry, experience, and availability</p>
+                                </li>
+                                <li>
+                                    <p>Post job listings and receive direct applications</p>
+                                </li>
+                                <li>
+                                    <p>Save, shortlist, and manage candidates efficiently</p>
+                                </li>
+                            </ul>
+
+                            <a href="/services/hire-a-talent" class="btn view-btn">Send a request</a>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="service-image-wrapper">
+                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tab 2 -->
+            <div class="tab-pane fade" id="job">
+                <div class="service-content-wrapper">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold mb-4">Discover Career Opportunities That Match Your Skills</h3>
+                            <p>Explore job openings from trusted employers and apply directly through the platform.
+                                Build your professional profile and get noticed by recruiters actively hiring.</p>
+
+                            <ul class="service-list mt-4">
+                                <li>
+                                    <p>Search jobs by category, location, and experience level</p>
+                                </li>
+                                <li>
+                                    <p>Create a professional profile to attract recruiters</p>
+                                </li>
+                                <li>
+                                    <p>Apply instantly to verified job postings</p>
+                                </li>
+                                <li>
+                                    <p>Track applications and manage your career journey</p>
+                                </li>
+                            </ul>
+
+                            <a href="/services/find-a-job" class="btn view-btn">Send a request</a>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="service-image-wrapper">
+                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3 -->
+            <div class="tab-pane fade" id="freelance">
+                <div class="service-content-wrapper">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold mb-4">Find Flexible Assignments & Project-Based Work</h3>
+                            <p>Connect with companies and individuals looking for freelance professionals. Whether
+                                you're a consultant, technician, or specialist, find projects that fit your
+                                schedule.</p>
+
+                            <ul class="service-list mt-4">
+                                <li>
+                                    <p>Discover short-term and project-based assignments</p>
+                                </li>
+                                <li>
+                                    <p>Negotiate terms directly with clients</p>
+                                </li>
+                                <li>
+                                    <p>Build your freelance reputation and client base</p>
+                                </li>
+                            </ul>
+
+                            <a href="/services/become-a-freelancer" class="btn view-btn">Send a request</a>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="service-image-wrapper">
+                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4 -->
+            <div class="tab-pane fade" id="mentor">
+                <div class="service-content-wrapper">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold mb-4">Share Your Expertise & Guide Future Professionals</h3>
+                            <p>Join as a mentor or trainer and support job seekers and professionals in advancing
+                                their careers. Help others grow while expanding your own professional network.</p>
+
+                            <ul class="service-list mt-4">
+                                <li>
+                                    <p>Connect with mentees seeking career guidance</p>
+                                </li>
+                                <li>
+                                    <p>Offer structured training or one-on-one sessions</p>
+                                </li>
+                                <li>
+                                    <p>Build credibility and professional recognition</p>
+                                </li>
+                                <li>
+                                    <p>Build credibility and professional recognition</p>
+                                </li>
+                            </ul>
+
+                            <a href="/services/become-a-mentor" class="btn view-btn">Send a request</a>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="service-image-wrapper">
+                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Process section -->
+<section class="process-section" id="process">
+    <div class="container position-relative z-1">
+        <!-- Section header -->
+        <div class="mb-4">
+            <p class="section-subtitle">A complete workforce platform.</p>
+            <h2 class="section-title">We Are Specialized In</h2>
+        </div>
+
+        <div class="row g-4">
+            <!-- Card 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="process-card text-start">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box me-4">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="mb-0">Corporate</h3>
+                    </div>
+                    <ul class="service-list mt-4">
+                        <li>
+                            <p>Company Formation / Setup</p>
+                        </li>
+                        <li>
+                            <p>PRO & HR Services</p>
+                        </li>
+                        <li>
+                            <p>Documents Attestation Services</p>
+                        </li>
+                        <li>
+                            <p>Sourcing & Procurement Consultant</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="process-card text-start">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box me-4">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="mb-0">Financial</h3>
+                    </div>
+                    <ul class="service-list mt-4">
+                        <li>
+                            <p>TAX</p>
+                        </li>
+                        <li>
+                            <p>Audit and Book Keeping</p>
+                        </li>
+                        <li>
+                            <p>Bank Facilities</p>
+                        </li>
+                        <li>
+                            <p>Corporate Bank Account Opening</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="process-card text-start">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box me-4">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <h3 class="mb-0">Recruitment</h3>
+                    </div>
+                    <ul class="service-list mt-4">
+                        <li>
+                            <p>Overseas & Local Recruitment</p>
+                        </li>
+                        <li>
+                            <p>Blue Collar and White Collar Hiring</p>
+                        </li>
+                        <li>
+                            <p>Providing candidates for all industries from around the world</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured candidates section -->
+<section class="resume-section" id="resume">
+    <div class="container position-relative z-1">
+        <!-- Section header -->
+        <div class="text-center mb-4">
+            <p class="section-subtitle">Featured Candidates</p>
+            <h2 class="section-title">Find Talent From The Featured Ones For Your Job</h2>
+        </div>
+        <div class="row g-4" id="featured-candidates-card">
+            <!-- Job listings will be dynamically inserted here -->
+        </div>
+    </div>
+</section>
+
+<!-- Resume builder section -->
+<section class="resume-section" id="resume">
+    <div class="container position-relative z-1">
+        <div class="row g-5 align-items-center">
+
+            <!-- Image -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="image-wrapper">
+                    <img src="navassets/img/resume-builder/resume-1.jpg" alt="Resume Image 1">
+                    <img src="navassets/img/resume-builder/resume-2.jpg" alt="Resume Image 2">
+                    <img src="navassets/img/resume-builder/resume-3.jpg" alt="Resume Image 3">
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-lg-6">
+                <div class="resume-content">
+                    <!-- Section header -->
+                    <div class="mb-4">
+                        <p class="section-subtitle">Resume Builder</p>
+                        <h2 class="section-title">Build Your Professional Resume With The Help Of Expert</h2>
+                    </div>
+                    <p class="resume-text">
+                        Enhance your career prospects with a standout resume tailored to the U.A.E. and GCC job market.
+                        Our expert resume writers specialize in crafting documents that highlight your skills,
+                        experience, and achievements in a way that resonates with employers across the region. Whether
+                        you're aiming for local or regional opportunities, we'll help you make a strong first
+                        impression.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Contact section -->
+<section class="contact-section" id="contact">
+    <div class="container position-relative z-1">
+        <div class="row g-5">
+
+            <!-- FAQ card -->
+            <div class="col-12 col-lg-6">
+                <!-- Section header -->
+                <div class="mb-4">
+                    <p class="section-subtitle">Faq</p>
+                    <h2 class="section-title">Asked Any Questions</h2>
+                </div>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                How does Navafiz help employers find professionals?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Navafiz allows employers and recruiters to browse verified professional profiles,
+                                    post job listings, and connect directly with qualified candidates. Our platform
+                                    makes it easy to filter by skills, experience, and industry to find the right talent
+                                    quickly.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Is registration required to use the platform?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Yes. Creating an account allows you to access full features such as posting jobs,
+                                    applying for positions, managing applications, and connecting with professionals
+                                    securely.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                How can I apply for jobs on Navafiz?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Job seekers can create a professional profile, upload their details, and apply
+                                    directly to available job listings. Once applied, employers can review your profile
+                                    and contact you for the next steps.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Can freelancers find short-term or project-based work?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Yes. Freelancers can explore assignment-based opportunities and connect with
+                                    businesses looking for short-term or specialized support. You can showcase your
+                                    expertise and get matched with relevant projects.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact card -->
+            <div class="col-12 col-lg-6">
+                <div class="card contact-card">
+                    <!-- Section header -->
+                    <div>
+                        <p class="section-subtitle">Let’s talk</p>
+                        <h2 class="section-title">Get In Touch With us</h2>
+                    </div>
+                    <form class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="email" class="form-label">E-Mail</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone">
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject">
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="3"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-submit">Submit Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

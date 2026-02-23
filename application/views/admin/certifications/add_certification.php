@@ -1,0 +1,94 @@
+
+<style type="text/css">
+  .dropdown-menu{
+    right: auto;
+    min-width: auto;
+  }
+</style>
+
+    <?php $this->load->view('notification/notification-messages');?>
+   
+    <div class="row">
+        <div class="col-12">
+            <form class="form-horizontal" method="post" action="<?=site_url('admin/member_certification/SaveCertification/');?>" enctype="multipart/form-data">
+                <div class="col-md-12 col-sm-12">
+                  <div class="form-group">
+                    <label>Member Name <span class="required">*</span></label>
+                    <input  type="text" name="m_name" id="autouser" value=""  class="form-control" autocomplete="off" />
+                    <input type="hidden" name="user_id" id="userid" value=""  class="form-control" autocomplete="off" />
+                  </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                  <div class="form-group">
+                    <label>Certification Title <span class="required">*</span></label>
+                    <input id="input_title" type="text" name="c_title" value="<?=isset($result['c_title']) ? $result['c_title']:'' ?>"  class="form-control" autocomplete="off" />
+
+                  </div>
+                </div>
+                 <div class="col-md-12 col-sm-12">
+                  <div class="form-group">
+                    <label>Certification Duration <span class="required">*</span></label>
+                    <input id="input_duration" type="text" name="c_duration" value="<?=isset($result['c_duration']) ? $result['c_duration']:'' ?>"  class="form-control" autocomplete="off" />
+                  </div>
+                </div>
+                  <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>Certificate File<span class="">*</span></label>
+                        <input type="file" id="img" name="img"  value="" class="form-control">
+                    </div>
+                  </div>
+                <div class="col-md-12 col-sm-12">
+                  <div class="form-group">
+                    <label>Certification Description <span class="required">*</span></label>
+                    <textarea id="input_description" name="c_description" placeholder="" class="form-control"><?=set_value('c_description',isset($result['c_description']) ? $result['c_description']:'');?></textarea>
+                  </div>
+                </div>
+               
+                <?php if(isset($result['c_id']) && $result['c_id']>0){?>
+                      <input type="hidden" name="c_id" value="<?=$result['c_id'];?>">
+                  <?php }?> 
+                <div class="col-md-12 col-sm-12">
+                    <input type="submit" class="btn btn-primary col-md-12 col-xs-12" value="Save">
+                </div>
+              </form>
+        </div>
+    </div>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<script> 
+    $(document).ready(function(){
+
+     $( "#autouser" ).autocomplete({
+        source: function( request, response ) {
+          // Fetch data
+          $.ajax({
+            url: "<?=base_url()?>admin/member_certification/userList",
+            type: 'post',
+            dataType: "json",
+            data: {
+              search: request.term
+            },
+            success: function( data ) {
+                console.log('ajax complte');
+              response( data );
+            }
+          });
+        },
+        select: function (event, ui) {
+          // Set selection
+          $('#autouser').val(ui.item.label); // display the selected text
+//          $('#name').val(ui.item.label); // display the selected text
+          $('#userid').val(ui.item.value); // save selected id to input
+         
+          return false;
+        }
+      });
+
+    });
+
+
+   
+</script> 
+

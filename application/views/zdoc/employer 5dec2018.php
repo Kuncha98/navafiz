@@ -1,0 +1,361 @@
+<?php $this->load->view('header.php'); ?>
+
+<style>
+.panel-body ul {
+	list-style: none !important;
+}
+</style>
+<body>
+<div class="page category-page">
+  <!--<div id="spinner">
+    <div class="spinner-img"> <img alt="Opportunities Preloader" src="images/loader.gif" />
+      <h2>Please Wait.....</h2>
+    </div>
+  </div>-->
+  <?php $this->load->view('pagetop.php'); ?>
+  <div class="clearfix"></div>
+  <!--<div class="search">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 nopadding">
+          <div class="input-group">
+            <div class="input-group-btn search-panel">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> <span id="search_concept">Filter By</span> <span class="caret"></span> </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">By Company</a></li>
+                <li><a href="#">By Function</a></li>
+                <li><a href="#">By City </a></li>
+                <li><a href="#">By Salary </a></li>
+                <li><a href="#">By Industry</a></li>
+              </ul>
+            </div>
+            <input type="hidden" name="search_param" value="all" id="search_param">
+            <input type="text" class="form-control search-field" name="x" placeholder="Search term...">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button"><span class="fa fa-search"></span></button>
+            </span> </div>
+        </div>
+      </div>
+    </div>
+  </div>-->
+  <section class="job-breadcrumb">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-sm-7 co-xs-12 text-left">
+          <h3>Job History</h3>
+        </div>
+        <div class="col-md-6 col-sm-5 co-xs-12 text-right">
+          <div class="bread">
+            <ol class="breadcrumb">
+              <li><a href="<?=base_url()?>">Home</a> </li>
+              <li class="active">Job History</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="dashboard-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+         <?php $this->load->view('profileleftside.php'); ?>
+          <div class="col-md-8 col-sm-8 col-xs-12">
+            <div class="heading-inner first-heading">
+              <p class="title">Add Employer</p>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 nopadding"> 
+              
+             
+              
+              <div class="profile-edit row boxed box-to-clone education-box">
+                <form class="form-horizontal" method="post" action="javascript:void(0)" id="memberpage">
+                 
+                 <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                      <label>Employer <span class="required">*</span></label>
+                      <input type="text" id="jobemployer" name="jobemployer" placeholder="" class="form-control"/>
+                    </div>
+                  </div>
+                 
+                  <?php /*?><div class="form-group"> 
+                            <div class="input-group date" id="datepicker">
+                                <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> 
+                              <input type="text" class="form-control" name="date"  placeholder="Select Date and Time"/>
+                              
+                            </div>
+                        </div><?php */?>
+                  <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>From <span class="required">*</span></label>
+                   <input type="text" class="form-control" id="datepicker" name="datepicker" value="">
+                </div>
+                  </div>
+               <!--   <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>-->
+                  <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>To <span class="required">*</span></label>
+                   <input type="text" id="datepickerto" name="datepickerto" placeholder="" class="form-control"/>
+                </div>
+                  </div>
+                  
+                  <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                      <label>Detail <span class="required">*</span></label>
+                      <textarea id="jobdescr" name="jobdescr" placeholder="" class="form-control"></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-sm-12">
+                    <button class="btn btn-default pull-right" onClick="saveJob()"> Save <i class="fa fa-angle-right"></i></button>
+                  </div>
+                </form>
+              </div>
+              <br>
+              
+              
+               <div class="profile-edit row boxed box-to-clone education-box">
+              
+              <?
+				$qry= "select * from jb_member_jobs where je_member_id = '".$this->session->userdata('user_id')."'";
+					$rs = mysql_query($qry);
+					while($row = mysql_fetch_array($rs)){
+					?>
+            <!--  <div class="col-md-12"> -->
+                <!--                      <div class="panel panel-default" class="showdetailClass" id="showdetails">
+-->
+                <div class="panel panel-default" id="showjobdetails_<?php echo $row['je_id'] ?>">
+                        <div class="panel-heading panel-heading-gray"> <a href="#showjobdetails_<?php echo $row['je_id'] ?>" class="showjobdetailClass btn btn-white btn-xs pull-right" id="editjobdetails_<?php echo $row['je_id'] ?>"><i class="fa fa-pencil"></i></a><a href="<?=base_url()?>delemployer/<?=$row['je_id']?>" class="btn btn-white btn-xs pull-right" <?php /*?>onClick="removeEmployer(<?php echo $row['je_id'] ?>)"<?php */?>><i class="fa fa-remove"></i></a>  Employer </div>
+                        <div class="panel-body">
+                          <ul class="list-unstyled profile-about">
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">Employer</span> </div>
+                                <div class="col-sm-8"><?php echo $row['je_name'] ?></div>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">From</span> </div>
+                                <div class="col-sm-8"><?php echo $row['je_year'] ?></div>
+                              </div>
+                            </li>
+                             <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">To</span> </div>
+                                <div class="col-sm-8"><?php echo $row['je_toyear'] ?></div>
+                              </div>
+                            </li>
+                            
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">Detail</span> </div>
+                                <div class="col-sm-8"><?php echo $row['je_descr'] ?></div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                <div class="panel panel-default editjobdetailClass" id="maineditjobdetails_<?php echo $row['je_id'] ?>">
+                        <div class="panel-heading panel-heading-gray"> <a href="javascript:void(0);" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>  Employer </div>
+                        <div id="profile-about" class="panel-body">
+                          <div class="form-group has-success" style="display:none;"> <span id="update-success"></span> </div>
+                          <ul class="list-unstyled profile-about">
+                            <?php // echo form_open('profile/editprofile'); ?>
+                            <li>
+                              <div class="row">
+                                <div class="col-lg-4"><span class="text-muted">Employer</span> </div>
+                               <div class="col-lg-8">
+                                <input type="text" name="employer_<?php echo $row['je_id'] ?>" id="employer_<?php echo $row['je_id'] ?>" value="<?php echo $row['je_name'] ?>">
+
+                            <span id="emailerrror"></span> </div>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">From</span> </div>
+                                <div class="col-sm-8">
+                                
+                                
+                                  <input type="text" name="jobyear_<?php echo $row['je_id'] ?>" id="jobyear_<?php echo $row['je_id'] ?>" value="<?php echo $row['je_year'] ?>">
+                                </div>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">To</span> </div>
+                                <div class="col-sm-8">
+                                
+                                
+                                  <input type="text" name="jobtoyear_<?php echo $row['je_id'] ?>" id="jobtoyear_<?php echo $row['je_id'] ?>" value="<?php echo $row['je_toyear'] ?>">
+                                </div>
+                              </div>
+                            </li>
+                            
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4"><span class="text-muted">Detail</span> </div>
+                                <div class="col-sm-8">
+                                   <textarea class="form-control" id="jobdescr_<?php echo $row['je_id'] ?>" name="jobdescr_<?php echo $row['je_id'] ?>"><?php echo $row['je_descr'] ?></textarea>
+                                 <?php /*?> <input type="text" name="detail_<?php echo $row['me_id'] ?>" id="detail_<?php echo $row['me_id'] ?>" value="<?php echo $row['me_descr'] ?>"><?php */?>
+                                </div>
+                              </div>
+                            </li>
+                            <li>
+                              <div class="row">
+                                <div class="col-sm-4" ><span class="text-muted"></span> </div>
+                                <div class="col-sm-8">
+                                  <input type="submit" class="btn btn-primary" name="editprofileinfo" id="updateAbout" value="Update" onClick="updateJobs(<?php echo $row['je_id'] ?>)"  >
+                                </div>
+                              </div>
+                            </li>
+                            <?php //echo form_close(); ?>
+                          </ul>
+                        </div>
+                      </div>
+            <!--  </div>-->
+              <?
+					}
+		 ?>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+   <?php $this->load->view('footer.php'); ?>
+  
+  <?php $this->load->view('footerbottom.php'); ?>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+<!--/*<script>
+	$(document).ready(function(){
+		var date_input=$('input[name="date"]'); //our date input has the name "date"
+		var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+		date_input.datepicker({
+			format: 'mm/dd/yyyy',
+			container: container,
+			todayHighlight: true,
+			autoclose: true,
+		})
+	})
+</script>*/-->
+  <script>
+  $(document).ready(function(){
+
+	$('#datepicker').datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true
+	});
+
+	$('#datepickerto').datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true
+});	
+
+
+    $(".editdetailClass").hide();
+	 $(".editjobdetailClass").hide();
+	 $(".maineditdetailClass").hide();
+	
+	
+
+});
+  
+  
+            $('.add-box').on('click', function(e) {
+            e.preventDefault();
+            var newElem = $(this).parent().find('.box-to-clone:first').clone();
+            newElem.find('input').val('');
+            newElem.prependTo($(this).parent()).show();
+            var height = $(this).prev('.box-to-clone').outerHeight(true);
+            $("html, body").stop().animate({
+                scrollTop: $(this).offset().top - height
+            }, 600);
+        });
+		
+	 
+	 	$(document).on('click', '.showjobdetailClass', function(){
+		
+		data = this.id;
+		ids = data.split("_"); 
+		id = ids[1];
+		
+	$("#showjobdetails_"+id).hide();
+
+	$("#maineditjobdetails_"+id).show();
+	
+	
+$('#jobyear_'+id).datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true
+});
+$('#jobtoyear_'+id).datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true
+});
+
+	
+		
+		
+		
+	
+	});
+	$(document).on('click', '.showdetailClass', function(){
+		
+		data = this.id;
+		ids = data.split("_"); 
+		id = ids[1];
+		
+	$("#showdetails_"+id).hide();
+
+	$("#maineditdetails_"+id).show();
+		$('#year_'+id).datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true
+});
+	
+		
+		
+	
+	});
+
+
+
+function editmstat(val)
+
+{
+
+	document.getElementById('editmstatus').value = val;
+
+}
+	 
+ function removeEmployer(je_id)
+	{
+ 	$("#loading").show();
+	var form_data = {
+			ajax	 		: '1',
+			je_id	: je_id,
+			actioncall  	: 'delemployer'
+		};
+	$.ajax({
+			//url  	: site_url+"deleducation",
+			//url  	: "http://localhost/newnavafiz/delemployer",
+			url  	: "http://navafiz.com/newversion/delemployer",
+			type 	: 'POST',
+			data 	: form_data,
+			success : function(data){
+				//$("#loading").hide();
+					//alert(data);
+			//	$("#loading").hide();
+				//window.location.reload();
+				
+				//$("#showdetails_"+me_id).hide();
+				}
+			});	
+	}         
+          </script> 
+</div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<?php $this->load->view('include/header.php'); ?>
+<?php $session_user_id = $this->session->userdata('user_id');?>
+<link href="<?=base_url()?>assets/frontend/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="<?=base_url()?>assets/frontend/css/jquery.tagsinput.min.css">
+
+        <section class="post-job ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-sm-12 col-xs-12">
+                        <div class="Heading-title-left black small-heading">
+                            <h3>Edit Company</h3>                         
+                        </div>
+                        <div id="modalloading" style="display:none"> <img id="loading-image" src="<?=base_url()?>assets/frontend/images/small.gif" alt="Loading..." /> </div>
+                        <p class="text-success" id="jobsuccesssms"></p>
+                        <br>
+                        <div class="post-job2-panel">
+                        <?php $this->load->view('notification/notification-messages'); ?>
+                    
+                        <form action="<?=base_url('companies/save');?>" class="row" method="post" id="formd" enctype="multipart/form-data">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="hidden" name="action" value="companies">
+                                <div class="form-group">
+                                    <label>Category *</label>
+                                    <select id="cat_id" name="cat_id" class="questions-category form-control" required>
+                                        <?php	
+                                        $cat_results = $this->db->query("SELECT * FROM jb_categories where c_status =1")->result_array();                                      
+                                        foreach ($cat_results as $cat_row){?>
+                                        <option value="<?=$cat_row['c_id']?>">
+                                        <?=$cat_row['c_name']?>
+                                        </option>
+                                        <?php }?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Name *</label>
+                                    <input type="text" placeholder="Enter Name" id="name" name="name" value="<?=$company_detail->co_name;?>" class="form-control" required>
+                                </div>
+                            </div>                                
+                            <div class="clearfix"></div> 
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Mobile</label>
+                                    <input type="text" placeholder="Enter Mobile" id="mobile" name="mobile" value="<?=$company_detail->co_mobile;?>" class="form-control">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                   <input type="text" placeholder="Enter Phone" id="phone" name="phone" value="<?=$company_detail->co_phone;?>" class="form-control">
+                                </div>
+                            </div>
+                             <div class="clearfix"></div>       
+
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                      <input type="text" placeholder="Enter Email" id="email" name="email" value="<?=$company_detail->co_email;?>" class="form-control">
+
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Website</label>
+                                   <input type="text" placeholder="Enter Website" id="website" name="website" value="<?=$company_detail->co_website;?>" class="form-control">
+                                </div>
+                            </div>
+                             <div class="clearfix"></div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Career Page</label>
+                                    <input type="text" placeholder="Enter Career page link" id="website" name="co_career_page" value="<?=$company_detail->co_career_page;?>" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>Fax</label>
+                                      <input type="text" placeholder="Enter Fax" id="fax" name="fax" value="<?=$company_detail->co_fax;?>" class="form-control">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" placeholder="Please Enter City" id="city" name="city" value="<?=$company_detail->city;?>" class="form-control">
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Address *</label>
+                                    <input type="text" placeholder="Enter Address" class="form-control" id="address" value="<?=$company_detail->co_address;?>" name="address" required>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div> 
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Keywords</label>
+                                    <input type="text" id="tags" name="keywords" value="<?=$company_detail->co_tags;?>" class="form-control"   data-role="tagsinput">
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <img src="<?=base_url($company_detail->co_logo);?>"  width="200" />
+                                </div>                                  
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Image</label><span class="Errorclass" id="jobimagesms"></span>
+                                    <input type="file" id="company_logo"  name="company_logo"> 
+                                </div>                                  
+                            </div>
+                            <?php if(in_array($session_user_id, CvReviewTeamList1())){?>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label>Admin Remarks</label>
+                                    <textarea name="admin_remarks" class="form-control"><?=$company_detail->admin_remarks;?></textarea>                                    
+                                </div>
+                            </div>
+                            <?php }?>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <button type="submit" class="btn btn-primary pull-right">Submit <i style="margin-top: 0; font-size: 14px; color: #fff;" class="fa fa-angle-right"></i></button>
+                               <!-- <button type="button" class="btn btn-default pull-right" onClick="postJob()">Post Job <i class="fa fa-angle-right"></i></button>-->
+                            </div>
+                            <input type="hidden" name="post_company_id" value="<?=$company_detail->co_id?>" />
+                        </form>
+                    </div>
+                </div>
+                    
+                </div>
+            </div>
+        </section>
+    
+<?php $this->load->view('include/footer.php'); ?>
+<!-- FOR THIS PAGE ONLY -->
+<script type="text/javascript" src="<?=base_url()?>assets/frontend/js/jquery.tagsinput.min.js"></script>
+<script type="text/javascript">
+    $('#tags').tagsInput({
+        width: 'auto'
+    });
+</script>
+<script type="text/javascript" src="<?=base_url()?>assets/frontend/ckeditor/ckeditor.js"></script> 
+<!-- CK-EDITOR -->
+<!-- <script src="../../../cdn.ckeditor.com/4.5.10/standard/ckeditor.js"></script>-->
+<script type="text/javascript">
+    CKEDITOR.replace('ckeditor.html');
+</script>
+<!-- FOR THIS PAGE ONLY -->
+<!--  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVj6yChAfe1ilA4YrZgn_UCAnei8AhQxQ&amp;sensor=false"></script>
+<script type="text/javascript" src="js/map.js"></script>-->
+
+<!-- CORE JS -->
+<script type="text/javascript" src="<?=base_url()?>assets/frontend/js/custom.js"></script>        
+<script>
+    $(function () {
+
+        $('#jobform').fileUploadUI({
+            uploadTable: $('#files'),
+            downloadTable: $('#files'),
+
+            buildUploadRow: function (files, index) {
+                return $('<tr><td><img src="<?=base_url()?>assets/frontend/images/small.gif" border="0"></td></tr>');
+            },
+            buildDownloadRow: function (file) {
+
+                            if(file.msg == "large size") {
+                                    $("#jobimagesms").show();
+                                    $("#jobimagesms").html('<span class="Errorclass">Size should be less than 2MB</span>');
+                                    }
+                            else if(file.msg == "invalid type") {
+                                    $("#jobimagesms").show();
+                                    $("#jobimagesms").html('<span class="Errorclass">Only jpg,jpeg,png allowed</span>');
+                            }
+                            else if(file.msg == "success") {
+                                    $('#jobimage').val(file.name);
+                                    $('#j_image').show();
+                                    $('#j_image').attr('src','<?=base_url()?>assets/uploads/jobs/small_thumbs/'+file.name);
+                                    $("#jobimagesms").show();
+                                    $("#jobimagesms").html('<span class="Successclass">File upload successfully</span>');
+                            }
+                            else {
+                                    $("#jobimagesms").show();
+                                    $("#jobimagesms").html('<span class="Errorclass">Due to internet Problem file not upload </span>');
+                            }
+
+
+            }
+        });
+});
+</script>
+       

@@ -1,0 +1,67 @@
+:root {
+  /* Core Brand Colors */
+  --primary: #164885; /* Deep Royal Blue */
+  --primary-hover: #123b6d; /* Darker Blue (hover) */
+  --primary-light: #e7eff8; /* Soft Blue (background tint/highlights) */
+
+  /* Text Colors */
+  --text-main-heading: #0f172a; /* Dark Navy */
+  --text-body: #334155; /* Dark Gray (body text) */
+  --text-muted: #64748b; /* Medium Gray (descriptions) */
+  --text-light-on-dark: #ffffff; /* Light text on dark background */
+
+  /* Background Colors */
+  --bg-main: #f8fafc; /* Very Light Gray (main page background) */
+  --bg-section-alt: #f1f6fb; /* Light Blue Tint (alternate section background) */
+  --bg-card: #ffffff; /* White (card background) */
+  --bg-dark-section: #164885; /* Primary Blue (dark sections) */
+
+  /* Button System */
+  --btn-primary-bg: #164885; /* Primary Button Background */
+  --btn-primary-text: #ffffff; /* Primary Button Text */
+  --btn-primary-hover: #123b6d; /* Primary Button Hover */
+  --btn-primary-active: #0f2f57; /* Primary Button Active */
+
+  --btn-secondary-border: #164885; /* Secondary Button Border */
+  --btn-secondary-text: #164885; /* Secondary Button Text */
+  --btn-secondary-hover-bg: #e7eff8; /* Secondary Button Hover Background */
+
+  --btn-ghost-text: #334155; /* Subtle Button Text */
+  --btn-ghost-hover-bg: #f1f5f9; /* Subtle Button Hover Background */
+
+  /* Navigation Styling */
+  --navbar-bg: #ffffff; /* Navbar Background */
+  --navbar-text: #334155; /* Navbar Text */
+  --navbar-hover: #164885; /* Navbar Hover */
+  --navbar-active-item: #164885; /* Active Nav Item */
+  --navbar-active-indicator: #164885; /* Active Nav Indicator */
+  --navbar-mobile-bg: #ffffff; /* Mobile Navbar Background */
+  --navbar-dropdown-hover-bg: #f1f6fb; /* Dropdown Hover Background */
+
+  /* Card Design System */
+  --card-bg: #ffffff; /* Card Background */
+  --card-border: #e2e8f0; /* Card Border */
+  --card-hover-border: #164885; /* Card Hover Border */
+  --card-shadow: rgba(15, 23, 42, 0.08); /* Card Shadow */
+
+  /* Status Colors */
+  --status-success: #16a34a; /* Success (Green) */
+  --status-warning: #f59e0b; /* Warning (Amber) */
+  --status-error: #dc2626; /* Error (Red) */
+  --status-info: #0284c7; /* Info (Sky Blue) */
+
+  /* Additional General Colors */
+  --white: #ffffff;
+  --secondary: #007bff; /* Secondary Color */
+  --page-bg: #f7fafc; /* Light page background */
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 15px;
+  --radius-shape: 0 20px;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 10px rgba(22, 72, 133, 0.08); /* Small shadow */
+  --shadow-md: 0 10px 30px rgba(22, 72, 133, 0.12); /* Medium shadow */
+}

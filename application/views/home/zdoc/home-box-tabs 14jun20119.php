@@ -1,0 +1,326 @@
+<link href="<?=base_url()?>assets/metrolab/css/style.css" rel="stylesheet" />
+<link href="<?=base_url()?>assets/metrolab/css/style-responsive.css" rel="stylesheet" />
+<link href="<?=base_url()?>assets/metrolab/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<style>
+    .home-box-tabs{
+        padding: 0 0 60px 0 !important;
+        
+    }
+</style>
+<?php
+$user_id = $this->session->userdata('user_id') =='' ? 0: $this->session->userdata('user_id');
+?>    
+<section class="home-box-tabs">
+    <div class="container-fluid" style="background: #fff;">
+        <?php $this->load->view('notification/notification-messages');?>
+        <div class="row-fluid">            
+            <h3>Recruiters &  Job Seekers</h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                <?php if($this->session->userdata('user_id') ==''){?>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('login');?>">
+                        <i class="icon-key"></i>
+                        <div class="info">Login</div>
+                        <!--<div class="status">Unique Visitor</div>-->
+                    </a>
+                </div>
+                <?php }else{?>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('logout');?>">
+                        <i class="icon-user"></i>
+                        <div class="info">Log out</div>
+                        <div class="status"><?=$this->session->userdata('name');?></div>
+                    </a>
+                </div>
+                <?php }?>
+
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="<?=site_url($user_id >0 ? 'my-profile/' :'login');?>">
+                        <i class="icon-file"></i>
+                        <div class="info">My Profile</div>
+                        <div class="status">My Digital Resume</div>
+                    </a>
+                </div>                
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('event-in-uae');?>">
+                        <i class="icon-calendar"></i>
+                        <div class="info">Events</div>
+                        <!--<div class="status">Step-7:</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-purple">
+                    <a data-original-title="" href="<?=site_url('shoutbox');?>">
+                        <!--<i class="icon-chat"></i>-->
+                        <div class="info">Discussion Board</div>
+                        <div class="status">Navafiz Discussion Board</div>
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="<?=site_url('page/about');?>">
+                        <!--<i class="icon-chat"></i>-->
+                        <div class="info">About Us</div>
+                        <div class="status">Navafiz Story</div>
+                    </a>
+                </div>
+            </div>
+            <div class="space10"></div>
+            <!--END METRO STATES-->
+        </div>
+        <div class="row-fluid">            
+            <h3>Job Seekers</h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                <div class="metro-nav-block nav-light-blue">
+                    <a data-original-title="" href="<?=site_url('find-job');?>">
+                        <i class="icon-search"></i>
+                        <div class="info">Find Job</div>
+                        <div class="status">Verified Jobs</div>
+                    </a>
+                </div>
+<!--                <div class="metro-nav-block nav-light-blue">
+                    <a data-original-title="" href="<?=site_url('cvreview');?>">
+                        <i class="icon-bar-chart"></i>
+                        <div class="info">My CV Review</div>
+                        <div class="status">Resume Review System</div>
+                    </a>
+                </div>-->
+                
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="<?=site_url('job-seeker-support-sysetm');?>">
+                        <!--<i class="icon-download-alt"></i>-->
+                        <div class="info">Support System</div>
+                        <div class="status">Job Seeker Support System</div>
+                    </a>
+                </div>
+                
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="<?=site_url('track_steps/sheet/'.$user_id);?>">
+                        <!--<i class="icon-download-alt"></i>-->
+                        <div class="info">Tracking Sheet</div>
+                        <div class="status">Job Hunt Strategy</div>
+                    </a>
+                </div>
+                
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="<?=site_url('7-days-plan');?>">
+                        <!--<i class="icon-download-alt"></i>-->
+                        <div class="info">7 Days Plan</div>
+                        <div class="status">7 Days Job Search Plan</div>
+                    </a>
+                </div>
+                                
+            </div>
+            <div class="space10"></div>
+            <!--END METRO STATES-->
+        </div>
+        <p>
+            Note 1:  All above features are available only after completion of profile. <br>
+            Note 2:  Links to join whatsApp groups are available under Support System >> Social Media.            
+        </p>
+        
+        <div class="row-fluid">            
+            <h3>Recruiters</h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('place-job');?>">
+                        <i class="icon-upload-alt"></i>
+                        <div class="info">Post A Job</div>
+                        <!--<div class="status">New User</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href='<?=site_url('professionals');?>'>
+                        <i class="icon-search"></i>
+                        <div class="info">Professional</div>
+                        <div class="status">Active Job Seekers</div>
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href='javascript:void(0);' onclick="alert('Coming Soon '); return false;">
+                        <!--<i class="icon-search"></i>-->
+                        <div class="info">Find Skills</div>
+                        <div class="status">Coming Soon</div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="space10"></div>
+            <!--END METRO STATES-->
+        </div>
+        <p>Note :  All above features are available only after completion of profile.</p>
+        <div class="row-fluid">            
+            <h3>Trainer / Coach / Mentor</h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="javascript:void(0);">
+                        <!--<i class="icon-upload-alt"></i>-->
+                        <div class="info">Navafiz Mentor</div>
+                        <div class="status">Coming Soon</div>
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href='javascript:void(0);'>
+                        <!--<i class="icon-search"></i>-->
+                        <div class="info">Professional Trainers</div>
+                        <div class="status">Coming Soon</div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="space10"></div>
+            <!--END METRO STATES-->
+        </div>
+        <div class="row-fluid">
+            <h3>  Community  </h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('event-in-uae');?>">
+                        <i class="icon-calendar"></i>
+                        <div class="info">Events</div>
+                        <!--<div class="status">Step-7:</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-brown">
+                    <a data-original-title="" href="<?=site_url('videos');?>">
+                        <i class="icon-youtube-play"></i>
+                        <div class="info">Videos</div>
+                        <!--<div class="status">Step-1:</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-block-grey">
+                    <a data-original-title="" href="<?=site_url('page/uae-labour-laws');?>">
+                        <i class="icon-legal"></i>
+                        <div class="info">Labour Laws</div>
+                        <!--<div class="status">Step-2:</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="<?=site_url('whats-happening');?>">
+                        <i class="icon-map-marker"></i>
+                        <div class="info">Happenings</div>
+                        <!--<div class="status">Step-3:</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-block-red">
+                    <a data-original-title="" href="<?=site_url('faqs');?>">
+                        <i class="icon-question"></i>
+                        <div class="info">FAQ's</div>
+                        <!--<div class="status">Step-4:</div>-->
+                    </a>
+                </div>                
+            </div>
+            <div class="metro-nav">
+
+                <div class="metro-nav-block nav-light-blue">
+                    <a data-original-title="" href="<?=site_url('page/basic-arabic-words');?>">
+                        <i class="icon-font"></i>
+                        <div class="info"> Arabic Words</div>
+                        <!--<div class="status">Step-6:</div>-->
+                    </a>
+                </div>
+                
+                <div class="metro-nav-block nav-light-purple">
+                    <a data-original-title="" href="<?=site_url('page/important-contact-numbers-in-uae');?>">
+                        <i class="icon-book"></i>
+                        <div class="info">Contacts</div>
+                        <!--<div class="status">Step-5:</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-purple">
+                    <a data-original-title="" href="<?=site_url('job/jobseekertips');?>">
+                        <!--<i class="icon-ribbon"></i>-->
+                        <div class="info">Job Hunt Tip</div>
+                        <!--<div class="status">New Order</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-blue">
+                    <a data-original-title="" href="<?=site_url('page/interview-tips');?>">
+                        <!--<i class="icon-tasks"></i>-->
+                        <div class="info">Interview Tips</div>
+                        <!--<div class="status">Stock</div>-->
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-purple">
+                    <a data-original-title="" href="<?=site_url('shoutbox');?>">
+                        <!--<i class="icon-chat"></i>-->
+                        <div class="info">Discussion Board</div>
+                        <div class="status">Navafiz Discussion Board</div>
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-purple">
+                    <a data-original-title="" href="javascript:void(0);" onclick="alert('Coming Soon '); return false;">
+                        <!--<i class="icon-chat"></i>-->
+                        <div class="info">Blood Donors</div>
+                        <div class="status">Coming Soon</div>
+                    </a>
+                </div>
+                
+            </div>
+            <div class="space10"></div>
+            <!--END METRO STATES-->
+        </div>
+        <div class="row-fluid">
+            <h3>  Downloads  </h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                <div class="metro-nav-block nav-light-purple">
+                    <a data-original-title="" href="http://www.navafiz.com/public-assets/Navafiz-Standard-cv-jan-2017.pdf" target="_blank">
+                        <i class="icon-download-alt"></i>
+                        <div class="info">Sample CV</div>
+                        <!--<div class="status">New Order</div>-->
+                    </a>
+                </div>                
+                <div class="metro-nav-block nav-block-grey">
+                    <a data-original-title="" href="<?=site_url('admin');?>">
+                        <i class="icon-key"></i>
+                        <div class="info">Admin</div>
+                        <!--<div class="status">New Order</div>-->
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="space10"></div>
+        <div class="row-fluid">
+            <h3>  Useful Links  </h3>
+            <!--BEGIN METRO STATES-->
+            <div class="metro-nav">
+                <div class="metro-nav-block nav-light-blue">
+                    <a data-original-title="" href="https://gulfnews.com/" target="_blank">
+                        <!--<i class="icon-download-alt"></i>-->
+                        <div class="info">Gulf News</div>
+                        <!--<div class="status">New Order</div>-->
+                    </a>
+                </div>                
+                <div class="metro-nav-block nav-block-green">
+                    <a data-original-title="" href="https://www.khaleejtimes.com/"  target="_blank">
+                        <!--<i class="icon-key"></i>-->
+                        <div class="info">Khaleej Times</div>
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('testimonials');?>">
+                        <i class="icon-flag-checkered"></i>
+                        <div class="info">Testimonials</div>
+                        <div class="status">Success Stories</div>
+                    </a>
+                </div>
+                <div class="metro-nav-block nav-light-green">
+                    <a data-original-title="" href="<?=site_url('achievements');?>">
+                        <i class="icon-flag-checkered"></i>
+                        <div class="info">Achievements</div>
+                        <!--<div class="status"></div>-->
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="space10"></div>
+        <!--END METRO STATES-->
+        </div>
+    </div>
+</section>
