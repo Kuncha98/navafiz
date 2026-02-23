@@ -1,8 +1,14 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 //$route['default_controller'] = "front/jobs";
 // $route['default_controller'] = "search";
 $route['default_controller'] = "home/new_index";
+$route['services/find-a-job'] = "home/find_job";
+$route['services/hire-a-talent'] = "home/hire_talent";
+$route['services/become-a-freelancer'] = "home/freelance";
+$route['services/become-a-mentor'] = "home/mentor";
+
 $route['draft'] = "home/draftPage";
 $route['feature_counts'] = "home/feature_counts";
 $route['homeold'] = "front/homeold/";

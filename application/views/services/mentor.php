@@ -1,6 +1,3 @@
-<?= $this->extend('layouts/website/website_layout') ?>
-<?= $this->section('content') ?>
-
 <section class="submition-form-section py-sm-5 py-4">
 
     <div class="container">
@@ -12,11 +9,12 @@
 
         <!-- Form card -->
         <div class="submition-form-card">
-            <?= form_open('services/become-a-mentor/submit', [
-                'id' => 'multiStepForm',
-                'enctype' => 'multipart/form-data'
-            ]) ?>
-            <?= csrf_field() ?>
+            <?php
+            $attributes = array(
+                'id' => 'multiStepForm'
+            );
+            echo form_open_multipart('services/become-a-mentor/submit', $attributes);
+            ?>
 
             <!-- Step progress -->
             <div class="step-progress">
@@ -229,9 +227,7 @@
                 </div>
             </div>
 
-            <?= form_close() ?>
+            <?php echo form_close(); ?>
         </div>
     </div>
 </section>
-
-<?= $this->endSection() ?>

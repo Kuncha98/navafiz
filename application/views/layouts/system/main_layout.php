@@ -22,16 +22,16 @@
     <div class="content-wrapper d-flex flex-column">
         <!-- Main content -->
         <main>
-            <?php if (session()->getFlashdata('success')): ?>
+            <?php if ($this->session->flashdata('success')): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?= session()->getFlashdata('success') ?>
+                    <?= $this->session->flashdata('success'); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
 
-            <?php if (session()->getFlashdata('error')): ?>
+            <?php if ($this->session->flashdata('error')): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= session()->getFlashdata('error') ?>
+                    <?= $this->session->flashdata('error'); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>

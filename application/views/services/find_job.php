@@ -9,11 +9,12 @@
 
         <!-- Form card -->
         <div class="submition-form-card">
-            <?= form_open('/services/find-a-job/submit', [
-                'id' => 'multiStepForm',
-                'enctype' => 'multipart/form-data'
-            ]) ?>
-            <?= csrf_field() ?>
+            <?php
+            $attributes = array(
+                'id' => 'multiStepForm'
+            );
+            echo form_open_multipart('services/find-a-job/submit', $attributes);
+            ?>
 
             <!-- Step progress -->
             <div class="step-progress">
@@ -132,7 +133,7 @@
                         <select name="skills[]" id="skills" class="form-select required-field p-0" multiple>
                             <?php foreach ($skills as $skill): ?>
                                 <option value="<?= $skill['id'] ?>">
-                                    <?= esc($skill['name']) ?>
+                                    <?= html_escape($skill['name']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -290,7 +291,7 @@
                 </div>
             </div>
 
-            <?= form_close() ?>
+            <?php echo form_close(); ?>
         </div>
 
     </div>

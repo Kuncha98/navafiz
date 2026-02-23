@@ -58,4 +58,44 @@ class home extends CI_Controller
         }
     }
 
+    function freelance()
+    {
+        // Example: Check if user is logged in
+        $user_id = $this->session->userdata('user_id');
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'services/freelance'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
+    }
+
+    function hire_talent()
+    {
+        // Example: Check if user is logged in
+        $user_id = $this->session->userdata('user_id');
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'services/hire_talent'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
+    }
+
+    function mentor()
+    {
+        // Example: Check if user is logged in
+        $user_id = $this->session->userdata('user_id');
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'services/mentor'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
+    }
+
+    function find_job()
+    {
+        // Example: Check if user is logged in
+        $user_id = $this->session->userdata('user_id');
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'services/find_job'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
+    }
+
 }
