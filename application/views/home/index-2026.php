@@ -436,29 +436,35 @@
                         <p class="section-subtitle">Let’s talk</p>
                         <h2 class="section-title">Get In Touch With us</h2>
                     </div>
-                    <form class="row g-3">
+                    <div class="form-group"> <span class="successmessage">
+                            <?php echo $this->session->flashdata('msg'); ?>
+                        </span> </div>
+                    <div class="form-group"> <span class="errormessage">
+                            <?php echo $this->session->flashdata('errormsg'); ?>
+                        </span> </div>
+                    <form class="row g-3" action="<?= base_url() ?>sendcontact" method="post">
                         <div class="col-12 col-lg-6">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" required>
+                            <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="col-12 col-lg-6">
                             <label for="email" class="form-label">E-Mail</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="col-12 col-lg-6">
                             <label for="phone" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="phone">
+                            <input type="text" class="form-control" id="phone" name="phone" required>
                         </div>
                         <div class="col-12 col-lg-6">
                             <label for="subject" class="form-label">Subject</label>
-                            <input type="text" class="form-control" id="subject">
+                            <input type="text" class="form-control" id="subject" name="subject" required>
                         </div>
                         <div class="col-12 col-lg-12">
                             <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" rows="3"></textarea>
+                            <textarea class="form-control" rows="3" id="message" name="message" required></textarea>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-submit">Submit Now</button>
+                            <button type="submit" value="Send Message" class="btn btn-submit">Submit Now</button>
                         </div>
                     </form>
                 </div>

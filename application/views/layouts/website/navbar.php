@@ -2,13 +2,15 @@
 <div class="top-bar">
     <div class="container d-flex justify-content-between align-items-center">
         <div>
-            <span><i class="fas fa-envelope"></i> info@navafiz.com</span>
-            <span class="ms-4"><i class="fas fa-phone-alt"></i> +971 4363 5252</span>
+            <span><i class="fas fa-envelope"></i> <a class="ms-0" href="mailto:info@navafiz.com">
+                    info@navafiz.com</a></span>
+            <span class="ms-4"><i class="fas fa-phone-alt"></i> <a class="ms-0" href="tel:+97143635252">+971 4 363
+                    5252</a></span>
         </div>
         <div>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.facebook.com/groups/JobPostMail"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/navafiz_management"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/navafiz"><i class="fab fa-linkedin"></i></a>
         </div>
     </div>
 </div>
@@ -16,8 +18,9 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm py-4">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <i class="fas fa-shapes me-2 text-danger"></i> NAVAFIZ
+        <a class="navbar-brand p-0 m-0">
+            <img id="mainLogo" src="<?= site_url() ?>jassets/draft/img/logo-invers.png" style="width: 150px;"
+                alt="Logo" />
         </a>
 
         <!-- Mobile Toggle -->
@@ -28,26 +31,71 @@
         <!-- Desktop Menu -->
         <div class="collapse navbar-collapse justify-content-end d-none d-lg-flex" id="navbarNav">
             <ul class="navbar-nav align-items-lg-center">
-                <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link active" href="<?= site_url() ?>">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= site_url('about') ?>">About</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         Services
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/services/hire-a-talent">Hire Talent</a></li>
-                        <li><a class="dropdown-item" href="/services/find-a-job">Find a Job</a></li>
-                        <li><a class="dropdown-item" href="/services/become-a-freelancer">Freelance Work</a></li>
-                        <li><a class="dropdown-item" href="/services/become-a-mentor">Become a Mentor</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('services/hire-a-talent') ?>">Hire Talent</a>
+                        </li>
+                        <li><a class="dropdown-item" href="<?= site_url('services/find-a-job') ?>">Find a Job</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('services/become-a-freelancer') ?>">Freelance
+                                Work
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="<?= site_url('services/become-a-mentor') ?>">Become a
+                                Mentor
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
-                <li class="nav-item"><a class="nav-link" href="#">Testimonials</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Job Listing
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= site_url('jobs') ?>">Featured Jobs</a>
+                        </li>
+                        <li><a class="dropdown-item" href="<?= site_url('recruiters-support-system') ?>">Recruitment
+                                Support</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('job-seeker-support-system') ?>">Job Seekers
+                                Support
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="<?= site_url('users_list/users_by_list/82') ?>">Featured
+                                Profiles
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" href="<?= site_url('feed') ?>">As Received
+                                Jobs
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class=" nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Candidates
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= site_url('users_list/users_by_list/82') ?>">See Featured
+                                Profiles
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item"><a class="nav-link" href="<?= site_url('testimonials'); ?>">Testimonials</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="#">Blog</a></li> -->
+                <li class="nav-item"><a class="nav-link" href="<?= site_url('contact') ?>">Contact</a></li>
                 <li class="nav-item ms-lg-3">
-                    <a href="#" class="btn login-btn">Login</a>
+                    <a href="<?= site_url('login') ?>" class="btn login-btn">Login</a>
                 </li>
             </ul>
         </div>
@@ -61,35 +109,76 @@
         <span class="close-mobile-menu">&times;</span>
     </div>
     <ul class="mobile-menu-nav">
-        <li><a href="/">Home</a></li>
-        <li><a href="#">About</a></li>
+        <li><a href="<?= site_url() ?>">Home</a></li>
+        <li><a href="<?= site_url('about') ?>">About</a></li>
         <li>
             <a href="#" class="submenu-toggle">Services <span>+</span></a>
             <ul class="submenu">
-                <li><a href="/services/hire-a-talent">Hire Talent</a></li>
-                <li><a href="/services/find-a-job">Find a Job</a></li>
-                <li><a href="/services/become-a-freelancer">Freelance Work</a></li>
-                <li><a href="/services/become-a-mentor">Become a Mentor</a></li>
+                <li><a href="<?= site_url('services/hire-a-talent') ?>">Hire Talent</a>
+                </li>
+                <li><a href="<?= site_url('services/find-a-job') ?>">Find a Job</a></li>
+                <li><a href="<?= site_url('services/become-a-freelancer') ?>">Freelance
+                        Work
+                    </a>
+                </li>
+                <li><a href="<?= site_url('services/become-a-mentor') ?>">Become a
+                        Mentor
+                    </a>
+                </li>
             </ul>
         </li>
-        <li><a href="#">Testimonials</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact</a></li>
+
+        <li>
+            <a href="#" class="submenu-toggle">Job Listing <span>+</span></a>
+            <ul class="submenu">
+                <li><a href="<?= site_url('jobs') ?>">Featured Jobs</a>
+                </li>
+                <li><a href="<?= site_url('recruiters-support-system') ?>">Recruitment
+                        Support</a></li>
+                <li><a href="<?= site_url('job-seeker-support-system') ?>">Job Seekers
+                        Support
+                    </a>
+                </li>
+                <li><a href="<?= site_url('users_list/users_by_list/82') ?>">Featured
+                        Profiles
+                    </a>
+                </li>
+                <li><a href="<?= site_url('feed') ?>">As Received
+                        Jobs
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#" class="submenu-toggle">Candidates<span>+</span></a>
+            <ul class="submenu">
+                <li><a href="<?= site_url('users_list/users_by_list/82') ?>">See Featured
+                        Profiles
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li><a href="<?= site_url('testimonials'); ?>">Testimonials</a></li>
+        <!-- <li><a href="#">Blog</a></li> -->
+        <li><a href="<?= site_url('contact') ?>">Contact</a></li>
+        <li><a href="<?= site_url('login') ?>">Login</a></li>
     </ul>
     <div class="mobile-menu-contact">
         <div class="d-flex align-items-center"><i class="fa fa-map-marker"></i>
             <p class="mb-0"> <strong>Address:</strong><br> Business Village B, Deira, Dubai</p>
         </div>
         <div class="d-flex align-items-center"><i class="fa fa-envelope"></i>
-            <p class="mb-0"><strong>Email:</strong><br> info@navafiz.com</p>
+            <p class="mb-0"><strong>Email:</strong><br> <a class="ms-0" href="mailto:info@navafiz.com">
+                    info@navafiz.com</a></p>
         </div>
         <div class="d-flex align-items-center"><i class="fa fa-phone"></i>
-            <p class="mb-0"><strong>Phone:</strong><br> +971 4363 5252</p>
+            <p class="mb-0"><strong>Phone:</strong><br> <a class="ms-0" href="tel:+97143635252">+971 4 363 5252</a></p>
         </div>
         <div>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/navafiz"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.facebook.com/groups/JobPostMail"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/navafiz_management"><i class="fab fa-instagram"></i></a>
         </div>
     </div>
 </div

@@ -8,9 +8,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="<?= base_url() ?>assets/frontend/css/select2.min.css" rel="stylesheet" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.5.1/dist/css/tom-select.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.5.1/dist/css/tom-select.css" rel="stylesheet"> -->
 
     <link rel="stylesheet" href="<?= base_url('navassets/css/core/variables.css') ?>">
     <link rel="stylesheet" href="<?= base_url('navassets/css/core/base.css') ?>">
@@ -25,6 +26,19 @@
     <?php $this->load->view('layouts/website/navbar'); ?>
 
     <!-- Main content -->
+    <?php if ($this->session->flashdata('success')): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= $this->session->flashdata('success'); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($this->session->flashdata('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= $this->session->flashdata('error'); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
     <?php if (isset($content))
         $this->load->view($content); ?>
 
@@ -33,16 +47,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.5.1/dist/js/tom-select.complete.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/tom-select@2.5.1/dist/js/tom-select.complete.min.js"></script> -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="<?= base_url() ?>assets/frontend/js/select2.min.js"></script>
 
     <script src="<?= base_url('navassets/js/common.js') ?>"></script>
     <script src="<?= base_url('navassets/js/website.js') ?>"></script>
     <script src="<?= base_url('navassets/js/master-form.js') ?>"></script>
-    <script>new TomSelect("#skills", {
-
-        });</script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -112,7 +124,9 @@
                             <div class="card candidate-card position-relative">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-2">
-                                        <img src="${avatarUrl}" class="img-thumbnail rounded-circle candidate-avatar me-3 p-0" alt="${member.m_name}">
+                                        <div class="avatar-wrapper me-3">
+                                          <img src="${avatarUrl}" class="candidate-avatar" alt="${member.m_name}">
+                                        </div>
                                         <h6>${member.m_name || 'Name not available'}</h6>
                                     </div>
                                     <small class="text-muted">${member.m_profession || 'Profession not available'}</small>
@@ -144,6 +158,79 @@
                     console.error(error);
                 }
             });
+        });
+    </script>
+
+    <!-- Fetch skills from csv to forms -->
+    <script>
+        $(document).ready(function () {
+
+            const select = $('#skills');
+
+            // 🔹 Initialize Select2
+            select.select2({
+                placeholder: "Enter or select your skills",
+                tags: true,
+                tokenSeparators: [','],
+                width: '100%'
+            });
+
+            // 🔹 Load skills from CSV file
+            fetch("<?= base_url('assets/skills.csv') ?>")
+                .then(response => response.text())
+                .then(csvText => {
+                    // Split CSV lines, remove header, trim whitespace
+                    let lines = csvText.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+                    if (lines[0].toLowerCase() === 'skills') lines.shift();
+
+                    // Remove duplicates
+                    const skills = [...new Set(lines)];
+
+                    // Add each as Select2 option
+                    skills.forEach(skill => {
+                        const newOption = new Option(skill, skill, false, false);
+                        select.append(newOption);
+                    });
+
+                    // Refresh Select2 after adding all skills
+                    select.trigger('change');
+                })
+                .catch(err => console.error('Error loading CSV:', err));
+
+            // 🔹 Enforce word/character limits for new entries
+            select.on('select2:selecting', function (e) {
+                const text = e.params.args.data.text.trim();
+                const wordCount = text.split(/\s+/).length;
+                const charCount = text.length;
+
+                if (wordCount > 7) {
+                    alert("❌ Please limit skill names to 7 words maximum.");
+                    e.preventDefault();
+                    return false;
+                }
+                if (charCount > 40) {
+                    alert("❌ Please limit skill names to 40 characters maximum.");
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // 🔹 Prevent duplicate skills being added manually
+            select.on('select2:select', function (e) {
+                const added = e.params.data.text.trim().toLowerCase();
+                const allOptions = select.find('option').map(function () {
+                    return $(this).val().trim().toLowerCase();
+                }).get();
+
+                // If duplicate found (other than this one), remove it
+                const count = allOptions.filter(v => v === added).length;
+                if (count > 1) {
+                    alert("⚠️ That skill is already in your list.");
+                    select.find(`option[value='${e.params.data.id}']`).remove();
+                    select.trigger('change');
+                }
+            });
+
         });
     </script>
 </body>

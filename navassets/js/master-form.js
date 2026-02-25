@@ -30,16 +30,14 @@ const FormCore = (() => {
         let valid = true;
 
         const fields = container.querySelectorAll(".required-field");
-
         const radioGroups = new Set();
 
         fields.forEach(field => {
-
-            // Skip if field is inside hidden wrapper (except file inputs)
+            // Skip hidden wrapper (except file)
             const wrapperHidden = field.closest(".d-none");
             if (wrapperHidden && field.type !== "file") return;
 
-            // Radio btn
+            // Radio buttons
             if (field.type === "radio") {
                 if (radioGroups.has(field.name)) return;
                 radioGroups.add(field.name);
@@ -47,9 +45,10 @@ const FormCore = (() => {
                 const radios = container.querySelectorAll(`input[name="${field.name}"]`);
                 const checked = [...radios].some(r => r.checked);
 
-                radios.forEach(r =>
-                    r.closest(".form-check").classList.toggle("text-danger", !checked)
-                );
+                radios.forEach(r => {
+                    const wrapper = r.closest(".form-check");
+                    if (wrapper) wrapper.classList.toggle("text-danger", !checked);
+                });
 
                 if (!checked) valid = false;
             }
@@ -64,8 +63,27 @@ const FormCore = (() => {
                 }
             }
 
-            // Text / Select / Textarea
-            else if (field.type === "text") {
+            // Select (single or multi)
+            else if (field.tagName.toLowerCase() === "select") {
+                if (field.multiple) {
+                    if (field.selectedOptions.length === 0) {
+                        valid = false;
+                        field.classList.add("is-invalid");
+                    } else {
+                        field.classList.remove("is-invalid");
+                    }
+                } else {
+                    if (!field.value) {
+                        valid = false;
+                        field.classList.add("is-invalid");
+                    } else {
+                        field.classList.remove("is-invalid");
+                    }
+                }
+            }
+
+            // Text, email, number, textarea
+            else if (["text", "email", "number"].includes(field.type) || field.tagName.toLowerCase() === "textarea") {
                 if (!field.value.trim()) {
                     valid = false;
                     field.classList.add("is-invalid");

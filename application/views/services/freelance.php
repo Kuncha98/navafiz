@@ -80,18 +80,19 @@
                         <input type="number" id="experience" name="experience" class="form-control required-field">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="skills" class="form-label required-label">Key Skills</label>
-                        <select name="skills[]" id="skills" class="form-select required-field" multiple>
-                            <?php foreach ($skills as $skill): ?>
-                                <option value="<?= $skill['id'] ?>">
-                                    <?= html_escape($skill['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
+                        <label for="skills" class="form-label">Key Skills</label>
+                        <select id="skills" name="skills[]" multiple="multiple" class="form-select" autofocus>
+                            <!-- Preload saved skills -->
+                            <?php
+                            foreach ($saved_skills as $skill) {
+                                echo '<option value="' . trim($skill) . '" selected>' . trim($skill) . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="portfolio" class="form-label">Portfolio / Work Samples Link</label>
-                        <input type="text" id="portfolio" name="portfolio[]" class="form-control">
+                        <input type="text" id="portfolio" name="portfolio" class="form-control">
                     </div>
                 </div>
 
@@ -120,7 +121,7 @@
                 <h5 class="form-section-title">Pricing</h5>
                 <div class="row mb-4">
                     <div class="col-md-4 mb-3">
-                        <label>Rate Type</label>
+                        <label for="rate_type" class="form-label required-label">Rate Type</label>
                         <select name="rate_type" class="form-select required-field">
                             <option value="">Select</option>
                             <option value="hourly">Hourly</option>
@@ -129,12 +130,12 @@
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label>Rate Amount</label>
+                        <label for="rate_amount" class="form-label required-label">Rate Amount</label>
                         <input type="number" step="0.01" name="rate_amount" class="form-control required-field">
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label>Currency</label>
+                        <label for="currency" class="form-label required-label">Currency</label>
                         <select name="currency" class="form-select required-field">
                             <option value="USD">USD</option>
                             <option value="LKR">LKR</option>

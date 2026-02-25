@@ -469,3 +469,14 @@
   color: #303030;
   border: 1px solid #dee2e6;
 }
+
+/* Select 2 */
+.select2-container--default .select2-selection--multiple {
+  background-color: white;
+  cursor: text;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  padding: 6px 15px;
+  min-height: 48px;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}

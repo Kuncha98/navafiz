@@ -33,8 +33,8 @@ section {
 }
 
 .btn {
-  padding: 12px 30px;
-  border-radius: 0 20px;
+  padding: 10px 20px;
+  border-radius: 0 10px;
   font-weight: 600;
   display: inline-block;
   transition: 0.3s ease;
@@ -282,7 +282,7 @@ section {
 
 .services-tabs .nav-link {
   background: #ffffff;
-  border-radius: 0 20px;
+  border-radius: 0 10px;
   padding: 15px 25px;
   margin-right: 15px;
   font-weight: 600;
@@ -530,6 +530,14 @@ footer .bi {
     padding: 20px;
     border-radius: 0 40px;
   }
+
+  .candidate-card {
+    min-height: unset !important;
+  }
+
+  .candidate-card:hover {
+    padding-bottom: 25px !important;
+  }
 }
 
 .card-footer {
@@ -559,11 +567,11 @@ footer .bi {
 }
 
 .accordion-item:first-of-type > .accordion-header .accordion-button {
-  border-radius: 0 20px;
+  border-radius: 0 10px;
 }
 
 .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed {
-  border-radius: 0 20px;
+  border-radius: 0 10px;
 }
 
 .accordion-button:not(.collapsed) {
@@ -577,7 +585,7 @@ footer .bi {
 .accordion-button {
   background-color: #f1f6fb;
   color: #333;
-  border-radius: 0 20px;
+  border-radius: 0 10px;
 }
 
 .accordion-button::after {
@@ -987,17 +995,28 @@ footer .bi {
 /* candidate card  */
 
 .candidate-card {
-  border-radius: 0 40px;
-  min-height: 312px;
+  border-radius: 20px;
+  min-height: 358px;
 }
 
 .candidate-card .card-body {
   padding: 0;
 }
 
-.candidate-avatar {
+.avatar-wrapper {
   width: 50px;
+  min-width: 50px;
   height: 50px;
+  border-radius: 50%;
+  overflow: hidden; /* crop excess image */
+}
+
+.candidate-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 /* Button positioned absolutely */
