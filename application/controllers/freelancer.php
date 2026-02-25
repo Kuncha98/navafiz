@@ -100,7 +100,7 @@ class Freelancer extends CI_Controller
             );
 
             // Insert into DB
-            if (!$this->db->insert('jb_freelancers', $data)) {
+            if (!$this->db->insert('jb_freelancer_requests', $data)) {
                 $db_error = $this->db->_error_message();
                 log_message('error', 'Freelancer insert failed: ' . $db_error);
                 $this->session->set_flashdata('error', 'Something went wrong while saving your data. Please try again.');
