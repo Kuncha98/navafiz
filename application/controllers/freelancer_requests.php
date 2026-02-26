@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Freelancer extends CI_Controller
+class freelancer_requests extends CI_Controller
 {
 
     public function __construct()

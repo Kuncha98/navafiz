@@ -7,16 +7,16 @@
 $route['default_controller'] = "home/new_index";
 // Become a freelancer form page
 $route['services/become-a-freelancer'] = "home/freelance";
-$route['services/become-a-freelancer/submit'] = "freelancer/submit";
+$route['services/become-a-freelancer/submit'] = "freelancer_requests/submit";
 // Job seeker form page
 $route['services/find-a-job'] = "home/find_job";
-$route['services/find-a-job/submit'] = "job_seeker/submit";
+$route['services/find-a-job/submit'] = "job_seeker_requests/submit";
 // Hire a talent form page
 $route['services/hire-a-talent'] = "home/hire_talent";
-$route['services/hire-a-talent/submit'] = "hire_talent/submit";
+$route['services/hire-a-talent/submit'] = "job_requests/submit";
 // Become a mentor form page
 $route['services/become-a-mentor'] = "home/mentor";
-$route['services/become-a-mentor/submit'] = "mentor/submit";
+$route['services/become-a-mentor/submit'] = "mentor_requests/submit";
 
 $route['draft'] = "home/draftPage";
 $route['feature_counts'] = "home/feature_counts";

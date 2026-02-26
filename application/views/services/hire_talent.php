@@ -120,11 +120,18 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="experience" class="form-label">Experience (Years + Field)</label>
-                        <input type="text" id="experience" name="experience" class="form-control">
+                        <input type="number" id="experience" name="experience" class="form-control">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="skills" class="form-label">Key Skills Needed</label>
-                        <input type="text" id="skills" name="skills" class="form-control">
+                        <select id="skills" name="skills[]" multiple="multiple" class="form-select" autofocus>
+                            <!-- Preload saved skills -->
+                            <?php
+                            foreach ($saved_skills as $skill) {
+                                echo '<option value="' . trim($skill) . '" selected>' . trim($skill) . '</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="language" class="form-label">Language Requirement</label>
@@ -215,3 +222,33 @@
         </div>
     </div>
 </section>
+<!-- 
+CREATE TABLE `jb_job_requests` (
+`id` int NOT NULL AUTO_INCREMENT,
+`company_name` varchar(150) NOT NULL,
+`contact_person` varchar(150) NOT NULL,
+`mobile` varchar(20) NOT NULL,
+`email` varchar(150) NOT NULL,
+`work_location` varchar(150) NOT NULL,
+`job_title` varchar(150) NOT NULL,
+`workers_required` int NOT NULL,
+`category` enum('blue_collar','white_collar') NOT NULL,
+`employment_type` enum('full_time','contract') NOT NULL,
+`joining_date` date NOT NULL,
+`education` varchar(255) DEFAULT NULL,
+`experience` varchar(255) DEFAULT NULL,
+`skills` varchar(255) DEFAULT NULL,
+`language` varchar(255) DEFAULT NULL,
+`salary_min` int NOT NULL,
+`salary_max` int NOT NULL,
+`accommodation` tinyint(1) DEFAULT '0',
+`transport` tinyint(1) DEFAULT '0',
+`food` tinyint(1) DEFAULT '0',
+`other_benefits` text DEFAULT NULL,
+`interview_type` varchar(50) NOT NULL,
+`trade_test` varchar(10) NOT NULL,
+`additional_notes` text DEFAULT NULL,
+`created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`status` tinyint(1) DEFAULT '1',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; -->

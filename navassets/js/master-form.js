@@ -82,8 +82,8 @@ const FormCore = (() => {
                 }
             }
 
-            // Text, email, number, textarea
-            else if (["text", "email", "number"].includes(field.type) || field.tagName.toLowerCase() === "textarea") {
+            // Text, email, number, textarea, date
+            else if (["text", "email", "number", "date"].includes(field.type) || field.tagName.toLowerCase() === "textarea") {
                 if (!field.value.trim()) {
                     valid = false;
                     field.classList.add("is-invalid");

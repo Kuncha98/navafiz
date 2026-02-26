@@ -13,7 +13,7 @@
             $attributes = array(
                 'id' => 'multiStepForm'
             );
-            echo form_open_multipart('services/find-a-job/submit', $attributes);
+            echo form_open_multipart('/services/find-a-job/submit', $attributes);
             ?>
 
             <!-- Step progress -->
@@ -129,13 +129,14 @@
                             class="form-control required-field">
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label for="skills" class="form-label required-label">Key Skills</label>
-                        <select name="skills[]" id="skills" class="form-select required-field p-0" multiple>
-                            <?php foreach ($skills as $skill): ?>
-                                <option value="<?= $skill['id'] ?>">
-                                    <?= html_escape($skill['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
+                        <label for="skills" class="form-label">Key Skills</label>
+                        <select id="skills" name="skills[]" multiple="multiple" class="form-select" autofocus>
+                            <!-- Preload saved skills -->
+                            <?php
+                            foreach ($saved_skills as $skill) {
+                                echo '<option value="' . trim($skill) . '" selected>' . trim($skill) . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -143,9 +144,9 @@
                 <h5 class="form-section-title">Education / Certification (If Any)</h5>
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3">
-                        <label for="highed_qualification" class="form-label required-label">Highest
+                        <label for="highest_qualification" class="form-label required-label">Highest
                             Qualification</label>
-                        <input type="text" id="highed_qualification" name="highed_qualification"
+                        <input type="text" id="highest_qualification" name="highest_qualification"
                             class="form-control required-field">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -242,45 +243,13 @@
 
                 </div>
 
-                <!-- <h5 class="form-section-title">Additional Notes</h5>
+                <h5 class="form-section-title">Additional Notes</h5>
                 <div class="row mb-4">
                     <div class="col-md-12 mb-3">
                         <label for="worked_in_gcc" class="form-label required-label">Have you worked in GCC before?
                             (Yes / No –
                             Country)</label>
                         <input type="text" id="worked_in_gcc" name="worked_in_gcc" class="form-control required-field">
-                    </div>
-                </div> -->
-
-                <!-- Actions -->
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="wizard-btn btn-prev" data-prev>Previous</button>
-                    <button type="button" class="wizard-btn btn-next" data-next>Next</button>
-                </div>
-            </div>
-
-            <!-- Step 04 -->
-            <div class="form-step" data-step="4">
-                <h5 class="form-section-title">Create a Navafiz Account</h5>
-                <div class="row mb-4">
-                    <div class="col-md-6 mb-3">
-                        <label for="account_type" class="form-label required-label">Submit the application as a Guest or
-                            Register</label>
-                        <select id="account_type" name="account_type" class="form-select required-field"
-                            data-toggle-target="#passwordWrapper" data-toggle-value="register">
-                            <option value="">Select</option>
-                            <option value="guest">Guest</option>
-                            <option value="register">Register</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3 d-none" id="passwordWrapper">
-                        <label for="password" class="form-label required-label">Password</label>
-                        <div class="position-relative">
-                            <input type="text" id="password" name="password" class="form-control required-field">
-                            <span class="toggle-password" onclick="togglePassword()">
-                                <i class="fa fa-eye-slash me-2"></i>
-                            </span>
-                        </div>
                     </div>
                 </div>
 
@@ -293,7 +262,33 @@
 
             <?php echo form_close(); ?>
         </div>
-
     </div>
-
 </section>
+
+<!-- CREATE TABLE `jb_job_seeker_requests;` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`name` VARCHAR(150) NOT NULL,
+`mobile` VARCHAR(20) NOT NULL,
+`email` VARCHAR(150) NOT NULL,
+`nationality` VARCHAR(100) NOT NULL,
+`current_location` VARCHAR(150) NOT NULL,
+`applying_position` VARCHAR(150) NOT NULL,
+`category` ENUM('blue_collar','white_collar') NOT NULL,
+`preferred_country` VARCHAR(100) NOT NULL,
+`expected_salary` INT DEFAULT NULL,
+`availability` VARCHAR(50) NOT NULL,
+`experience` INT NOT NULL,
+`last_job_title` VARCHAR(150) NOT NULL,
+`skills` VARCHAR(255) DEFAULT NULL,
+`highest_qualification` VARCHAR(150) NOT NULL,
+`certificate` VARCHAR(150) DEFAULT NULL,
+`cv` VARCHAR(255) DEFAULT NULL,
+`passport` VARCHAR(255) DEFAULT NULL,
+`visa_status` ENUM('yes','no') DEFAULT 'no',
+`visa` VARCHAR(255) DEFAULT NULL,
+`worked_in_gcc` VARCHAR(255) DEFAULT NULL,
+`additional_notes` TEXT DEFAULT NULL,
+`created_at` DATETIME NOT NULL,
+`status` TINYINT(1) DEFAULT 1,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; -->

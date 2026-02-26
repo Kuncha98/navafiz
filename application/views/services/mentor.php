@@ -13,7 +13,7 @@
             $attributes = array(
                 'id' => 'multiStepForm'
             );
-            echo form_open_multipart('services/become-a-mentor/submit', $attributes);
+            echo form_open_multipart('/services/become-a-mentor/submit', $attributes);
             ?>
 
             <!-- Step progress -->
@@ -231,3 +231,40 @@
         </div>
     </div>
 </section>
+
+
+
+<!-- CREATE TABLE `jb_mentor_requests` (
+`id` INT(11) NOT NULL AUTO_INCREMENT,
+
+`name` VARCHAR(150) NOT NULL,
+`professional_title` VARCHAR(150) NOT NULL,
+`company` VARCHAR(150) NOT NULL,
+`experience` INT(3) NOT NULL,
+`location` VARCHAR(150) NOT NULL,
+`mobile` VARCHAR(20) NOT NULL,
+`email` VARCHAR(150) NOT NULL,
+`linkedin` VARCHAR(255) NOT NULL,
+
+`expertise_areas` VARCHAR(255) NOT NULL,
+`students` TINYINT(1) DEFAULT 0,
+`job_seekers` TINYINT(1) DEFAULT 0,
+`entrepreneurs` TINYINT(1) DEFAULT 0,
+`professionals` TINYINT(1) DEFAULT 0,
+`languages_spoken` VARCHAR(255) NOT NULL,
+`mentorship_type` VARCHAR(50) NOT NULL,
+`conducting_mode` VARCHAR(50) NOT NULL,
+`session_duration` INT(4) NOT NULL,
+`available_at` TEXT NOT NULL,
+
+`personal_intro` TEXT NULL,
+`key_achievement` TEXT NULL,
+`previous_mentoring` VARCHAR(10) NOT NULL,
+`paid_type` VARCHAR(20) NOT NULL,
+`additional_notes` TEXT NULL,
+
+`created_at` DATETIME NOT NULL,
+`status` TINYINT(1) DEFAULT 1,
+
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; -->
