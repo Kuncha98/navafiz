@@ -9,7 +9,9 @@ class freelancer_requests extends CI_Controller
         parent::__construct();
         $this->load->database();
         $this->load->helper(array('form', 'url'));
-        $this->load->library(array('form_validation', 'email', 'session'));
+        $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
+
+        $this->load->model('Freelancer_requests_model');
     }
 
     public function submit()
@@ -126,5 +128,48 @@ class freelancer_requests extends CI_Controller
             return TRUE;
         }
         return TRUE; // allow empty for optional
+    }
+
+    // Fetch all the form requests
+    public function all_requests($page = 0)
+    {
+        require_role(array(2)); // 2 = Mentor
+
+        $config = array();
+        $config["base_url"] = site_url('freelancer-request-list');
+        $config["total_rows"] = $this->Freelancer_requests_model->get_total_count();
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 2;
+
+        $this->pagination->initialize($config);
+
+        $data["records"] = $this->Freelancer_requests_model->get_all($config["per_page"], $page);
+        $data["pagination"] = $this->pagination->create_links();
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'form_requests/freelancer_requests'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
+    }
+
+    // Fetch single record using IDs
+    public function freelancer_request_view($id = NULL)
+    {
+        require_role(array(2)); // 2 = Mentor
+
+        if ($id == NULL || !is_numeric($id)) {
+            show_404();
+        }
+
+        $record = $this->Freelancer_requests_model->get_by_id($id);
+
+        if (!$record) {
+            show_404();
+        }
+
+        $data["record"] = $record;
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'form_requests/freelancer_request_view'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
     }
 }

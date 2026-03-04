@@ -20,11 +20,11 @@
             <div class="step-progress">
                 <div class="step active">
                     <p class="step-circle">1</p>
-                    <p class="step-title">Company & Position</p>
+                    <p class="step-title">Basic Information</p>
                 </div>
                 <div class="step">
                     <p class="step-circle">2</p>
-                    <p class="step-title">Requirements & Salary</p>
+                    <p class="step-title">Mentorship</p>
                 </div>
                 <div class="step">
                     <p class="step-circle">3</p>
@@ -35,7 +35,7 @@
             <!-- Step 01 -->
             <div class="form-step active" data-step="1">
 
-                <h5 class="form-section-title">Company Details</h5>
+                <h5 class="form-section-title">Basic Information</h5>
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3">
                         <label for="name" class="form-label required-label">Full Name</label>

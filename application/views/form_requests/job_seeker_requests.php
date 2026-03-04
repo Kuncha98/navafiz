@@ -1,0 +1,96 @@
+<div class="container py-4">
+
+    <!-- Page header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
+                    class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
+            <h3 class="page-title mt-3 mb-1">Manage Job Seeker Applications</h3>
+            <p class="text-muted mb-0">View all the job seeker applications</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 candidate-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Current Location</th>
+                    <th>E-mail</th>
+                    <th>Exp.</th>
+                    <th>Skills</th>
+                    <th>App. Position</th>
+                    <th>Category</th>
+                    <th>Pref. Country</th>
+                    <th>Availability</th>
+                    <th>Highest Qual.</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($records)) { ?>
+                    <?php foreach ($records as $row) { ?>
+                        <tr>
+                            <td>
+                                <?= $index + 1 ?>
+                            </td>
+                            <td>
+                                <?php echo $row->name; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->current_location; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->email; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->experience; ?> Yrs
+                            </td>
+                            <td>
+                                <?php echo $row->skills; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->applying_position; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->category; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->preferred_country; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->availability; ?>
+                            </td>
+                            <td>
+                                <?php echo $row->highest_qualification; ?>
+                            </td>
+                            <td>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php echo $row->created_at; ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo site_url('form-requests/job-seeker-request-view/' . $row->id); ?>"
+                                    class="btn btn-sm btn-primary mb-1">View</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="10" class="text-center">No candidates found.</td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+
+        <br>
+        <?php echo $pagination; ?>
+    </div>
+</div>

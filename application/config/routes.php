@@ -17,6 +17,22 @@ $route['services/hire-a-talent/submit'] = "job_requests/submit";
 // Become a mentor form page
 $route['services/become-a-mentor'] = "home/mentor";
 $route['services/become-a-mentor/submit'] = "mentor_requests/submit";
+// Mentor view of job seeker request forms
+$route['form-requests/job-seeker-request-list'] = 'job_seeker_requests/all_requests/0';
+$route['form-requests/job-seeker-request-list/(:num)'] = 'job_seeker_requests/all_requests/$1';
+$route['form-requests/job-seeker-request-view/(:num)'] = 'job_seeker_requests/job_seeker_request_view/$1';
+// Mentor view of job request forms
+$route['form-requests/job-request-list'] = 'job_requests/all_requests/0';
+$route['form-requests/job-request-list/(:num)'] = 'job_requests/all_requests/$1';
+$route['form-requests/job-request-view/(:num)'] = 'job_requests/job_request_view/$1';
+// Mentor view of freelancer request forms
+$route['form-requests/freelancer-request-list'] = 'freelancer_requests/all_requests/0';
+$route['form-requests/freelancer-request-list/(:num)'] = 'freelancer_requests/all_requests/$1';
+$route['form-requests/freelancer-request-view/(:num)'] = 'freelancer_requests/freelancer_request_view/$1';
+// Mentor view of mentor forms
+$route['form-requests/mentor-request-list'] = 'mentor_requests/all_requests/0';
+$route['form-requests/mentor-request-list/(:num)'] = 'mentor_requests/all_requests/$1';
+$route['form-requests/mentor-request-view/(:num)'] = 'mentor_requests/mentor_request_view/$1';
 
 $route['draft'] = "home/draftPage";
 $route['feature_counts'] = "home/feature_counts";

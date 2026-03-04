@@ -331,6 +331,7 @@ class user extends CI_Controller
 //                                echo "<br />";
 //                                echo $return_url;
 //                                exit();
+
                             if (empty($return_url)) {
                                 redirect(base_url('profile/' . intval($user_id)));
                             }

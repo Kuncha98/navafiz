@@ -119,7 +119,7 @@
                         <input type="text" id="education" name="education" class="form-control">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="experience" class="form-label">Experience (Years + Field)</label>
+                        <label for="experience" class="form-label">Experience (Years)</label>
                         <input type="number" id="experience" name="experience" class="form-control">
                     </div>
                     <div class="col-md-6 mb-3">

@@ -206,6 +206,10 @@
   background-color: var(--secondary);
   border-color: var(--secondary) !important;
 }
+.select-badge {
+  padding: 12px 20px !important;
+  font-size: unset !important;
+}
 
 /* Candidate profile card */
 .candidate-profile-card {
