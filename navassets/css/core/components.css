@@ -484,3 +484,23 @@
   min-height: 48px;
   border: var(--bs-border-width) solid var(--bs-border-color);
 }
+
+/* Posts feed */
+.feed-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* number of lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: auto;
+}
+
+.feed-text.expanded {
+  -webkit-line-clamp: unset;
+}
+
+.see-more {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 13px;
+  display: none;
+}

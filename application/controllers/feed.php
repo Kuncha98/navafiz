@@ -196,8 +196,7 @@ class Feed extends CI_Controller
     }
 
     // Fetch pending posts only for mentor
-    // function pending_feed_posts()
-    function pending_feeds()
+    function pending_feed_posts()
     {
         LoginCheck(site_url('login'), current_url());
 
@@ -206,25 +205,24 @@ class Feed extends CI_Controller
             show_error('Unauthorized access');
         }
 
-        $where['approval_status'] = 0;
-        $where['del_status'] = 1;
-
-        $data['feeds'] = $this->feed_model->SearchByLimit($where, 100, 0);
-
+        $data['feeds'] = $this->feed_model->get_pending_feeds();
         $data['pending_count'] = count($data['feeds']);
 
-        $this->load->view('feed/pending-feeds', $data);
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'feed/pending-feeds'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
     }
 
     // Approving posts by mentor
-    // function approve_post($id)
-    function approve($feed_id)
+    function approve_post($feed_id)
     {
         LoginCheck(site_url('login'), current_url());
 
         if ($this->session->userdata('role_id') != 2) {
             show_error('Unauthorized');
         }
+
+        $feed = $this->feed_model->GetById($feed_id);
 
         $data = array(
             'approval_status' => 1,
@@ -234,18 +232,35 @@ class Feed extends CI_Controller
 
         $this->feed_model->Save($data, $feed_id);
 
+        // reward points
+        if ($feed->user_role != 2) // prevent mentor reward
+        {
+            $reward = [
+                'user_id' => $feed->user_id,
+                'feed_id' => $feed_id,
+                'points' => 10,
+                'action_type' => 'approved',
+                'created_at' => datenow(),
+                'created_by' => $this->session_user_id
+            ];
+
+            $this->feed_model->add_reward_points($reward);
+        }
+
+
         redirect('feed/pending');
     }
 
     // Rejecting posts by mentor
-    // function reject_post($id)
-    function reject($feed_id)
+    function reject_post($feed_id)
     {
         LoginCheck(site_url('login'), current_url());
 
         if ($this->session->userdata('role_id') != 2) {
             show_error('Unauthorized');
         }
+
+        $feed = $this->feed_model->GetById($feed_id);
 
         $data = array(
             'approval_status' => 2,
@@ -254,6 +269,18 @@ class Feed extends CI_Controller
         );
 
         $this->feed_model->Save($data, $feed_id);
+
+        // remove reward points
+        $reward = [
+            'user_id' => $feed->user_id,
+            'feed_id' => $feed_id,
+            'points' => -10,
+            'action_type' => 'rejected',
+            'created_at' => datenow(),
+            'created_by' => $this->session_user_id
+        ];
+
+        $this->feed_model->add_reward_points($reward);
 
         redirect('feed/pending');
     }

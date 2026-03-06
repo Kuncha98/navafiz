@@ -393,7 +393,7 @@ $session_user_id = $user_id;
             <span class="navbar-toggler-icon"></span>
         </button>        
         <?php }?>        
-        <a class="navbar-brand" href="<?=site_url('feed');?>">
+        <a class="navbar-brand" href="<?=site_url('/');?>">
             <img src="<?=site_url('nassets');?>/img/logo.png?v=1" alt="Navafiz">
         </a>
         <?php $this->load->view('include/mobile-menu');?>
@@ -499,6 +499,7 @@ $session_user_id = $user_id;
                                                      <a style="padding: 3px;margin:  0 0 6px 0" href="<?=site_url('blueuser/listusers');?>" target="_blank" class="btn btn-outline-secondary col-12">View List of Blue User</a><br />
                                                      <a style="padding: 3px;margin:  0 0 6px 0" href="<?=site_url('mentors/quick_job_applicants');?>" target="_blank" class="btn btn-outline-secondary col-12">Easy Jobs Candidates</a><br />
                                                      <a style="padding: 3px;margin:  0 0 6px 0" href="<?=site_url('recruitment_projects/');?>" target="_blank" class="btn btn-outline-secondary col-12">Recruitment Project Contacts</a><br />
+                                                     <a style="padding: 3px;margin:  0 0 6px 0" href="<?=site_url('feed/pending');?>" target="_blank" class="btn btn-outline-secondary col-12">View pending posts</a><br />
                                                      
                                                     <?php }?>
                                                     

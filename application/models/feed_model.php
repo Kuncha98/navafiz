@@ -151,5 +151,54 @@ class Feed_model extends CI_Model
             return false;
         }
     }
+
+    public function get_pending_feeds()
+    {
+        $this->db->select('f.*, m.m_name as user_name');
+        $this->db->from('jb_feed f');
+        $this->db->join('jb_member m', 'm.m_id = f.user_id', 'left');
+        $this->db->where('f.approval_status', 0);
+        $this->db->where('f.del_status', 1);
+        $this->db->order_by('f.feed_id', 'DESC');
+
+        return $this->db->get()->result();
+    }
+
+    public function add_reward_points($data)
+    {
+        $this->db->insert('jb_feed_reward_points', $data);
+    }
+
+    public function get_feed_reward($feed_id)
+    {
+        $this->db->where('feed_id', $feed_id);
+        return $this->db->get('jb_feed_reward_points')->result();
+    }
+
+    public function get_total_points($user_id)
+    {
+        echo "<pre>";
+        print_r($user_id);
+        exit;
+
+        // // Make sure $user_id is integer
+        // $user_id = intval($user_id);
+
+        // $this->db->select_sum('points'); // Alias is automatically 'points' in CI2
+        // $this->db->where('user_id', $user_id);
+        // $query = $this->db->get('jb_feed_reward_points');
+
+        // // Get the row safely
+        // $row = $query->row();
+
+        // // Check if row exists and property is set
+        // if ($row && isset($row->points)) {
+        //     // Return points as integer
+        //     return (int) $row->points;
+        // }
+
+        // // If no row, return 0
+        return $user_id;
+    }
 }
 ?>

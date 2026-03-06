@@ -193,6 +193,13 @@ if (!empty($isFeaturedProfile)) {
                         <i>Profile Views </i> <small><i class="fas fa-eye"></i></small>
                         <i><b><?= $profile->m_profile_view; ?></b></i>
                     </div>
+                    <hr>
+                    <div class="profile_views">
+                        <i>Reward Points: </i> <small><i class="fas fa-eye"></i></small>
+                        <i><b>
+                                <?= isset($reward_points) ? $reward_points : 0 ?>
+                            </b></i>
+                    </div>
 
                     <hr>
                     <i>Recommendations </i> <i><b>(<?= count($recommand_list) ?>)</b></i>
@@ -936,7 +943,7 @@ if (!empty($isFeaturedProfile)) {
 
 
         </div>
-        
+
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">

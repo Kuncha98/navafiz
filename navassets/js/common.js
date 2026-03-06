@@ -21,4 +21,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
 });
 
+// Posts feed
+$(document).ready(function () {
+
+    $('.feed-text').each(function () {
+        var element = $(this);
+        if (this.scrollHeight > this.clientHeight) {
+            element.next('.see-more').show();
+        }
+    });
+});
+
+
+$(document).on('click', '.see-more', function () {
+
+    var text = $(this).prev('.feed-text');
+
+    if (text.hasClass('expanded')) {
+        text.removeClass('expanded');
+        $(this).text('See more');
+    } else {
+        text.addClass('expanded');
+        $(this).text('See less');
+    }
+
+});
+
 
