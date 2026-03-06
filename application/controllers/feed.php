@@ -205,8 +205,21 @@ class Feed extends CI_Controller
             show_error('Unauthorized access');
         }
 
-        $data['feeds'] = $this->feed_model->get_pending_feeds();
-        $data['pending_count'] = count($data['feeds']);
+        $this->load->library('pagination');
+
+        $config['base_url'] = site_url('feed/pending_feed_posts');
+        $config['total_rows'] = $this->feed_model->count_pending_feeds();
+        $config['per_page'] = 10;
+        $config['uri_segment'] = 3;
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $data['feeds'] = $this->feed_model->get_pending_feeds($config['per_page'], $page);
+        $data['pending_count'] = $config['total_rows'];
+
+        $data['pagination'] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'feed/pending-feeds'; // content view
@@ -235,18 +248,26 @@ class Feed extends CI_Controller
         // reward points
         if ($feed->user_role != 2) // prevent mentor reward
         {
-            $reward = [
-                'user_id' => $feed->user_id,
-                'feed_id' => $feed_id,
-                'points' => 10,
-                'action_type' => 'approved',
-                'created_at' => datenow(),
-                'created_by' => $this->session_user_id
-            ];
+            // check if reward already exists
+            $exists = $this->db
+                ->where('feed_id', $feed_id)
+                ->where('action_type', 'approved')
+                ->count_all_results('jb_feed_reward_points');
 
-            $this->feed_model->add_reward_points($reward);
+            if (!$exists) {
+
+                $reward = [
+                    'user_id' => $feed->user_id,
+                    'feed_id' => $feed_id,
+                    'points' => 10,
+                    'action_type' => 'approved',
+                    'created_at' => datenow(),
+                    'created_by' => $this->session_user_id
+                ];
+
+                $this->feed_model->add_reward_points($reward);
+            }
         }
-
 
         redirect('feed/pending');
     }
@@ -269,18 +290,6 @@ class Feed extends CI_Controller
         );
 
         $this->feed_model->Save($data, $feed_id);
-
-        // remove reward points
-        $reward = [
-            'user_id' => $feed->user_id,
-            'feed_id' => $feed_id,
-            'points' => -10,
-            'action_type' => 'rejected',
-            'created_at' => datenow(),
-            'created_by' => $this->session_user_id
-        ];
-
-        $this->feed_model->add_reward_points($reward);
 
         redirect('feed/pending');
     }

@@ -27,6 +27,7 @@ class Profile extends CI_Controller
         $this->load->model('Assigned_question_model', 'assigned_question_model');
         $this->load->model('users_by_list_model');
         $this->load->model('user_list_model');
+        $this->load->model('feed_model');
 
         $d = $this->front_model->getSettings();
         foreach ($d as $c) {
@@ -382,7 +383,7 @@ class Profile extends CI_Controller
         $recruitment_questions = array_map("unserialize", array_unique(array_map("serialize", $recruitment_questions)));
 
 
-        // $data['reward_points'] = $this->feed_model->get_total_points($profile->m_id);
+        $data['reward_points'] = $this->feed_model->get_total_points($profile->m_id);
         // echo "<pre>";
         // print_r($data['reward_points']);
         // exit;

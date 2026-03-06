@@ -195,10 +195,10 @@ if (!empty($isFeaturedProfile)) {
                     </div>
                     <hr>
                     <div class="profile_views">
-                        <i>Reward Points: </i> <small><i class="fas fa-eye"></i></small>
+                        <i>Reward Points: </i>
                         <i><b>
                                 <?= isset($reward_points) ? $reward_points : 0 ?>
-                            </b></i>
+                            </b></i> <small><i class="fas fa-trophy"></i></small>
                     </div>
 
                     <hr>

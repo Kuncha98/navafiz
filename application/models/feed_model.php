@@ -152,7 +152,7 @@ class Feed_model extends CI_Model
         }
     }
 
-    public function get_pending_feeds()
+    public function get_pending_feeds($limit, $offset)
     {
         $this->db->select('f.*, m.m_name as user_name');
         $this->db->from('jb_feed f');
@@ -160,8 +160,16 @@ class Feed_model extends CI_Model
         $this->db->where('f.approval_status', 0);
         $this->db->where('f.del_status', 1);
         $this->db->order_by('f.feed_id', 'DESC');
+        $this->db->limit($limit, $offset);
 
         return $this->db->get()->result();
+    }
+
+    public function count_pending_feeds()
+    {
+        $this->db->where('approval_status', 0);
+        $this->db->where('del_status', 1);
+        return $this->db->count_all_results('jb_feed');
     }
 
     public function add_reward_points($data)
@@ -177,28 +185,22 @@ class Feed_model extends CI_Model
 
     public function get_total_points($user_id)
     {
-        echo "<pre>";
-        print_r($user_id);
-        exit;
 
-        // // Make sure $user_id is integer
-        // $user_id = intval($user_id);
+        $this->db->select_sum('points');
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get('jb_feed_reward_points');
 
-        // $this->db->select_sum('points'); // Alias is automatically 'points' in CI2
-        // $this->db->where('user_id', $user_id);
-        // $query = $this->db->get('jb_feed_reward_points');
+        // Get the row safely
+        $row = $query->row();
 
-        // // Get the row safely
-        // $row = $query->row();
+        // Check if row exists and property is set
+        if ($row && isset($row->points)) {
+            // Return points as integer
+            return (int) $row->points;
+        }
 
-        // // Check if row exists and property is set
-        // if ($row && isset($row->points)) {
-        //     // Return points as integer
-        //     return (int) $row->points;
-        // }
-
-        // // If no row, return 0
-        return $user_id;
+        // If no row, return 0
+        return 0;
     }
 }
 ?>

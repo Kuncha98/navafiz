@@ -26,7 +26,7 @@
                     <?php foreach ($feeds as $index => $row) { ?>
                         <tr>
                             <td>
-                                <?= $index + 1 ?>
+                                <?= $index + 1 + $this->uri->segment(3) ?>
                             </td>
                             <td>
                                 <?php echo $row->user_name; ?>
