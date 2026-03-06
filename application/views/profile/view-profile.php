@@ -936,6 +936,7 @@ if (!empty($isFeaturedProfile)) {
 
 
         </div>
+        
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
@@ -975,7 +976,8 @@ if (!empty($isFeaturedProfile)) {
                         <a href="<?= site_url('form-requests/job-request-list'); ?>" class="btn btn-primary col-12 mb-2">
                             Job Requests
                         </a>
-                        <a href="<?= site_url('form-requests/job-seeker-request-list'); ?>" class="btn btn-primary col-12 mb-2">
+                        <a href="<?= site_url('form-requests/job-seeker-request-list'); ?>"
+                            class="btn btn-primary col-12 mb-2">
                             Job Seeker Requests
                         </a>
                         <a href="<?= site_url('form-requests/mentor-request-list'); ?>" class="btn btn-primary col-12 mb-2">

@@ -1,4 +1,4 @@
-<?php 
+<?php
 $session_user_id = $this->session->userdata('user_id');
 ?>
 <style>
@@ -7,101 +7,101 @@ $session_user_id = $this->session->userdata('user_id');
     color: #454545;
 }
 </style>
-<?php if($feed_list){?>
-    <?php foreach ($feed_list as $happen){?>                    
-    <div class="card feed-item">
-        <div class="card-body">                        
-            <div class="post-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="mr-2">
-                            <a href="<?= site_url('profile/'.$happen->user_id) ?>">
-                            <?php 
-                                if($happen->m_avatar != ''): ?>
-                                <img class="rounded-circle" width="50" src="<?=site_url('assets/uploads/members/small_thumbs/'. $happen->m_avatar);?>">
+<?php if ($feed_list) { ?>
+        <?php foreach ($feed_list as $happen) { ?>                    
+            <div class="card feed-item">
+                <div class="card-body">                        
+                    <div class="post-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="mr-2">
+                                    <a href="<?= site_url('profile/' . $happen->user_id) ?>">
+                                    <?php
+                                    if ($happen->m_avatar != ''): ?>
+                                            <img class="rounded-circle" width="50" src="<?= site_url('assets/uploads/members/small_thumbs/' . $happen->m_avatar); ?>">
+                                    <?php else: ?>
+                                            <img class="rounded-circle" width="45" src="<?= site_url('assets/uploads/members/user-placeholder.jpg'); ?>">
+                                    <?php endif; ?>
+                                    </a>                                    
+                                </div>
+                                <div class="ml-2">
+                                    <div class="m-0">
+                                        <a href="<?= site_url('profile/' . $happen->user_id); ?>" class="post-user-info" style="color: black;">
+                                            <span class="name"><?= $happen->m_name; ?></span>
+                                            <small class="profession"> <?= $happen->m_profession; ?></small>
+                                        </a>
+                                    </div>
+                                    <div class="h7 text-muted post-time">                                         
+                                        <?= date('d-M-Y - h:i a', strtotime($happen->feed_added_on)); ?>
+                                    </div>                                    
+                                </div>
+                            </div>                
+                        </div>                
+                    </div>
+                    <hr>
+                    <div class="desc">
+                        <?php
+                        $feed_text = link_it($happen->feed_text);
+                        $feed_text = nl2br($feed_text); // Convert newlines to <br> tags
+                        $limit = 400; // Set your character limit
+                
+                        // Check if the text exceeds the limit and truncate if necessary
+                        if (strlen($feed_text) > $limit) {
+                            $feed_text = substr($feed_text, 0, $limit) . '...'; // Add ellipsis for truncated text
+                        }
+
+                        echo $feed_text;
+                        ?>
+                
+                        <p class="text-right">
+                            <?php if (isset($session_user_id) && $session_user_id != 0): ?>
+                                <a href="<?= site_url('feed/view/' . $happen->feed_id) ?>"> See more...</a>
                             <?php else: ?>
-                                <img class="rounded-circle" width="45" src="<?=site_url('assets/uploads/members/user-placeholder.jpg');?>">
+                                <a href="<?= site_url('login') ?>"> See more...</a>
                             <?php endif; ?>
-                            </a>                                    
-                        </div>
-                        <div class="ml-2">
-                            <div class="m-0">
-                                <a href="<?=site_url('profile/'.$happen->user_id);?>" class="post-user-info" style="color: black;">
-                                    <span class="name"><?=$happen->m_name;?></span>
-                                    <small class="profession"> <?=$happen->m_profession;?></small>
-                                </a>
-                            </div>
-                            <div class="h7 text-muted post-time">                                         
-                                <?=date('d-M-Y - h:i a', strtotime($happen->feed_added_on));?>
-                            </div>                                    
-                        </div>
-                    </div>                
-                </div>                
-            </div>
-            <hr>
-            <div class="desc">
-                <?php 
-                $feed_text = link_it($happen->feed_text);
-                $feed_text = nl2br($feed_text); // Convert newlines to <br> tags
-                $limit = 400; // Set your character limit
-                
-                // Check if the text exceeds the limit and truncate if necessary
-                if (strlen($feed_text) > $limit) {
-                    $feed_text = substr($feed_text, 0, $limit) . '...'; // Add ellipsis for truncated text
-                }
+                        </p>                
+                    </div>
+                    <?php if ($happen->feed_image != ''): ?>
+                        <div class="img">
+                            <a href="<?= site_url('feed/view/' . $happen->feed_id) ?>">
+                                <img src="<?= site_url(feed_upload_path . $happen->feed_image) ?>" class="img-fluid img-responsive" style="width: 100%;" >
+                            </a>                
+                        </div>                        
+                    <?php endif; ?>                                    
+                    <hr>
+                    <div class="feed-post-actions">
+                        <?php if (isset($session_user_id) && $session_user_id != 0): ?>
+                            <a href="javascript:void(0);" feed_id="<?= $happen->feed_id; ?>" class="btn btn-outline-secondary loadcomments"> <?= $happen->comments_count > 0 ? $happen->comments_count : ''; ?> Comments</a>
+                        <?php else: ?>
+                            <a href="<?= base_url('login'); ?>" class="btn btn-outline-secondary"> <?= $happen->comments_count > 0 ? $happen->comments_count : ''; ?> Comments</a>
+                        <?php endif; ?>
+                        <?php if (in_array($session_user_id, CvReviewTeamList())) { ?> 
+                            <a href="<?= site_url('feed/delete/' . $happen->feed_id); ?>" class="btn" onclick="return confirm('Are you sure you want to delete this?');">Delete</a>
+                            <!--<a href="#" class="card-link">Like</a>-->
+                        <?php } ?>
+                        <a href="<?= site_url('track_steps/sheet/' . $happen->user_id . '/#mchatbox'); ?>" class="btn">Message</a>
 
-                echo $feed_text;
-                ?>
-                
-                <p class="text-right">
-                    <?php if(isset($session_user_id) && $session_user_id != 0): ?>
-                    <a href="<?=site_url('feed/view/'.$happen->feed_id)?>"> See more...</a>
-                    <?php else : ?>
-                    <a href="<?=site_url('login')?>"> See more...</a>
-                    <?php endif; ?>
-                </p>                
-            </div>
-            <?php if($happen->feed_image != ''): ?>
-            <div class="img">
-                <a href="<?=site_url('feed/view/'.$happen->feed_id)?>">
-                    <img src="<?=site_url(feed_upload_path. $happen->feed_image )?>" class="img-fluid img-responsive" style="width: 100%;" >
-                </a>                
-            </div>                        
-            <?php endif; ?>                                    
-            <hr>
-            <div class="feed-post-actions">
-                <?php if(isset($session_user_id) && $session_user_id != 0): ?>
-                <a href="javascript:void(0);" feed_id="<?=$happen->feed_id;?>" class="btn btn-outline-secondary loadcomments"> <?=$happen->comments_count>0 ? $happen->comments_count:'';?> Comments</a>
-                <?php else : ?>
-                <a href="<?= base_url('login'); ?>" class="btn btn-outline-secondary"> <?=$happen->comments_count>0 ? $happen->comments_count:'';?> Comments</a>
-                <?php endif; ?>
-                <?php if(in_array($session_user_id, CvReviewTeamList())){?> 
-                <a href="<?=site_url('feed/delete/'.$happen->feed_id);?>" class="btn" onclick="return confirm('Are you sure you want to delete this?');">Delete</a>
-                <!--<a href="#" class="card-link">Like</a>-->
-                <?php }?>
-                <a href="<?=site_url('track_steps/sheet/'.$happen->user_id.'/#mchatbox');?>" class="btn">Message</a>
-
-                <span class="views float-right">(<?=$happen->feed_views?>) Views</span>
-<!--            </div>-->
-            <hr>            
-<!--            <a href="javascript:void(0);" onclick="return confirm('Are you sure you want to share this post?');" feed-id="<?=$happen->feed_id;?>" class="btn btn-outline-secondary float-right sharepost btn-confirm">
+                        <span class="views float-right">(<?= $happen->feed_views ?>) Views</span>
+        <!--            </div>-->
+                    <hr>            
+        <!--            <a href="javascript:void(0);" onclick="return confirm('Are you sure you want to share this post?');" feed-id="<?= $happen->feed_id; ?>" class="btn btn-outline-secondary float-right sharepost btn-confirm">
                 Share
             </a>-->
-            <!--<input id="fname" value="<?=$happen->feed_id;?>" type="hidden">-->
+                    <!--<input id="fname" value="<?= $happen->feed_id; ?>" type="hidden">-->
                 
          
           
              
-            </div>
-            <div class="feedcommentbox">
-                <div class="feedcommentslist" id="commentsof_<?=$happen->feed_id?>">
+                    </div>
+                    <div class="feedcommentbox">
+                        <div class="feedcommentslist" id="commentsof_<?= $happen->feed_id ?>">
                     
-                </div>                
-            </div>
-        </div>        
-    </div>    
-    <?php }?>    
-<?php }?>
+                        </div>                
+                    </div>
+                </div>        
+            </div>    
+        <?php } ?>    
+<?php } ?>
 
 
 <!--<button class="btn btn-default" id="btn-confirm">Confirm</button>-->
@@ -139,7 +139,7 @@ $session_user_id = $this->session->userdata('user_id');
        console.log(id);
              $.ajax({
             type: "POST",
-            url: '<?=base_url('feed/sharepost')?>/'+id,
+            url: '<?= base_url('feed/sharepost') ?>/'+id,
             data: id,
             timeout: 600000,
             crossDomain:true,
@@ -193,4 +193,4 @@ $session_user_id = $this->session->userdata('user_id');
                 
 
 </script>
-<?php $this->load->view('feed/feed-script');?>
+<?php $this->load->view('feed/feed-script'); ?>

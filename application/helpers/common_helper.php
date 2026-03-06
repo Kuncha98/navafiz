@@ -1511,4 +1511,19 @@ function request_forms_status($status)
         'class' => isset($classMap[$status]) ? $classMap[$status] : 'badge bg-light text-dark'
     ];
 }
+
+// Validating mentor role
+// function IsMentor()
+// {
+//     $CI = &get_instance();
+//     $query = $CI->db->query('Select m_id from jb_member where role_id = 2');
+//     $data = $query->result();
+//     $return = array();
+//     if ($data) {
+//         foreach ($data as $user) {
+//             $return[] = $user->m_id;
+//         }
+//     }
+//     return $return;
+// }
 ?>

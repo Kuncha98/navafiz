@@ -4,14 +4,13 @@
         <!-- Page header -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
             <div>
-                <p class="section-subtitle">Freelancer Request</p>
+                <a href="<?php echo site_url('form-requests/freelancer-request-list'); ?>" class=""><i
+                        class="fa fa-arrow-left me-2"></i>Go back</a>
+                <p class="section-subtitle mt-3">Freelancer Request</p>
                 <h3 class="section-title">Freelancer Application -
                     <?php echo $record->name; ?>
                 </h3>
             </div>
-
-            <a href="<?php echo site_url('form-requests/freelancer-request-list'); ?>" class="btn border">Back to
-                dashboard</a>
         </div>
 
         <!-- Form card -->
@@ -40,18 +39,37 @@
             <h6 class="form-section-title">Skills & Experience</h6>
             <div class="row g-3 mb-4">
                 <?php
-                function skill_fields($label, $value)
+                $skills_html = '';
+
+                if (!empty($record->skills)) {
+                    $skills = explode(',', $record->skills);
+
+                    foreach ($skills as $skill) {
+                        $skills_html .= '<span class="badge bg-primary me-1 mb-2">'
+                            . htmlspecialchars(trim($skill))
+                            . '</span>';
+                    }
+                }
+                ?>
+                <?php
+                function skill_fields($label, $value, $is_html = false)
                 {
                     echo '<div class="col-md-6">
                             <div class="border rounded-3 p-3">
                                 <small class="text-muted">' . $label . '</small>
-                                <div class="fw-semibold">' . ($value ?: '-') . '</div>
+                                <div class="fw-semibold">';
+                    if ($value) {
+                        echo $is_html ? $value : htmlspecialchars($value);
+                    } else {
+                        echo '-';
+                    }
+                    echo '</div>
                             </div>
-                          </div>';
+                         </div>';
                 }
 
                 skill_fields('Experience', $record->experience);
-                skill_fields('Key Skills', $record->skills);
+                skill_fields('Key Skills', $skills_html, true);
                 skill_fields('Portfolio', $record->portfolio);
                 ?>
             </div>
@@ -69,8 +87,8 @@
                           </div>';
                 }
 
-                work_fields('Work Type', $record->work_type);
-                work_fields('Availability Type', $record->availability_type);
+                work_fields('Work Type', ucwords(str_replace('_', ' ', $record->work_type)));
+                work_fields('Availability Type', ucwords(str_replace('_', ' ', $record->availability_type)));
                 ?>
             </div>
 
@@ -87,7 +105,7 @@
                           </div>';
                 }
 
-                price_fields('Rate Type', $record->rate_type);
+                price_fields('Rate Type', ucwords($record->rate_type));
                 price_fields('Rate', $record->rate_amount);
                 price_fields('Currency', $record->currency);
                 ?>

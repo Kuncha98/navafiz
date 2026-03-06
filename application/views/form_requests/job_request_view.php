@@ -4,14 +4,13 @@
         <!-- Page header -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
             <div>
-                <p class="section-subtitle">Job Request</p>
+                <a href="<?php echo site_url('form-requests/job-request-list'); ?>" class=""><i
+                        class="fa fa-arrow-left me-2"></i>Go back</a>
+                <p class="section-subtitle mt-3">Job Request</p>
                 <h3 class="section-title">Job Application -
                     <?php echo $record->company_name; ?>
                 </h3>
             </div>
-
-            <a href="<?php echo site_url('form-requests/job-request-list'); ?>" class="btn border">Back to
-                dashboard</a>
         </div>
 
         <!-- Form card -->
@@ -52,8 +51,8 @@
 
                 position_fields('Job Title', $record->job_title);
                 position_fields('Number of Workers Required', $record->workers_required);
-                position_fields('Category', $record->category);
-                position_fields('Employment Type', $record->employment_type);
+                position_fields('Category', ucwords(str_replace('_', ' ', $record->category)));
+                position_fields('Employment Type', ucwords(str_replace('_', ' ', $record->employment_type)));
                 position_fields('Expected Joining Date', $record->joining_date);
                 ?>
             </div>
@@ -61,20 +60,52 @@
             <h6 class="form-section-title">Candidate Requirements</h6>
             <div class="row g-3 mb-4">
                 <?php
-                function can_fields($label, $value)
+                $skills_html = '';
+
+                if (!empty($record->skills)) {
+                    $skills = explode(',', $record->skills);
+
+                    foreach ($skills as $skill) {
+                        $skills_html .= '<span class="badge bg-primary me-1 mb-2">'
+                            . htmlspecialchars(trim($skill))
+                            . '</span>';
+                    }
+                }
+                ?>
+                <?php
+                $language_html = '';
+
+                if (!empty($record->language)) {
+                    $language = explode(',', $record->language);
+
+                    foreach ($language as $lang) {
+                        $language_html .= '<span class="badge bg-primary me-1 mb-2">'
+                            . htmlspecialchars(trim($lang))
+                            . '</span>';
+                    }
+                }
+                ?>
+                <?php
+                function can_fields($label, $value, $is_html = false)
                 {
                     echo '<div class="col-md-6">
                             <div class="border rounded-3 p-3">
                                 <small class="text-muted">' . $label . '</small>
-                                <div class="fw-semibold">' . ($value ?: '-') . '</div>
+                                <div class="fw-semibold">';
+                    if ($value) {
+                        echo $is_html ? $value : htmlspecialchars($value);
+                    } else {
+                        echo '-';
+                    }
+                    echo '</div>
                             </div>
-                          </div>';
+                         </div>';
                 }
 
                 can_fields('Education', $record->education);
                 can_fields('Experience (Years)', $record->experince);
-                can_fields('Key Skills Needed', $record->skills);
-                can_fields('Language Requirement', $record->language);
+                can_fields('Key Skills Needed', $skills_html, true);
+                can_fields('Language Requirement', $language_html, true);
                 ?>
             </div>
 
@@ -93,9 +124,9 @@
 
                 sal_fields('Minimum Salary', $record->salary_min);
                 sal_fields('Maximum Salary', $record->salary_max);
-                sal_fields('Accommodation', $record->accommodation);
-                sal_fields('Transportation', $record->transportation);
-                sal_fields('Food', $record->food);
+                sal_fields('Accommodation', $record->accommodation == 1 ? 'Yes' : 'No');
+                sal_fields('Transportation', $record->transportation == 1 ? 'Yes' : 'No');
+                sal_fields('Food', $record->food == 1 ? 'Yes' : 'No');
                 sal_fields('Other Benifits', $record->other_benifits);
                 ?>
             </div>
@@ -113,7 +144,7 @@
                           </div>';
                 }
 
-                int_fields('Interview Type', $record->interview_type);
+                int_fields('Interview Type', ucwords(str_replace('_', ' ', $record->interview_type)));
                 int_fields('Trade Test Required', $record->trade_test);
                 ?>
                 <div class="col-12">

@@ -313,6 +313,8 @@ class user extends CI_Controller
                                 'cv' => $get_user->member_cv,
                                 'avatar' => $get_user->m_avatar,
                                 'last_login_date' => $get_user->last_login_date,
+                                'role_id' => $get_user->role_id
+
                             );
 
                             $this->session->set_userdata($user_session_data);
@@ -354,6 +356,7 @@ class user extends CI_Controller
                                 'name' => $get_user->m_name,
                                 'cv' => $get_user->member_cv,
                                 'avatar' => $get_user->m_avatar,
+                                'role_id' => $get_user->role_id
                             );
 
                             $this->session->set_userdata($user_session_data);
@@ -541,7 +544,7 @@ class user extends CI_Controller
                         'name' => $user->m_name,
                         'cv' => $user->member_cv ?? '',
                         'avatar' => $user->m_avatar ?? '',
-                        'last_login_date' => datenow()
+                        'last_login_date' => datenow(),
                     ];
 
                     $this->session->set_userdata($user_session_data);

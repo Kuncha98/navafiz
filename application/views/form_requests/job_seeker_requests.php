@@ -1,13 +1,11 @@
 <div class="container py-4">
 
     <!-- Page header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <div>
-            <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
-                    class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
-            <h3 class="page-title mt-3 mb-1">Manage Job Seeker Applications</h3>
-            <p class="text-muted mb-0">View all the job seeker applications</p>
-        </div>
+    <div class="mb-4">
+        <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
+                class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
+        <h3 class="page-title mt-3 mb-1">Manage Job Seeker Applications</h3>
+        <p class="text-muted mb-0">View all the job seeker applications</p>
     </div>
 
     <div class="table-responsive">
@@ -32,7 +30,7 @@
             </thead>
             <tbody>
                 <?php if (!empty($records)) { ?>
-                    <?php foreach ($records as $row) { ?>
+                    <?php foreach ($records as $index => $row) { ?>
                         <tr>
                             <td>
                                 <?= $index + 1 ?>
@@ -50,19 +48,30 @@
                                 <?php echo $row->experience; ?> Yrs
                             </td>
                             <td>
-                                <?php echo $row->skills; ?>
+                                <?php
+                                $skills = explode(',', $row->skills);
+                                if (!empty($skills)):
+                                    foreach ($skills as $skill):
+                                        ?>
+                                        <span class="badge skill-badge border me-1 mb-2">
+                                            <?php echo htmlspecialchars(trim($skill)); ?>
+                                        </span>
+                                        <?php
+                                    endforeach;
+                                endif;
+                                ?>
                             </td>
                             <td>
                                 <?php echo $row->applying_position; ?>
                             </td>
                             <td>
-                                <?php echo $row->category; ?>
+                                <?php echo ucwords(str_replace('_', ' ', $row->category)) ?>
                             </td>
                             <td>
                                 <?php echo $row->preferred_country; ?>
                             </td>
                             <td>
-                                <?php echo $row->availability; ?>
+                                <?php echo ucwords(str_replace('_', ' ', $row->availability)) ?>
                             </td>
                             <td>
                                 <?php echo $row->highest_qualification; ?>

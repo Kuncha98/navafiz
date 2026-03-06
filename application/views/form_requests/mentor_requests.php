@@ -1,14 +1,11 @@
 <div class="container py-4">
 
     <!-- Page header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="page-title mb-1">Manage Mentor Applications</h3>
-            <p class="text-muted mb-0">View all the mentor applications</p>
-        </div>
-
-        <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class="btn border">Back to
-            dashboard</a>
+    <div class="mb-4">
+        <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
+                class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
+        <h3 class="page-title mt-3 mb-1">Manage Mentor Applications</h3>
+        <p class="text-muted mb-0">View all the mentor applications</p>
     </div>
 
     <div class="table-responsive">
@@ -30,7 +27,7 @@
             </thead>
             <tbody>
                 <?php if (!empty($records)) { ?>
-                    <?php foreach ($records as $row) { ?>
+                    <?php foreach ($records as $index => $row) { ?>
                         <tr>
                             <td>
                                 <?= $index + 1 ?>
@@ -48,26 +45,56 @@
                                 <?php echo $row->session_duration; ?> Mins
                             </td>
                             <td>
-                                <?php echo $row->conducting_mode; ?>
+                                <?php echo ucwords(str_replace('_', ' ', $row->conducting_mode)) ?>
                             </td>
                             <td>
-                                <?php echo $row->mentorship_type; ?>
+                                <?php echo ucwords(str_replace('_', ' ', $row->mentorship_type)) ?>
                             </td>
                             <td>
-                                <?php echo $row->available_at; ?>
+                                <?php if (!empty($row->available_at)): ?>
+
+                                    <?php
+                                    $dates = explode(',', $row->available_at);
+                                    $today = date('Y-m-d');
+                                    ?>
+
+                                    <?php foreach ($dates as $date): ?>
+
+                                        <?php
+                                        $cleanDate = trim($date);
+
+                                        if (empty($cleanDate))
+                                            continue;
+
+                                        $timestamp = strtotime($cleanDate);
+
+                                        if (!$timestamp)
+                                            continue; // skip invalid date
+                        
+                                        $isExpired = $timestamp < time();
+                                        $isToday = date('Y-m-d', $timestamp) === $today;
+
+                                        if ($isExpired) {
+                                            $badgeClass = 'bg-danger';
+                                        } elseif ($isToday) {
+                                            $badgeClass = 'bg-warning text-dark';
+                                        } else {
+                                            $badgeClass = 'bg-success';
+                                        }
+                                        ?>
+
+                                        <span class="badge <?= $badgeClass ?> me-1 mb-1">
+                                            <?= date('d M Y H:i', $timestamp) ?>
+                                        </span>
+
+                                    <?php endforeach; ?>
+
+                                <?php endif; ?>
                             </td>
                             <td>
-                                <?php
-                                $statusClass = match ($row->status) {
-                                    '1' => 'badge bg-warning text-dark',
-                                    '2' => 'badge bg-success',
-                                    '3' => 'badge bg-danger',
-                                    '4' => 'badge bg-secondary',
-                                    default => 'badge bg-light text-dark'
-                                };
-                                ?>
-                                <span class="<?= $statusClass ?>">
-                                    <?php echo $row->category; ?>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
                                 </span>
                             </td>
                             <td>

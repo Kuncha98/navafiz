@@ -1,14 +1,11 @@
 <div class="container py-4">
 
     <!-- Page header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="page-title mb-1">Manage Freelancer Applications</h3>
-            <p class="text-muted mb-0">View all the freelancer applications</p>
-        </div>
-
-        <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class="btn border">Back to
-            dashboard</a>
+    <div class="mb-4">
+        <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
+                class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
+        <h3 class="page-title mt-3 mb-1">Manage Freelancer Applications</h3>
+        <p class="text-muted mb-0">View all the freelancer applications</p>
     </div>
 
     <div class="table-responsive">
@@ -32,7 +29,7 @@
             </thead>
             <tbody>
                 <?php if (!empty($records)) { ?>
-                    <?php foreach ($records as $row) { ?>
+                    <?php foreach ($records as $index => $row) { ?>
                         <tr>
                             <td>
                                 <?= $index + 1 ?>
@@ -83,17 +80,9 @@
                                 <?php echo $row->currency; ?>
                             </td>
                             <td>
-                                <?php
-                                $statusClass = match ($row->status) {
-                                    '1' => 'badge bg-warning text-dark',
-                                    '2' => 'badge bg-success',
-                                    '3' => 'badge bg-danger',
-                                    '4' => 'badge bg-secondary',
-                                    default => 'badge bg-light text-dark'
-                                };
-                                ?>
-                                <span class="<?= $statusClass ?>">
-                                    <?php echo $row->category; ?>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
                                 </span>
                             </td>
                             <td>

@@ -12,63 +12,49 @@
                 </h3>
             </div>
 
-
+ 
             <form method="post" action="<?= site_url('job_seeker_requests/change_request_status/' . $record->id); ?>">
-                <div class="dropdown">
-                    <button class="btn btn-sm 
-        <?php
-        // Button color matches current status
-        switch ($record->status) {
-            case 1:
-                echo 'btn-warning text-dark';
-                break; // Submit
-            case 2:
-                echo 'btn-success';
-                break;          // Approved
-            case 3:
-                echo 'btn-danger';
-                break;           // Rejected
-            default:
-                echo 'btn-light text-dark';
-                break;
-        }
-        ?>" type="button" id="statusDropdown<?= $record->id ?>" data-bs-toggle="dropdown" aria-expanded="false">
-                        <?php
-                        $statusMap = [1 => 'Submit', 2 => 'Approved', 3 => 'Rejected'];
-                        echo $statusMap[$record->status] ?? 'Unknown';
+                <?php
+                // Decide background color based on current status
+                $status = (int) $record->status;
+
+                switch ($status) {
+                    case 1:
+                        $selectStyle = 'background-color: #ffc107; color: #212529;';
+                        break;
+                    case 2:
+                        $selectStyle = 'background-color: #198754; color: #fff;';
+                        break;
+                    case 3:
+                        $selectStyle = 'background-color: #dc3545; color: #fff;';
+                        break;
+                    default:
+                        $selectStyle = 'background-color: #f8f9fa; color: #212529;';
+                }
+                ?>
+                <select name="status" class="badge select-badge border-0" onchange="this.form.submit()"
+                    style="<?= $selectStyle ?>">
+                    <?php
+                    $statusOptions = [
+                        1 => 'Submit',
+                        2 => 'Approved',
+                        3 => 'Rejected'
+                    ];
+
+                    foreach ($statusOptions as $key => $label):
+                        $selected = ($record->status == $key) ? 'selected' : '';
+
+                        // Disable Submit if current status is Approved or Rejected
+                        $disabled = '';
+                        if (($record->status == 2 || $record->status == 3) && $key == 1) {
+                            $disabled = 'disabled';
+                        }
                         ?>
-                        <i class="bi bi-caret-down-fill"></i>
-                    </button>
-
-                    <ul class="dropdown-menu" aria-labelledby="statusDropdown<?= $record->id ?>">
-                        <?php foreach ($statusMap as $key => $label): ?>
-                            <?php
-                            // Disable Submit if already Approved/Rejected
-                            $disabled = '';
-                            if (($record->status == 2 || $record->status == 3) && $key == 1) {
-                                $disabled = 'disabled';
-                            }
-
-                            // Map badge classes for dropdown items
-                            $badgeClass = match ($key) {
-                                1 => 'bg-warning text-dark',
-                                2 => 'bg-success text-white',
-                                3 => 'bg-danger text-white',
-                                default => 'bg-light text-dark'
-                            };
-                            ?>
-                            <li>
-                                <form method="post"
-                                    action="<?= site_url('job_seeker_requests/change_request_status/' . $record->id) ?>">
-                                    <input type="hidden" name="status" value="<?= $key ?>">
-                                    <button type="submit" class="dropdown-item <?= $badgeClass ?>" <?= $disabled ?>>
-                                        <?= $label ?>
-                                    </button>
-                                </form>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
+                        <option value="<?= $key; ?>" <?= $selected; ?>     <?= $disabled; ?>>
+                            <?= $label; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
             </form>
         </div>
 
@@ -90,8 +76,8 @@
 
                 personal_fields('Email', $record->email);
                 personal_fields('Mobile', $record->mobile);
-                personal_fields('Nationality', $record->nationality);
-                personal_fields('Current Location', $record->current_location);
+                personal_fields('Nationality', ucwords($record->nationality));
+                personal_fields('Current Location', ucwords($record->current_location));
                 ?>
             </div>
 
@@ -108,30 +94,49 @@
                           </div>';
                 }
 
-                job_fields('Applying Position', $record->applying_position);
-                job_fields('Category', $record->category);
-                job_fields('Preferred Country', $record->preferred_country);
+                job_fields('Applying Position', ucwords($record->applying_position));
+                job_fields('Category', ucwords(str_replace('_', ' ', $record->category)));
+                job_fields('Preferred Country', ucwords($record->preferred_country));
                 job_fields('Expected Salary', number_format($record->expected_salary));
-                job_fields('Availability', $record->availability);
+                job_fields('Availability', ucwords(str_replace('_', ' ', $record->availability)));
                 ?>
             </div>
 
             <h6 class="form-section-title">Experience</h6>
             <div class="row g-3 mb-4">
                 <?php
-                function exp_fields($label, $value)
+                $skills_html = '';
+
+                if (!empty($record->skills)) {
+                    $skills = explode(',', $record->skills);
+
+                    foreach ($skills as $skill) {
+                        $skills_html .= '<span class="badge bg-primary me-1 mb-2">'
+                            . htmlspecialchars(trim($skill))
+                            . '</span>';
+                    }
+                }
+                ?>
+                <?php
+                function exp_fields($label, $value, $is_html = false)
                 {
                     echo '<div class="col-md-6">
                             <div class="border rounded-3 p-3">
                                 <small class="text-muted">' . $label . '</small>
-                                <div class="fw-semibold">' . ($value ?: '-') . '</div>
+                                <div class="fw-semibold">';
+                    if ($value) {
+                        echo $is_html ? $value : htmlspecialchars($value);
+                    } else {
+                        echo '-';
+                    }
+                    echo '</div>
                             </div>
-                          </div>';
+                         </div>';
                 }
 
                 exp_fields('Experience (Years)', $record->experience);
-                exp_fields('Last Job Title', $record->last_job_title);
-                exp_fields('Skills', $record->skills);
+                exp_fields('Last Job Title', ucwords($record->last_job_title));
+                exp_fields('Skills', $skills_html, true);
                 ?>
             </div>
 
@@ -148,8 +153,8 @@
                           </div>';
                 }
 
-                edu_fields('Highest Qualification', $record->highest_qualification);
-                edu_fields('Trade / Technical Certificate', $record->certificate);
+                edu_fields('Highest Qualification', ucwords($record->highest_qualification));
+                edu_fields('Trade / Technical Certificate', ucwords($record->certificate));
                 ?>
             </div>
 
