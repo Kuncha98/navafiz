@@ -1102,7 +1102,7 @@ if ($session_user_id > 0) {
 
                             <li>
                                 <i class="flaticon-p"></i>
-                                <a href="tel:+97143635252">+971 4363 5252</a>
+                                <a href="tel:+971554465332"> +971 55 446 5332</a>
                             </li>
 
                             <li>

@@ -29,7 +29,7 @@
 
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#hire">
-                    <i class="fas fa-credit-card"></i> Hire Talent
+                    <i class="fas fa-credit-card"></i> Hire Talents
                 </button>
             </li>
 
@@ -40,8 +40,14 @@
             </li>
 
             <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#manpower">
+                    <i class="fas fa-users"></i> Supply Manpower
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#freelance">
-                    <i class="fas fa-graduation-cap"></i> Freelance Work
+                    <i class="fas fa-graduation-cap"></i> Work as a Freelancer
                 </button>
             </li>
 
@@ -135,6 +141,42 @@
             </div>
 
             <!-- Tab 3 -->
+            <div class="tab-pane fade" id="manpower">
+                <div class="service-content-wrapper">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold mb-4">Partner With Us to Supply Skilled Manpower</h3>
+                            <p>Connect with companies and organizations seeking reliable manpower solutions.
+                                Showcase your workforce capabilities and collaborate with trusted employers
+                                looking for qualified personnel across various industries.</p>
+
+                            <ul class="service-list mt-4">
+                                <li>
+                                    <p>Register your company and showcase your workforce expertise</p>
+                                </li>
+                                <li>
+                                    <p>Connect with employers seeking reliable manpower supply partners</p>
+                                </li>
+                                <li>
+                                    <p>Receive manpower requests across multiple industries</p>
+                                </li>
+                                <li>
+                                    <p>Manage partnerships and grow your manpower supply network</p>
+                                </li>
+                            </ul>
+
+                            <a href="/services/supply-manpower" class="btn view-btn">Join as a Manpower Partner</a>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="service-image-wrapper">
+                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4 -->
             <div class="tab-pane fade" id="freelance">
                 <div class="service-content-wrapper">
                     <div class="row align-items-center g-5">
@@ -167,7 +209,7 @@
                 </div>
             </div>
 
-            <!-- Tab 4 -->
+            <!-- Tab 5 -->
             <div class="tab-pane fade" id="mentor">
                 <div class="service-content-wrapper">
                     <div class="row align-items-center g-5">

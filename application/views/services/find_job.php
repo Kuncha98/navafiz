@@ -94,7 +94,7 @@
                             class="form-control required-field">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="expected_salary" class="form-label">Expected Salary</label>
+                        <label for="expected_salary" class="form-label">Expected Salary (AED)</label>
                         <input type="number" id="expected_salary" name="expected_salary" class="form-control">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -130,7 +130,17 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label for="skills" class="form-label">Key Skills</label>
-                        <select id="skills" name="skills[]" multiple="multiple" class="form-select" autofocus>
+                        <!-- <select id="skills" name="skills[]" multiple="multiple" class="form-select" autofocus>
+                            <?php
+                            foreach ($saved_skills as $skill) {
+                                echo '<option value="' . trim($skill) . '" selected>' . trim($skill) . '</option>';
+                            }
+                            ?>
+                        </select> -->
+                        <select id="skills" name="skills[]" multiple autofocus class="form-select select2-field"
+                            data-placeholder="Enter or select skills" data-tags="true"
+                            data-csv="<?= base_url('assets/skills.csv') ?>" data-validate="skills">
+
                             <!-- Preload saved skills -->
                             <?php
                             foreach ($saved_skills as $skill) {
@@ -178,7 +188,7 @@
                             <div class="upload-ui" data-trigger="cv">
                                 <div class="upload-initial" id="cvInitialState">
                                     <i class="fas fa-file-pdf text-danger"></i>
-                                    <p class="mt-3 mb-1">Upload your CV (PDF only)</p>
+                                    <p class="mt-3 mb-1">Upload CV (PDF only)</p>
                                     <small class="text-muted">Max size: 5MB</small>
                                 </div>
 

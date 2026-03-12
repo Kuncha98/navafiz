@@ -9,9 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="<?= base_url() ?>assets/frontend/css/select2.min.css" rel="stylesheet" />
-    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.5.1/dist/css/tom-select.css" rel="stylesheet"> -->
 
     <link rel="stylesheet" href="<?= base_url('navassets/css/core/variables.css') ?>">
     <link rel="stylesheet" href="<?= base_url('navassets/css/core/base.css') ?>">
@@ -45,18 +42,15 @@
     <!-- Footer -->
     <?php $this->load->view('layouts/website/footer'); ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- <script src="https://cdn.jsdelivr.net/npm/tom-select@2.5.1/dist/js/tom-select.complete.min.js"></script> -->
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="<?= base_url() ?>assets/frontend/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="<?= base_url() ?>assets/frontend/js/select2.min.js"></script>
     <script src="<?= base_url('navassets/js/common.js') ?>"></script>
     <script src="<?= base_url('navassets/js/website.js') ?>"></script>
     <script src="<?= base_url('navassets/js/master-form.js') ?>"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.querySelector('.contact-card form').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -162,7 +156,7 @@
     </script>
 
     <!-- Fetch skills from csv to forms -->
-    <script>
+    <!-- <script>
         $(document).ready(function () {
 
             const select = $('#skills');
@@ -232,7 +226,137 @@
             });
 
         });
-    </script>
+    </script> -->
+    <!-- <script>
+        (function ($) {
+
+            /**
+             * Universal Select2 initializer
+             */
+            function initSelect2() {
+
+                $('.select2-field').each(function () {
+
+                    const $el = $(this);
+
+                    // prevent reinitializing
+                    if ($el.hasClass('select2-hidden-accessible')) return;
+
+                    const config = {
+                        width: '100%',
+                        placeholder: $el.data('placeholder') || 'Select option',
+                        allowClear: true,
+                        tags: $el.data('tags') === true || $el.data('tags') === "true",
+                        tokenSeparators: [',']
+                    };
+
+                    $el.select2(config);
+
+                    // Load CSV if defined
+                    const csv = $el.data('csv');
+                    if (csv) loadCSVOptions($el, csv);
+
+                    // Apply validation if needed
+                    const validate = $el.data('validate');
+                    if (validate === 'skills') initSkillValidation($el);
+
+                });
+
+            }
+
+            /**
+             * Load CSV into Select2
+             */
+            function loadCSVOptions($select, url) {
+
+                fetch(url)
+                    .then(res => res.text())
+                    .then(csv => {
+
+                        let rows = csv
+                            .split(/\r?\n/)
+                            .map(v => v.trim())
+                            .filter(Boolean);
+
+                        // remove header
+                        if (rows[0].toLowerCase() === 'skills') rows.shift();
+
+                        const unique = [...new Set(rows)];
+
+                        const existingValues = $select.find('option')
+                            .map(function () { return $(this).val(); })
+                            .get();
+
+                        unique.forEach(item => {
+                            if (!existingValues.includes(item)) {
+                                const option = new Option(item, item, false, false);
+                                $select.append(option);
+                            }
+                        });
+
+                        $select.trigger('change');
+
+                    })
+                    .catch(err => console.error('CSV load error:', err));
+
+            }
+
+            /**
+             * Skills validation
+             */
+            function initSkillValidation($select) {
+
+                $select.on('select2:selecting', function (e) {
+
+                    const text = e.params.args.data.text.trim();
+                    const wordCount = text.split(/\s+/).length;
+                    const charCount = text.length;
+
+                    if (wordCount > 7) {
+                        alert("❌ Maximum 7 words allowed.");
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    if (charCount > 40) {
+                        alert("❌ Maximum 40 characters allowed.");
+                        e.preventDefault();
+                        return false;
+                    }
+
+                });
+
+                $select.on('select2:select', function (e) {
+
+                    const added = e.params.data.text.trim().toLowerCase();
+
+                    const values = $select.find('option')
+                        .map(function () {
+                            return $(this).val().trim().toLowerCase();
+                        }).get();
+
+                    const count = values.filter(v => v === added).length;
+
+                    if (count > 1) {
+                        alert("⚠️ Duplicate skill detected.");
+                        $select.find(`option[value="${e.params.data.id}"]`).remove();
+                        $select.trigger('change');
+                    }
+
+                });
+
+            }
+
+            /**
+             * Initialize on page load
+             */
+            $(function () {
+                initSelect2();
+            });
+
+        })(jQuery);
+    </script> -->
+
 </body>
 
 </html>

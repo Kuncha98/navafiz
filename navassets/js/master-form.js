@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     FileUpload.init();
     ConditionalFields.init();
     MultipleDateTimeSelectField.init();
+    select2.init();
 });
 
 // Multi step form with validation
@@ -65,21 +66,54 @@ const FormCore = (() => {
 
             // Select (single or multi)
             else if (field.tagName.toLowerCase() === "select") {
+                let hasValue;
                 if (field.multiple) {
-                    if (field.selectedOptions.length === 0) {
-                        valid = false;
-                        field.classList.add("is-invalid");
-                    } else {
-                        field.classList.remove("is-invalid");
+                    hasValue = field.selectedOptions.length > 0;
+                } else {
+                    hasValue = field.value !== "";
+                }
+
+                const select2Box = $(field).next('.select2-container').find('.select2-selection')[0];
+
+                if (!hasValue) {
+                    valid = false;
+                    field.classList.add("is-invalid");
+                    if (select2Box) {
+                        select2Box.classList.add("is-invalid");
                     }
                 } else {
-                    if (!field.value) {
-                        valid = false;
-                        field.classList.add("is-invalid");
-                    } else {
-                        field.classList.remove("is-invalid");
+                    field.classList.remove("is-invalid");
+                    if (select2Box) {
+                        select2Box.classList.remove("is-invalid");
                     }
                 }
+
+                // Remove error when user changes value
+                field.addEventListener("change", () => {
+                    field.classList.remove("is-invalid");
+                    if (select2Box) {
+                        select2Box.classList.remove("is-invalid");
+                    }
+                }, { once: true });
+
+            }
+
+            // Email validation
+            else if (field.type === "email") {
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!field.value.trim() || !emailRegex.test(field.value.trim())) {
+                    valid = false;
+                    field.classList.add("is-invalid");
+                } else {
+                    field.classList.remove("is-invalid");
+                }
+
+                field.addEventListener("input", () => {
+                    field.classList.remove("is-invalid");
+                }, { once: true });
+
             }
 
             // Text, email, number, textarea, date
@@ -88,10 +122,58 @@ const FormCore = (() => {
                     valid = false;
                     field.classList.add("is-invalid");
                 } else {
+                    // const min = field.dataset.min ? parseInt(field.dataset.min) : null;
+                    // const max = field.dataset.max ? parseInt(field.dataset.max) : null;
+                    // const maxLength = field.dataset.maxLength ? parseInt(field.dataset.maxLength) : null;
+
+                    // // Max length validation
+                    // if (maxLength !== null && value.length > maxLength) {
+                    //     valid = false;
+                    //     field.classList.add("is-invalid");
+                    // }
+
+                    // // Number range validation
+                    // else if (field.type === "number" && (min !== null || max !== null)) {
+
+                    //     const num = parseInt(value);
+
+                    //     if ((min !== null && num < min) || (max !== null && num > max)) {
+                    //         valid = false;
+                    //         field.classList.add("is-invalid");
+                    //     } else {
+                    //         field.classList.remove("is-invalid");
+                    //     }
+
+                    // } else {
                     field.classList.remove("is-invalid");
+                    // }
                 }
+
+                field.addEventListener("input", () => {
+                    field.classList.remove("is-invalid");
+                }, { once: true });
             }
         });
+
+        // document.querySelectorAll('[data-max-length]').forEach(field => {
+
+        //     const maxLength = parseInt(field.dataset.maxLength);
+
+        //     field.addEventListener('input', function () {
+
+        //         // Remove non-numeric characters for number inputs
+        //         if (field.type === "number") {
+        //             field.value = field.value.replace(/[^0-9]/g, '');
+        //         }
+
+        //         // Enforce max length
+        //         if (field.value.length > maxLength) {
+        //             field.value = field.value.slice(0, maxLength);
+        //         }
+
+        //     });
+
+        // });
 
         return valid;
     }
@@ -261,4 +343,131 @@ const MultipleDateTimeSelectField = (() => {
 
         e.target.closest(".availability-item").remove();
     })
+})();
+
+// Select2 multi select field
+const select2 = (() => {
+
+    function multiSelectField() {
+        $('.select2-field').each(function () {
+
+            const $el = $(this);
+
+            // Prevent reinitialization
+            if ($el.hasClass('select2-hidden-accessible')) return;
+
+            const config = {
+                width: '100%',
+                placeholder: $el.data('placeholder') || 'Select option',
+                allowClear: true,
+                tags: $el.data('tags') === true || $el.data('tags') === "true",
+                tokenSeparators: [',']
+            };
+
+            $el.select2(config);
+
+            // Add form-control class to Select2 UI
+            $el.next('.select2-container').find('.select2-selection')
+                .addClass('form-control');
+
+            // Load CSV if defined
+            const csv = $el.data('csv');
+            if (csv) loadCSVOptions($el, csv);
+
+            // Apply validation if needed
+            const validate = $el.data('validate');
+            if (validate === 'skills') initSkillValidation($el);
+
+        });
+
+    }
+
+    // Load skills CSV into Select2
+    function loadCSVOptions($select, url) {
+
+        fetch(url)
+            .then(res => res.text())
+            .then(csv => {
+
+                let rows = csv
+                    .split(/\r?\n/)
+                    .map(v => v.trim())
+                    .filter(Boolean);
+
+                // Prevent crash if CSV empty
+                if (rows.length === 0) return;
+
+                // Remove header
+                if (rows[0].toLowerCase() === 'skills') rows.shift();
+
+                const unique = [...new Set(rows)];
+
+                const existingValues = $select.find('option')
+                    .map(function () { return $(this).val(); })
+                    .get();
+
+                unique.forEach(item => {
+                    if (!existingValues.includes(item)) {
+                        const option = new Option(item, item, false, false);
+                        $select.append(option);
+                    }
+                });
+
+                $select.trigger('change');
+
+            })
+            .catch(err => console.error('CSV load error:', err));
+
+    }
+
+    // Skills validation
+    function initSkillValidation($select) {
+
+        // Prevent duplicate binding
+        $select.off('select2:selecting');
+        $select.off('select2:select');
+
+        $select.on('select2:selecting', function (e) {
+
+            const text = e.params.args.data.text.trim();
+            const wordCount = text.split(/\s+/).length;
+            const charCount = text.length;
+
+            if (wordCount > 7) {
+                alert("❌ Maximum 7 words allowed.");
+                e.preventDefault();
+                return false;
+            }
+
+            if (charCount > 40) {
+                alert("❌ Maximum 40 characters allowed.");
+                e.preventDefault();
+                return false;
+            }
+
+        });
+
+        $select.on('select2:select', function (e) {
+
+            const added = e.params.data.text.trim().toLowerCase();
+
+            const values = $select.find('option')
+                .map(function () {
+                    return $(this).val().trim().toLowerCase();
+                }).get();
+
+            const count = values.filter(v => v === added).length;
+
+            if (count > 1) {
+                alert("⚠️ Duplicate skill detected.");
+                $select.find(`option[value="${e.params.data.id}"]`).remove();
+                $select.trigger('change');
+            }
+
+        });
+
+    }
+
+    multiSelectField();
+
 })();

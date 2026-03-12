@@ -1,5 +1,46 @@
 <!-- Footer Section -->
 <footer class="text-light py-5">
+    <!-- WhatsApp Floating Button -->
+    <div class="whatsapp-widget">
+
+        <button class="whatsapp-float" onclick="openForm()">
+            <i class="fab fa-whatsapp"></i>
+        </button>
+
+        <div class="chat-popup" id="myForm">
+
+            <div class="chat-container">
+
+                <div class="chat-header">
+                    <img src="<?= site_url('nassets'); ?>/img/logo.png?v=1">
+                    <span>Navafiz Support</span>
+                    <button class="chat-close" onclick="closeForm()">×</button>
+                </div>
+
+                <div class="chat-body">
+
+                    <div class="chat-message">
+                        <p>
+                            Hello 👋 <br>
+                            Thank you for choosing Navafiz Support Systems.<br><br>
+                            How can we help you today?
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="chat-footer">
+                    <a href="https://api.whatsapp.com/send/?phone=971554465332" target="_blank" class="whatsapp-start">
+                        <i class="fab fa-whatsapp"></i>
+                        Start Chat
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
     <div class="container">
         <div class="row g-4">
             <!-- Navafiz Info -->
@@ -83,11 +124,24 @@
             </div>
             <div class="col-md-6 text-md-end">
                 <ul class="list-inline mb-0">
-                    <li class="list-inline-item"><a href="#" class="text-light">LinkedIn</a></li>
-                    <li class="list-inline-item"><a href="#" class="text-light">Facebook</a></li>
-                    <li class="list-inline-item"><a href="#" class="text-light">Instagram</a></li>
+                    <li class="list-inline-item"><a href="https://www.linkedin.com/company/navafiz"
+                            class="text-light">LinkedIn</a></li>
+                    <li class="list-inline-item"><a href="https://www.facebook.com/groups/JobPostMail"
+                            class="text-light">Facebook</a></li>
+                    <li class="list-inline-item"><a href="https://www.instagram.com/navafiz_management"
+                            class="text-light">Instagram</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
+
+<script>
+    function openForm() {
+        document.getElementById("myForm").style.display = "block";
+    }
+
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
+</script>

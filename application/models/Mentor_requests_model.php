@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Mentor_requests_model extends CI_Model
+class mentor_requests_model extends CI_Model
 {
     private $table = 'jb_mentor_requests';
 

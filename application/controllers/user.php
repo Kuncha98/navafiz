@@ -15,19 +15,16 @@ class user extends CI_Controller
         $this->table_name = TABLE_PREFIX . 'jobs';
     }
 
-    function index()
-    {
-
-    }
+    function index() {}
 
 
 
     function login2()
     {
         //         $this->session->unset_userdata('access_token');
-//
-//        $this->session->unset_userdata('user_session_data');
-//        exit();
+        //
+        //        $this->session->unset_userdata('user_session_data');
+        //        exit();
         include_once APPPATH . "libraries/google-api-php-client/vendor/autoload.php";
 
         $google_client = new Google_Client();
@@ -91,7 +88,6 @@ class user extends CI_Controller
 
                             $this->profile_model->Save(array('last_login_date' => datenow()), $get_user_detail[0]->m_id);
                             redirect(base_url('profile/' . intval($user_id)));
-
                         }
                     }
                 } else {
@@ -122,12 +118,8 @@ class user extends CI_Controller
 
                         $this->profile_model->Save(array('last_login_date' => datenow()), $user_oauth[0]->m_id);
                         redirect(base_url('profile/' . intval($user_id)));
-
                     }
                 }
-
-
-
             }
         }
         $loginURL = '';
@@ -243,7 +235,6 @@ class user extends CI_Controller
                 }
                 redirect('user/login');
                 exit();
-
             }
         }
     }
@@ -328,11 +319,11 @@ class user extends CI_Controller
                             $return_url = $this->session->userdata('return_url');
                             $this->session->set_userdata('return_url', '');
                             //                                echo base_url();exit();
-//                                $base_url = site_url();
-//                                echo $base_url;
-//                                echo "<br />";
-//                                echo $return_url;
-//                                exit();
+                            //                                $base_url = site_url();
+                            //                                echo $base_url;
+                            //                                echo "<br />";
+                            //                                echo $return_url;
+                            //                                exit();
 
                             if (empty($return_url)) {
                                 redirect(base_url('profile/' . intval($user_id)));
@@ -379,106 +370,105 @@ class user extends CI_Controller
                 }
                 redirect('user/login');
                 exit();
-
             }
         }
     }
 
     //     function register()
-//     {
-//     $this->form_validation->set_rules('regname', 'Name', 'trim|required');
-//     $this->form_validation->set_rules('regemail', 'Email', 'trim|required|valid_email');
-//     $this->form_validation->set_rules('regpwd', 'Password', 'trim|required|matches[regcpwd]');
-//     $this->form_validation->set_rules('regcpwd', 'Password Confirmation', 'required');
+    //     {
+    //     $this->form_validation->set_rules('regname', 'Name', 'trim|required');
+    //     $this->form_validation->set_rules('regemail', 'Email', 'trim|required|valid_email');
+    //     $this->form_validation->set_rules('regpwd', 'Password', 'trim|required|matches[regcpwd]');
+    //     $this->form_validation->set_rules('regcpwd', 'Password Confirmation', 'required');
 
     //     if ($this->form_validation->run() === FALSE) {
-//         _setError('Please enter all correct information');
-//         $data['selected'] = "login";
-//         $this->load->view('login/register', $data);
-//     } else {
-//         $referral_id = $this->input->post('referral_id');
-//         $name = $this->input->post('regname');
-//         $email = $this->input->post('regemail');
-//         $password = $this->input->post('regpwd');
+    //         _setError('Please enter all correct information');
+    //         $data['selected'] = "login";
+    //         $this->load->view('login/register', $data);
+    //     } else {
+    //         $referral_id = $this->input->post('referral_id');
+    //         $name = $this->input->post('regname');
+    //         $email = $this->input->post('regemail');
+    //         $password = $this->input->post('regpwd');
 
     //         $page_metas = array(
-//             'title' => '',
-//             'description' => '',
-//             'og_img' => '',
-//             'og_url' => '',
-//         );
-//         $data['page_meta'] = $page_metas;
+    //             'title' => '',
+    //             'description' => '',
+    //             'og_img' => '',
+    //             'og_url' => '',
+    //         );
+    //         $data['page_meta'] = $page_metas;
 
     //         $decoded_referral_id = base64_decode($referral_id);
-//         $reg['m_name'] = $name;
-//         $reg['m_email'] = $email;
-//         $reg['m_password'] = $password;
-//         $reg['referral_id'] = $decoded_referral_id;
-//         $reg['added_on'] = datenow();
+    //         $reg['m_name'] = $name;
+    //         $reg['m_email'] = $email;
+    //         $reg['m_password'] = $password;
+    //         $reg['referral_id'] = $decoded_referral_id;
+    //         $reg['added_on'] = datenow();
 
     //         $find_user = $this->profile_model->Search(array('m_email' => $email));
-//         if (count($find_user) < 1) {
-//             $retun_id = $this->profile_model->Save($reg);
-//             if (intval($retun_id) > 0) {
-//                 $m_verification = rand(10000, 99999);
-//                 $to = $email;
-//                 $subject = "Thank you " . $name . " for Registration with Navafiz - One more step needs to be completed";
+    //         if (count($find_user) < 1) {
+    //             $retun_id = $this->profile_model->Save($reg);
+    //             if (intval($retun_id) > 0) {
+    //                 $m_verification = rand(10000, 99999);
+    //                 $to = $email;
+    //                 $subject = "Thank you " . $name . " for Registration with Navafiz - One more step needs to be completed";
 
     //                 $messageText = "Dear " . $name . ",\n";
-//                 $messageText .= "Thank you for registering with Navafiz!\n";
-//                 $messageText .= "Your Verification code is " . $m_verification . "\n";
-//                 $messageText .= "Or copy and paste the URL in the browser: " . base_url() . "user/verify/\n";
-//                 $messageText .= "Regards,\nThe Navafiz Team\n";
-//                 $messageText .= "*This message was sent by an automated mail server. Please do not reply.";
+    //                 $messageText .= "Thank you for registering with Navafiz!\n";
+    //                 $messageText .= "Your Verification code is " . $m_verification . "\n";
+    //                 $messageText .= "Or copy and paste the URL in the browser: " . base_url() . "user/verify/\n";
+    //                 $messageText .= "Regards,\nThe Navafiz Team\n";
+    //                 $messageText .= "*This message was sent by an automated mail server. Please do not reply.";
 
     //                 // Email configuration
-//                 $config = [
-//                     'protocol'  => 'smtp',
-//                     'smtp_host' => 'ssl://mail.navafiz.com',   // Use 'ssl://' prefix for port 465
-//                     'smtp_user' => 'register@navafiz.com',
-//                     'smtp_pass' => 'Nav@123123.',      // Use the actual password for the email
-//                     'smtp_port' => 465,
-//                     'mailtype'  => 'html',
-//                     'charset'   => 'utf-8',
-//                     'wordwrap'  => true,
-//                     'newline'   => "\r\n",
-//                     'crlf'      => "\r\n",
-//                 ];
+    //                 $config = [
+    //                     'protocol'  => 'smtp',
+    //                     'smtp_host' => 'ssl://mail.navafiz.com',   // Use 'ssl://' prefix for port 465
+    //                     'smtp_user' => 'register@navafiz.com',
+    //                     'smtp_pass' => 'Nav@123123.',      // Use the actual password for the email
+    //                     'smtp_port' => 465,
+    //                     'mailtype'  => 'html',
+    //                     'charset'   => 'utf-8',
+    //                     'wordwrap'  => true,
+    //                     'newline'   => "\r\n",
+    //                     'crlf'      => "\r\n",
+    //                 ];
 
 
     //                 // Load email library with the above config
-//                 $this->load->library('email');
-//                 $this->email->initialize($config);
+    //                 $this->load->library('email');
+    //                 $this->email->initialize($config);
 
 
 
 
     //                 // Set email details
-//                 $this->email->from('np-reply@navafiz.com', 'Navafiz');
-//                 $this->email->to($to);
-//                 $this->email->subject($subject);
-//                 $this->email->message($messageText);
+    //                 $this->email->from('np-reply@navafiz.com', 'Navafiz');
+    //                 $this->email->to($to);
+    //                 $this->email->subject($subject);
+    //                 $this->email->message($messageText);
 
     //                 // Send email
-//                 if ($this->email->send()) {
-//                     $retun = $this->profile_model->Save(array('m_verification' => $m_verification), $retun_id);
-//                     if ($retun > 0) {
-//                         _setSuccess('Please check your Email inbox/spam and enter the verification code to complete registration on Navafiz');
-//                         redirect('user/verify');
-//                     } else {
-//                         _setError("There is some problem with Website Administrator");
-//                         redirect('user/login');
-//                     }
-//                 } else {
-//                     echo $this->email->print_debugger();
-//                 }
-//             }
-//         } else {
-//             _setError("You're already registered with the provided email, Please login or try forgot password");
-//             redirect('user/register');
-//         }
-//     }
-// }
+    //                 if ($this->email->send()) {
+    //                     $retun = $this->profile_model->Save(array('m_verification' => $m_verification), $retun_id);
+    //                     if ($retun > 0) {
+    //                         _setSuccess('Please check your Email inbox/spam and enter the verification code to complete registration on Navafiz');
+    //                         redirect('user/verify');
+    //                     } else {
+    //                         _setError("There is some problem with Website Administrator");
+    //                         redirect('user/login');
+    //                     }
+    //                 } else {
+    //                     echo $this->email->print_debugger();
+    //                 }
+    //             }
+    //         } else {
+    //             _setError("You're already registered with the provided email, Please login or try forgot password");
+    //             redirect('user/register');
+    //         }
+    //     }
+    // }
 
     function register()
     {
@@ -570,39 +560,39 @@ class user extends CI_Controller
 
 
     // public function testMail() {
-//     SendMailRegister('ibasilsaleem@gmail.com','test','test');
-//     exit;
-//     // Load email library
+    //     SendMailRegister('ibasilsaleem@gmail.com','test','test');
+    //     exit;
+    //     // Load email library
 
     //     // Email configuration
-//     $config = [
-//         'protocol'  => 'smtp',
-//         'smtp_host' => 'smtp.navafiz.com', // Replace with your cPanel email SMTP host
-//         'smtp_user' => 'register@navafiz.com', // Your full cPanel email address
-//         'smtp_pass' => 'Nav@123123.', // Your cPanel email password
-//         'smtp_port' => 587, // Or 587 if using TLS
-//         'smtp_crypto' => 'tls', // Use 'tls' for port 587
-//         'mailtype'  => 'html', // Email format (HTML)
-//         'charset'   => 'utf-8', // Character encoding
-//         'wordwrap'  => true, // Word wrapping
-//     ];
+    //     $config = [
+    //         'protocol'  => 'smtp',
+    //         'smtp_host' => 'smtp.navafiz.com', // Replace with your cPanel email SMTP host
+    //         'smtp_user' => 'register@navafiz.com', // Your full cPanel email address
+    //         'smtp_pass' => 'Nav@123123.', // Your cPanel email password
+    //         'smtp_port' => 587, // Or 587 if using TLS
+    //         'smtp_crypto' => 'tls', // Use 'tls' for port 587
+    //         'mailtype'  => 'html', // Email format (HTML)
+    //         'charset'   => 'utf-8', // Character encoding
+    //         'wordwrap'  => true, // Word wrapping
+    //     ];
 
     //     $this->load->library('email', $config);
 
     //     // Email details
-//     $this->email->from('np-reply@navafiz.com', 'NAvafiz'); // Sender's email and name
-//     $this->email->to('basil78687@gmail.com'); // Recipient's email
-//     $this->email->subject('Test Email from CodeIgniter');
-//     $this->email->message('<p>This is a test email sent from CodeIgniter 3 on cPanel hosting.</p>');
+    //     $this->email->from('np-reply@navafiz.com', 'NAvafiz'); // Sender's email and name
+    //     $this->email->to('basil78687@gmail.com'); // Recipient's email
+    //     $this->email->subject('Test Email from CodeIgniter');
+    //     $this->email->message('<p>This is a test email sent from CodeIgniter 3 on cPanel hosting.</p>');
 
     //     // Send email
-//     if ($this->email->send()) {
-//         echo 'Email sent successfully.';
-//     } else {
-//         echo 'Failed to send email.';
-//         echo $this->email->print_debugger(); // Debugging information
-//     }
-// }
+    //     if ($this->email->send()) {
+    //         echo 'Email sent successfully.';
+    //     } else {
+    //         echo 'Failed to send email.';
+    //         echo $this->email->print_debugger(); // Debugging information
+    //     }
+    // }
 
 
 
@@ -700,18 +690,18 @@ class user extends CI_Controller
                         } else {
                             _setError("There is some problem with Website Adminstrator");
                             //                            redirect('user/login'); 
-//                            exit();
+                            //                            exit();
                         }
                     } else {
                         _setError("Your registeration is completed for login check with Website Adminstrator");
                         //                        redirect('user/login'); 
-//                        exit();
+                        //                        exit();
                     }
                 }
             } else {
                 _setError("You're already registered with provided email, Please login or try forgot password");
                 //                redirect('user/s_register');     
-//                exit();
+                //                exit();
             }
 
 
@@ -746,10 +736,6 @@ class user extends CI_Controller
                 //                print_r($response);
 
             }
-
-
-
-
         }
     }
 
@@ -769,8 +755,8 @@ class user extends CI_Controller
     {
 
         //        $query = $this->db->query('select list_id from jb_member_by_list where member_id = '.$id);
-//        $user_list_cat = $query->result();
-//        return $user_list_cat;
+        //        $user_list_cat = $query->result();
+        //        return $user_list_cat;
         $email = $this->input->post('email');
         //        echo $email;exit();
         $query = $this->db->query('SELECT m_verification FROM jb_member WHERE m_email="' . $email . '"');
@@ -782,7 +768,6 @@ class user extends CI_Controller
         } else {
             echo "<h1 style='margin-top:40px;text-align:center'> This Email " . $email . " Doesn't Exists </h1>";
         }
-
     }
 
 
@@ -830,8 +815,6 @@ class user extends CI_Controller
             redirect(site_url('user/change_password'));
             exit();
         }
-
-
     }
 
 
@@ -874,7 +857,6 @@ class user extends CI_Controller
                 //MentorAutoAssigned($user_id);                
                 redirect(base_url('profile/' . intval($user_id)));
                 exit();
-
             } else {
                 _setError("Unable to complete this request please try again");
                 redirect(site_url());
@@ -929,7 +911,6 @@ class user extends CI_Controller
             _setSuccess('Please check your Email inbox/spam and enter the verification code to complete registration on Navafiz');
             redirect('user/verify');
             exit();
-
         } else {
             _setError('No Account associate with provided email address');
             redirect('user/resend_code');
@@ -1016,6 +997,4 @@ class user extends CI_Controller
         $data['referred_persons'] = $query->result();
         $this->load->view('profile/referred_persons', $data);
     }
-
-
 }

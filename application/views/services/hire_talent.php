@@ -124,7 +124,10 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="skills" class="form-label">Key Skills Needed</label>
-                        <select id="skills" name="skills[]" multiple="multiple" class="form-select" autofocus>
+                        <select id="skills" name="skills[]" multiple autofocus class="form-select select2-field"
+                            data-placeholder="Enter or select skills" data-tags="true"
+                            data-csv="<?= base_url('assets/skills.csv') ?>" data-validate="skills">
+
                             <!-- Preload saved skills -->
                             <?php
                             foreach ($saved_skills as $skill) {

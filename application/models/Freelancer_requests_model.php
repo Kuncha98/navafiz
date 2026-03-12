@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Freelancer_requests_model extends CI_Model
+class freelancer_requests_model extends CI_Model
 {
     private $table = 'jb_freelancer_requests';
 

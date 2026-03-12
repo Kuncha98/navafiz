@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Job_seeker_requests_model extends CI_Model
+class job_seeker_requests_model extends CI_Model
 {
     private $table = 'jb_job_seeker_requests';
 

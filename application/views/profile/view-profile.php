@@ -194,14 +194,16 @@ if (!empty($isFeaturedProfile)) {
                         <i><b><?= $profile->m_profile_view; ?></b></i>
                     </div>
                     <hr>
-                    <div class="profile_views">
-                        <i>Reward Points: </i>
-                        <i><b>
-                                <?= isset($reward_points) ? $reward_points : 0 ?>
-                            </b></i> <small><i class="fas fa-trophy"></i></small>
-                    </div>
+                    <?php if ($profile->role_id != 2): ?>
+                        <div class="">
+                            <i>Reward Points:</i>
+                            <i><b><?= $reward_points ?? 0 ?></b></i>
+                            <small><i class="fas fa-trophy mt-0" style="font-size: small;"></i></small>
+                        </div>
+                        <hr>
+                    <?php endif; ?>
 
-                    <hr>
+
                     <i>Recommendations </i> <i><b>(<?= count($recommand_list) ?>)</b></i>
                     <?php if (!empty($profile->last_login_date)) { ?>
                         <hr>

@@ -5,18 +5,23 @@
 // $route['default_controller'] = "search";
 // Home page
 $route['default_controller'] = "home/new_index";
+
 // Become a freelancer form page
 $route['services/become-a-freelancer'] = "home/freelance";
 $route['services/become-a-freelancer/submit'] = "freelancer_requests/submit";
 // Job seeker form page
 $route['services/find-a-job'] = "home/find_job";
 $route['services/find-a-job/submit'] = "job_seeker_requests/submit";
+// Job seeker form page
+$route['services/supply-manpower'] = "home/supply_manpower";
+$route['services/supply-manpower/submit'] = "manpower_supply_requests/submit";
 // Hire a talent form page
 $route['services/hire-a-talent'] = "home/hire_talent";
 $route['services/hire-a-talent/submit'] = "job_requests/submit";
 // Become a mentor form page
 $route['services/become-a-mentor'] = "home/mentor";
 $route['services/become-a-mentor/submit'] = "mentor_requests/submit";
+
 // Mentor view of job seeker request forms
 $route['form-requests/job-seeker-request-list'] = 'job_seeker_requests/all_requests/0';
 $route['form-requests/job-seeker-request-list/(:num)'] = 'job_seeker_requests/all_requests/$1';

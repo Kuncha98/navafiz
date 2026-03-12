@@ -1,6 +1,6 @@
 <?php
-/*error_reporting(1);
-ini_set('display_errors', 1);*/
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 date_default_timezone_set('America/Denver');
 
 if (substr($_SERVER['SERVER_NAME'], 0, 3) == "www") {

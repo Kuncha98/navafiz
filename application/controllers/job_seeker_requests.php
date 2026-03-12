@@ -11,7 +11,7 @@ class job_seeker_requests extends CI_Controller
         $this->load->helper(array('form', 'url'));
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
-        $this->load->model('Job_seeker_requests_model');
+        $this->load->model('job_seeker_requests_model');
     }
 
     public function submit()
@@ -44,9 +44,11 @@ class job_seeker_requests extends CI_Controller
         } else {
 
             $cv_upload_data = $this->_upload_file('cv', 'cv_', 'pdf', 'navassets/uploads/cv/');
+
             $passport_upload_data = !empty($_FILES['passport']['name'])
                 ? $this->_upload_file('passport', 'passport_', ['pdf', 'jpg', 'jpeg', 'png'], 'navassets/uploads/passport/')
                 : null;
+
             $visa_upload_data = null;
             if ($this->input->post('visaStatus') === 'yes' && !empty($_FILES['visa']['name'])) {
                 $visa_upload_data = $this->_upload_file('visa', 'visa_', ['pdf', 'jpg', 'jpeg', 'png'], 'navassets/uploads/visa/');
@@ -167,13 +169,13 @@ class job_seeker_requests extends CI_Controller
         // exit;
         $config = array();
         $config["base_url"] = site_url('job-seeker-request-list');
-        $config["total_rows"] = $this->Job_seeker_requests_model->get_total_count();
+        $config["total_rows"] = $this->job_seeker_requests_model->get_total_count();
         $config["per_page"] = 10;
         $config["uri_segment"] = 2;
 
         $this->pagination->initialize($config);
 
-        $data["records"] = $this->Job_seeker_requests_model->get_all($config["per_page"], $page);
+        $data["records"] = $this->job_seeker_requests_model->get_all($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';
@@ -190,7 +192,7 @@ class job_seeker_requests extends CI_Controller
             show_404();
         }
 
-        $record = $this->Job_seeker_requests_model->get_by_id($id);
+        $record = $this->job_seeker_requests_model->get_by_id($id);
 
         if (!$record) {
             show_404();
@@ -222,7 +224,7 @@ class job_seeker_requests extends CI_Controller
         }
 
         // Fetch current status
-        $request = $this->Job_seeker_requests_model->get_by_id($id);
+        $request = $this->job_seeker_requests_model->get_by_id($id);
         if (!$request) {
             show_error('Request not found', 404);
         }
@@ -235,7 +237,7 @@ class job_seeker_requests extends CI_Controller
         }
 
         // Update status
-        $updated = $this->Job_seeker_requests_model->update_status($id, $status);
+        $updated = $this->job_seeker_requests_model->update_status($id, $status);
 
         if ($updated) {
             $this->session->set_flashdata('success', 'Status updated successfully.');

@@ -11,7 +11,7 @@ class mentor_requests extends CI_Controller
         $this->load->helper(array('form', 'url'));
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
-        $this->load->model('Mentor_requests_model');
+        $this->load->model('mentor_requests_model');
     }
 
     public function submit()
@@ -104,13 +104,13 @@ class mentor_requests extends CI_Controller
 
         $config = array();
         $config["base_url"] = site_url('mentor-request-list');
-        $config["total_rows"] = $this->Mentor_requests_model->get_total_count();
+        $config["total_rows"] = $this->mentor_requests_model->get_total_count();
         $config["per_page"] = 10;
         $config["uri_segment"] = 2;
 
         $this->pagination->initialize($config);
 
-        $data["records"] = $this->Mentor_requests_model->get_all($config["per_page"], $page);
+        $data["records"] = $this->mentor_requests_model->get_all($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';
@@ -127,7 +127,7 @@ class mentor_requests extends CI_Controller
             show_404();
         }
 
-        $record = $this->Mentor_requests_model->get_by_id($id);
+        $record = $this->mentor_requests_model->get_by_id($id);
 
         if (!$record) {
             show_404();
