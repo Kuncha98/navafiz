@@ -3,7 +3,8 @@
     <div class="container">
         <!-- Page header -->
         <div class="mb-4">
-            <p class="section-subtitle">Recruitment Request</p>
+            <p class="section-subtitle">Share your expertise and guide professionals through mentorship opportunities
+            </p>
             <h2 class="section-title">Mentor Application Form</h2>
         </div>
 

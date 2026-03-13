@@ -38,6 +38,10 @@ $route['form-requests/freelancer-request-view/(:num)'] = 'freelancer_requests/fr
 $route['form-requests/mentor-request-list'] = 'mentor_requests/all_requests/0';
 $route['form-requests/mentor-request-list/(:num)'] = 'mentor_requests/all_requests/$1';
 $route['form-requests/mentor-request-view/(:num)'] = 'mentor_requests/mentor_request_view/$1';
+// Mentor view of mentor forms
+$route['form-requests/manpower-supply-request-list'] = 'manpower_supply_requests/all_requests/0';
+$route['form-requests/manpower-supply-request-list/(:num)'] = 'manpower_supply_requests/all_requests/$1';
+$route['form-requests/manpower-supply-request-view/(:num)'] = 'manpower_supply_requests/manpower_supply_request_view/$1';
 // Feed posts pending, approval & reject
 $route['feed/pending'] = 'feed/pending_feed_posts';
 $route['feed/approve/(:num)'] = 'feed/approve_post/$1';

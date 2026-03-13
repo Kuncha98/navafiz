@@ -4,8 +4,8 @@
     <div class="mb-4">
         <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
                 class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
-        <h3 class="page-title mt-3 mb-1">Manage Freelancer Applications</h3>
-        <p class="text-muted mb-0">View all the freelancer applications</p>
+        <h3 class="page-title mt-3 mb-1">Freelancer Applications Management</h3>
+        <p class="text-muted mb-0">Review and manage all freelancer applications submitted through the platform.</p>
     </div>
 
     <div class="table-responsive">

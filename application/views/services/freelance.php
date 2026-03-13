@@ -3,8 +3,8 @@
     <div class="container">
         <!-- Page header -->
         <div class="mb-4">
-            <p class="section-subtitle">Recruitment Request</p>
-            <h2 class="section-title">Freelance Application Form</h2>
+            <p class="section-subtitle">Apply to join our network of independent professionals and freelancers</p>
+            <h2 class="section-title">Freelancer Registration Form</h2>
         </div>
 
         <!-- Form card -->

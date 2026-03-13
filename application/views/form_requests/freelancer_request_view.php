@@ -6,9 +6,9 @@
             <div>
                 <a href="<?php echo site_url('form-requests/freelancer-request-list'); ?>" class=""><i
                         class="fa fa-arrow-left me-2"></i>Go back</a>
-                <p class="section-subtitle mt-3">Freelancer Request</p>
-                <h3 class="section-title">Freelancer Application -
-                    <?php echo $record->name; ?>
+                <p class="section-subtitle mt-3">Freelancer Application Review</p>
+                <h3 class="section-title">
+                    Freelancer Application – <?php echo $record->name; ?>
                 </h3>
             </div>
         </div>

@@ -3,7 +3,7 @@
     <div class="container">
         <!-- Page header -->
         <div class="mb-4">
-            <p class="section-subtitle">Join as a Manpower Partner</p>
+            <p class="section-subtitle">Partner with us to provide skilled workforce solutions</p>
             <h2 class="section-title">Manpower Supply Company Registration</h2>
         </div>
 
@@ -86,9 +86,9 @@
                         <label class="form-label required-label">Company Type</label>
                         <select name="company_type" class="form-select required-field">
                             <option value="">Select</option>
-                            <option value="Recruitment Agency">Recruitment Agency</option>
-                            <option value="Manpower Supply Company">Manpower Supply Company</option>
-                            <option value="HR Consultancy">HR Consultancy</option>
+                            <option value="recruitment_agency">Recruitment Agency</option>
+                            <option value="manpower_supply_company">Manpower Supply Company</option>
+                            <option value="hr_consultancy">HR Consultancy</option>
                         </select>
                     </div>
 
@@ -384,32 +384,24 @@
             <div class="form-step" data-step="5">
 
                 <h5 class="form-section-title">Online Presence</h5>
-
                 <div class="row mb-4">
-
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Company Website</label>
                         <input type="text" name="company_website" class="form-control">
                     </div>
-
                     <div class="col-md-4 mb-3">
                         <label class="form-label">LinkedIn Page</label>
                         <input type="text" name="linkedin_page" class="form-control">
                     </div>
-
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Facebook Page</label>
                         <input type="text" name="facebook_page" class="form-control">
                     </div>
-
                 </div>
 
                 <div class="d-flex justify-content-between">
-
                     <button type="button" class="wizard-btn btn-prev" data-prev>Previous</button>
-
                     <button type="submit" class="wizard-btn btn-next">Submit</button>
-
                 </div>
 
             </div>

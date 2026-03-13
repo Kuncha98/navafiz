@@ -3,8 +3,8 @@
     <div class="container">
         <!-- Page header -->
         <div class="mb-4">
-            <p class="section-subtitle">Recruitment Request</p>
-            <h2 class="section-title">Job Seeker Application Form</h2>
+            <p class="section-subtitle">Create your profile to explore job opportunities with our partner companies</p>
+            <h2 class="section-title">Job Seeker Registration Form</h2>
         </div>
 
         <!-- Form card -->

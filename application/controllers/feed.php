@@ -204,7 +204,7 @@ class Feed extends CI_Controller
         if ($this->session->userdata('role_id') != 2) {
             show_error('Unauthorized access');
         }
-
+ 
         $this->load->library('pagination');
 
         $config['base_url'] = site_url('feed/pending_feed_posts');

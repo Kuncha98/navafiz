@@ -11,7 +11,7 @@ class manpower_supply_requests extends CI_Controller
         $this->load->helper(array('form', 'url'));
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
-        // $this->load->model('manpower_supply_requests_model');
+        $this->load->model('manpower_supply_requests_model');
     }
 
     public function submit()
@@ -221,23 +221,23 @@ class manpower_supply_requests extends CI_Controller
         require_role(array(2)); // 2 = Mentor
 
         $config = array();
-        $config["base_url"] = site_url('mentor-request-list');
-        $config["total_rows"] = $this->mentor_requests_model->get_total_count();
+        $config["base_url"] = site_url('manpower-supply-request-list');
+        $config["total_rows"] = $this->manpower_supply_requests_model->get_total_count();
         $config["per_page"] = 10;
         $config["uri_segment"] = 2;
 
         $this->pagination->initialize($config);
 
-        $data["records"] = $this->mentor_requests_model->get_all($config["per_page"], $page);
+        $data["records"] = $this->manpower_supply_requests_model->get_all($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';
-        $data['content'] = 'form_requests/mentor_requests'; // content view
+        $data['content'] = 'form_requests/manpower_supply_requests'; // content view
         $this->load->view('layouts/website/website_layout', $data);
     }
 
     // Fetch single record using IDs
-    public function mentor_request_view($id = NULL)
+    public function manpower_supply_request_view($id = NULL)
     {
         require_role(array(2)); // 2 = Mentor
 
@@ -245,7 +245,7 @@ class manpower_supply_requests extends CI_Controller
             show_404();
         }
 
-        $record = $this->mentor_requests_model->get_by_id($id);
+        $record = $this->manpower_supply_requests_model->get_by_id($id);
 
         if (!$record) {
             show_404();
@@ -254,7 +254,7 @@ class manpower_supply_requests extends CI_Controller
         $data["record"] = $record;
 
         $data['title'] = 'NAVAFIZ Home';
-        $data['content'] = 'form_requests/mentor_request_view'; // content view
+        $data['content'] = 'form_requests/manpower_supply_request_view'; // content view
         $this->load->view('layouts/website/website_layout', $data);
     }
 }

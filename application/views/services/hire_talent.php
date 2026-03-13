@@ -3,7 +3,7 @@
     <div class="container">
         <!-- Page header -->
         <div class="mb-4">
-            <p class="section-subtitle">Recruitment Request</p>
+            <p class="section-subtitle">Submit your recruitment requirements to connect with qualified candidates</p>
             <h2 class="section-title">Hire Talent Request Form</h2>
         </div>
 

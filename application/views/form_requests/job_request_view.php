@@ -6,9 +6,9 @@
             <div>
                 <a href="<?php echo site_url('form-requests/job-request-list'); ?>" class=""><i
                         class="fa fa-arrow-left me-2"></i>Go back</a>
-                <p class="section-subtitle mt-3">Job Request</p>
-                <h3 class="section-title">Job Application -
-                    <?php echo $record->company_name; ?>
+                <p class="section-subtitle mt-3">Employer Recruitment Request</p>
+                <h3 class="section-title">
+                    Job Application – <?php echo $record->company_name; ?>
                 </h3>
             </div>
         </div>

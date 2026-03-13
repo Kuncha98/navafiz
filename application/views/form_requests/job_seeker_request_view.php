@@ -6,13 +6,13 @@
             <div>
                 <a href="<?php echo site_url('form-requests/job-seeker-request-list'); ?>" class=""><i
                         class="fa fa-arrow-left me-2"></i>Go back</a>
-                <p class="section-subtitle mt-3">Job Seeker Request</p>
-                <h3 class="section-title">Job Seeker Application -
-                    <?php echo $record->name; ?>
+                <p class="section-subtitle mt-3">Candidate Registration</p>
+                <h3 class="section-title">
+                    Job Seeker Application – <?php echo $record->name; ?>
                 </h3>
             </div>
 
- 
+
             <form method="post" action="<?= site_url('job_seeker_requests/change_request_status/' . $record->id); ?>">
                 <?php
                 // Decide background color based on current status

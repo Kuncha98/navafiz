@@ -989,6 +989,10 @@ if (!empty($isFeaturedProfile)) {
                             class="btn btn-primary col-12 mb-2">
                             Job Seeker Requests
                         </a>
+                        <a href="<?= site_url('form-requests/manpower-supply-request-list'); ?>"
+                            class="btn btn-primary col-12 mb-2">
+                            Manpower Supply Company Registrations
+                        </a>
                         <a href="<?= site_url('form-requests/mentor-request-list'); ?>" class="btn btn-primary col-12 mb-2">
                             Mentor Requests
                         </a>
