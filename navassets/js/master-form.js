@@ -1,15 +1,27 @@
-document.addEventListener("DOMContentLoaded", () => {
-    FormCore.init();
-    FileUpload.init();
-    ConditionalFields.init();
-    MultipleDateTimeSelectField.init();
-    select2.init();
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//     FormCore.init();
+//     FileUpload.init();
+//     ConditionalFields.init();
+//     MultipleDateTimeSelectField.init();
+//     select2.init();
+// });
+
+function initMasterForm() {
+    if (typeof FormCore !== "undefined") FormCore.init();
+    if (typeof FileUpload !== "undefined") FileUpload.init();
+    if (typeof ConditionalFields !== "undefined") ConditionalFields.init();
+    if (typeof MultipleDateTimeSelectField !== "undefined") MultipleDateTimeSelectField.init();
+    if (typeof select2 !== "undefined") select2.init();
+}
+
+// Wait for full page load
+window.addEventListener('load', initMasterForm);
 
 // Multi step form with validation
 const FormCore = (() => {
 
     const form = document.getElementById("multiStepForm");
+    if (!form) return {}; // Exit if multi-step form not present
     const steps = [...document.querySelectorAll(".form-step")];
     const progressSteps = [...document.querySelectorAll(".step")];
     const nextBtns = document.querySelectorAll(".btn-next");
@@ -22,7 +34,9 @@ const FormCore = (() => {
     function showStep(step) {
         steps.forEach((s, i) => {
             s.classList.toggle("active", i === step);
-            progressSteps[i].classList.toggle("active", i <= step);
+            if (progressSteps[i]) {
+                progressSteps[i].classList.toggle("active", i <= step);
+            }
         });
     }
 
@@ -210,6 +224,7 @@ const FormCore = (() => {
 
 // File upload field
 const FileUpload = (() => {
+    console.log('working')
     const fileInputs = document.querySelectorAll("[data-file-upload]");
 
     fileInputs.forEach(input => {

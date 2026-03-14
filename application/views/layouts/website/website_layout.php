@@ -119,7 +119,7 @@
                                 <div class="card-body">
                                     <div class="d-flex align-items-center mb-2">
                                         <div class="avatar-wrapper me-3">
-                                          <img src="${avatarUrl}" class="candidate-avatar" alt="${member.m_name}">
+                                          <img src="${avatarUrl}" class="candidate-avatar" alt="${member.m_name}" onerror="this.onerror=null; this.src='navassets/img/user-avatar.jpg';">
                                         </div>
                                         <h6>${member.m_name || 'Name not available'}</h6>
                                     </div>
@@ -227,135 +227,47 @@
 
         });
     </script> -->
-    <!-- <script>
-        (function ($) {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('uploadResumeForm');
+            const modal = new bootstrap.Modal(document.getElementById('uploadResumeModal'));
+            const msgBox = document.getElementById('uploadResumeMsg');
 
-            /**
-             * Universal Select2 initializer
-             */
-            function initSelect2() {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Prevent normal submission
+                msgBox.innerHTML = ''; // Clear previous messages
 
-                $('.select2-field').each(function () {
+                const formData = new FormData(form);
 
-                    const $el = $(this);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            msgBox.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
 
-                    // prevent reinitializing
-                    if ($el.hasClass('select2-hidden-accessible')) return;
+                            // Close modal after 2 seconds
+                            setTimeout(() => {
+                                modal.hide();
+                                form.reset();
+                                document.getElementById('cvPreview').innerHTML = ''; // Clear file preview
+                                document.getElementById('cvInitialState').style.display = 'block';
+                                msgBox.innerHTML = ''
+                            }, 2000);
 
-                    const config = {
-                        width: '100%',
-                        placeholder: $el.data('placeholder') || 'Select option',
-                        allowClear: true,
-                        tags: $el.data('tags') === true || $el.data('tags') === "true",
-                        tokenSeparators: [',']
-                    };
-
-                    $el.select2(config);
-
-                    // Load CSV if defined
-                    const csv = $el.data('csv');
-                    if (csv) loadCSVOptions($el, csv);
-
-                    // Apply validation if needed
-                    const validate = $el.data('validate');
-                    if (validate === 'skills') initSkillValidation($el);
-
-                });
-
-            }
-
-            /**
-             * Load CSV into Select2
-             */
-            function loadCSVOptions($select, url) {
-
-                fetch(url)
-                    .then(res => res.text())
-                    .then(csv => {
-
-                        let rows = csv
-                            .split(/\r?\n/)
-                            .map(v => v.trim())
-                            .filter(Boolean);
-
-                        // remove header
-                        if (rows[0].toLowerCase() === 'skills') rows.shift();
-
-                        const unique = [...new Set(rows)];
-
-                        const existingValues = $select.find('option')
-                            .map(function () { return $(this).val(); })
-                            .get();
-
-                        unique.forEach(item => {
-                            if (!existingValues.includes(item)) {
-                                const option = new Option(item, item, false, false);
-                                $select.append(option);
-                            }
-                        });
-
-                        $select.trigger('change');
-
+                        } else if (data.status === 'error') {
+                            msgBox.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                        }
                     })
-                    .catch(err => console.error('CSV load error:', err));
-
-            }
-
-            /**
-             * Skills validation
-             */
-            function initSkillValidation($select) {
-
-                $select.on('select2:selecting', function (e) {
-
-                    const text = e.params.args.data.text.trim();
-                    const wordCount = text.split(/\s+/).length;
-                    const charCount = text.length;
-
-                    if (wordCount > 7) {
-                        alert("❌ Maximum 7 words allowed.");
-                        e.preventDefault();
-                        return false;
-                    }
-
-                    if (charCount > 40) {
-                        alert("❌ Maximum 40 characters allowed.");
-                        e.preventDefault();
-                        return false;
-                    }
-
-                });
-
-                $select.on('select2:select', function (e) {
-
-                    const added = e.params.data.text.trim().toLowerCase();
-
-                    const values = $select.find('option')
-                        .map(function () {
-                            return $(this).val().trim().toLowerCase();
-                        }).get();
-
-                    const count = values.filter(v => v === added).length;
-
-                    if (count > 1) {
-                        alert("⚠️ Duplicate skill detected.");
-                        $select.find(`option[value="${e.params.data.id}"]`).remove();
-                        $select.trigger('change');
-                    }
-
-                });
-
-            }
-
-            /**
-             * Initialize on page load
-             */
-            $(function () {
-                initSelect2();
+                    .catch(err => {
+                        console.error(err);
+                        msgBox.innerHTML = `<div class="alert alert-danger">Something went wrong. Try again.</div>`;
+                    });
             });
-
-        })(jQuery);
-    </script> -->
+        });
+    </script>
 
 </body>
 

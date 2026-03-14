@@ -130,10 +130,17 @@
                             </ul>
 
                             <a href="/services/find-a-job" class="btn view-btn">Send a request</a>
+
+                            <a href="/user/register" class="btn view-btn">Create a profile</a>
+
+                            <button type="button" class="btn view-btn" data-bs-toggle="modal"
+                                data-bs-target="#uploadResumeModal">
+                                Upload Resume
+                            </button>
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
-                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                                <img src="<?= base_url('navassets/img/find-a-job.jpg') ?>" alt="">
                             </div>
                         </div>
                     </div>
@@ -169,7 +176,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
-                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                                <img src="<?= base_url('navassets/img/manpower-supply.jpg') ?>" alt="">
                             </div>
                         </div>
                     </div>
@@ -202,7 +209,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
-                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                                <img src="<?= base_url('navassets/img/freelancer.jpg') ?>" alt="">
                             </div>
                         </div>
                     </div>
@@ -237,7 +244,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
-                                <img src="<?= base_url('navassets/img/homepage-bg.jpg') ?>" alt="">
+                                <img src="<?= base_url('navassets/img/mentor.jpg') ?>" alt="">
                             </div>
                         </div>
                     </div>
@@ -336,7 +343,7 @@
 </section>
 
 <!-- Featured candidates section -->
-<section class="resume-section" id="resume">
+<section class="resume-section" id="candidates">
     <div class="container position-relative z-1">
         <!-- Section header -->
         <div class="text-center mb-4">
@@ -514,3 +521,77 @@
         </div>
     </div>
 </section>
+
+<!-- CREATE TABLE `jb_resume_submissions` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(150) NOT NULL,
+  `profession` VARCHAR(150) NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `cv` VARCHAR(255) NOT NULL,
+  `status` TINYINT(1) DEFAULT 1,
+  `created_at` DATETIME NOT NULL,
+  `ip_address` VARCHAR(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; -->
+
+<!-- Upload Resume Modal -->
+<div class="modal fade" id="uploadResumeModal" tabindex="-1" aria-labelledby="uploadResumeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadResumeModalLabel">Upload Your Resume</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card p-3">
+                    <div id="uploadResumeMsg" class="mb-3"></div>
+
+                    <?php
+                    $attributes = array(
+                        'id' => 'uploadResumeForm'
+                    );
+                    echo form_open_multipart('upload_resume/submit', $attributes); ?>
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="name" class="form-label required-label">Name</label>
+                            <input type="text" class="form-control required-field" id="name" name="name">
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="profession" class="form-label required-label">Profession</label>
+                            <input type="text" class="form-control required-field" id="profession" name="profession">
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="phone" class="form-label required-label">WhatsApp Number</label>
+                            <input type="text" class="form-control required-field" id="phone" name="phone">
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="cv" class="form-label required-label">CV / Resume</label>
+                            <div class="upload-box" id="cvUploadBox">
+                                <input type="file" name="cv" id="cv" accept=".pdf"
+                                    class="form-control d-none required-field" data-file-upload data-preview="cvPreview"
+                                    data-initial="cvInitialState" data-max-size="5">
+
+                                <div class="upload-ui" data-trigger="cv">
+                                    <div class="upload-initial" id="cvInitialState">
+                                        <i class="fas fa-file-pdf text-danger"></i>
+                                        <p class="mt-3 mb-1">Upload CV (PDF only)</p>
+                                        <small class="text-muted">Max size: 5MB</small>
+                                    </div>
+
+                                    <!-- Preview will be injected here -->
+                                    <div class="file-preview" id="cvPreview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                    <?php echo form_close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

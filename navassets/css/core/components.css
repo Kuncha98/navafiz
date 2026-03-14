@@ -689,3 +689,7 @@
   font-size: 13px;
   display: none;
 }
+
+.modal-content {
+  border-radius: var(--radius-lg);
+}
