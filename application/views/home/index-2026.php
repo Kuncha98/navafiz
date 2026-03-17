@@ -41,7 +41,7 @@
 
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="pill" data-bs-target="#manpower">
-                    <i class="fas fa-users"></i> Supply Manpower
+                    <i class="fas fa-users"></i> Manpower Suppliers
                 </button>
             </li>
 

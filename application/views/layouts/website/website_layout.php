@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Management System </title>
+    <title>Navafiz </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
@@ -265,6 +265,50 @@
                         console.error(err);
                         msgBox.innerHTML = `<div class="alert alert-danger">Something went wrong. Try again.</div>`;
                     });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).on("click", ".add-to-cart", function () {
+
+            let id = $(this).data("id");
+
+            var $button = $(this);
+            // var serviceId = $button.data('service-id');
+
+            // Get service name for notification
+            var serviceName = $button.closest('.service-list-item').find('h6').first().text();
+
+            $.ajax({
+                url: '<?= base_url("cart/add") ?>',
+                type: 'POST',
+                data: { service_id: id },
+                dataType: 'json',
+                success: function (res) {
+                    if (res && res.status === 'success') {
+                        // Show notification above accordion
+                        var notificationHtml = '“' + serviceName + '” has been added to your cart. ' +
+                            '<a class="btn btn-primary cart-btn ms-2" href="<?= base_url("cart") ?>">' +
+                            'View Cart <i class="fas fa-shopping-cart ms-1"></i></a>';
+
+                        $('#cart-notification').html(notificationHtml).fadeIn();
+                        setTimeout(function () { $('#cart-notification').fadeOut(); }, 3000);
+
+                        // Update navbar cart count
+                        if (res.cart) {
+                            $('#cart-count').text(Object.keys(res.cart).length);
+                        }
+
+                    } else {
+                        console.error('Unexpected response:', res);
+                        alert('Error adding to cart.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    alert('Something went wrong.');
+                }
             });
         });
     </script>

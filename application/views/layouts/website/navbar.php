@@ -36,14 +36,14 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Services
+                        Opportunities
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= site_url('services/hire-a-talent') ?>">Hire Talents</a>
                         </li>
                         <li><a class="dropdown-item" href="<?= site_url('services/find-a-job') ?>">Find a Job</a></li>
-                        <li><a class="dropdown-item" href="<?= site_url('services/supply-manpower') ?>">Supply
-                                Manpower</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('services/supply-manpower') ?>">Manpower
+                                Suppliers</a></li>
                         <li><a class="dropdown-item" href="<?= site_url('services/become-a-freelancer') ?>">Work as a
                                 Freelancer
                             </a>
@@ -54,6 +54,10 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item"><a class="nav-link" href="<?= site_url('premium-services') ?>">Premium
+                        Services</a></li>
+
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -99,6 +103,17 @@
                 <!-- <li class="nav-item ms-lg-3">
                     <a href="<?= site_url('login') ?>" class="btn login-btn">Login</a>
                 </li> -->
+
+                <li class="nav-item ms-3">
+                    <?php $cart = $this->session->userdata('cart'); ?>
+                    <a class="nav-link position-relative" href="<?= site_url('cart') ?>" id="navbar-cart-link">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle"
+                            id="cart-count">
+                            <?= is_array($cart) ? count($cart) : 0 ?>
+                        </span>
+                    </a>
+                </li>
 
                 <?php if ($this->session->userdata('user_id')): ?>
 
@@ -192,11 +207,12 @@
         <li><a href="<?= site_url() ?>">Home</a></li>
         <li><a href="<?= site_url('about') ?>">About</a></li>
         <li>
-            <a href="#" class="submenu-toggle">Services <span>+</span></a>
+            <a href="#" class="submenu-toggle">Opportunities <span>+</span></a>
             <ul class="submenu">
                 <li><a href="<?= site_url('services/hire-a-talent') ?>">Hire Talent</a>
                 </li>
                 <li><a href="<?= site_url('services/find-a-job') ?>">Find a Job</a></li>
+                <li><a href="<?= site_url('services/find-a-job') ?>">Manpower Suppliers</a></li>
                 <li><a href="<?= site_url('services/become-a-freelancer') ?>">Freelance
                         Work
                     </a>
@@ -207,6 +223,8 @@
                 </li>
             </ul>
         </li>
+
+        <li><a href="<?= site_url('premium-services') ?>">Premium Services</a></li>
 
         <li>
             <a href="#" class="submenu-toggle">Job Listing <span>+</span></a>

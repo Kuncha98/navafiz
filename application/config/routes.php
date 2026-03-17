@@ -47,6 +47,18 @@ $route['feed/pending'] = 'feed/pending_feed_posts';
 $route['feed/approve/(:num)'] = 'feed/approve_post/$1';
 $route['feed/reject/(:num)'] = 'feed/reject_post/$1';
 
+// Premium services
+$route['premium-services'] = 'premium_services/index';
+// Premium services cart
+$route['cart'] = 'premium_services_cart/index';
+$route['cart/add'] = 'premium_services_cart/add';
+$route['cart/remove/(:num)'] = 'premium_services_cart/remove/$1';
+$route['cart/update'] = 'premium_services_cart/update';
+// Premium services checkout
+$route['checkout'] = 'premium_services_checkout/index';
+$route['checkout/place-order'] = 'premium_services_checkout/place_order';
+$route['checkout/success'] = 'premium_services_checkout/success';
+
 $route['draft'] = "home/draftPage";
 $route['feature_counts'] = "home/feature_counts";
 $route['homeold'] = "front/homeold/";

@@ -693,3 +693,29 @@
 .modal-content {
   border-radius: var(--radius-lg);
 }
+
+/* Premium services */
+.service-list-item {
+  /* display: flex;
+  align-items: center;
+  justify-content: space-between; */
+  background: white;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #00000021;
+}
+
+.cart-btn {
+  border: antiquewhite;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  font-weight: 400 !important;
+  background: #1cb351;
+}
+
+.checkout-card {
+  background: #f1f6fb;
+  border: 1px solid var(--primary);
+  padding: 20px;
+  border-radius: 12px;
+}
