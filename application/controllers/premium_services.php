@@ -14,6 +14,7 @@ class premium_services extends CI_Controller
         $this->load->model('premium_services_model');
     }
 
+    // Fetch all the service
     public function index()
     {
         $services = $this->premium_services_model->get_services();

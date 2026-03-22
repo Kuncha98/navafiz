@@ -74,8 +74,14 @@
             </div>
 
             <div class="d-flex align-items-center justify-content-end mt-4 gap-4">
-                <button class="btn btn-primary">Update Cart</button>
-                <a href="/checkout" class="btn btn-success">Checkout</a>
+                <?php if (!empty($cart)) { ?>
+                    <button class="btn btn-primary">Update Cart</button>
+                        <a href="/checkout" class="btn btn-success">Checkout</a>
+            <?php } else { ?>
+                    <button class="btn btn-success" disabled title="Add items to cart first">
+                        Checkout
+                        </button>
+                <?php } ?>
             </div>
         </form>
     </div>

@@ -12,6 +12,7 @@ class job_seeker_requests extends CI_Controller
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
         $this->load->model('job_seeker_requests_model');
+        $this->load->model('profile_model');
     }
 
     public function submit()
@@ -206,6 +207,46 @@ class job_seeker_requests extends CI_Controller
     }
 
     // Update status
+    // public function change_request_status($id = NULL)
+    // {
+    //     // Mentor-only access
+    //     require_role(array(2));
+
+    //     if ($id == NULL || !is_numeric($id)) {
+    //         show_error('Invalid Request ID', 400);
+    //     }
+
+    //     $status = $this->input->post('status');
+
+    //     // Validate status
+    //     $valid_statuses = [1, 2, 3];
+    //     if (!in_array($status, $valid_statuses)) {
+    //         show_error('Invalid Status', 400);
+    //     }
+
+    //     // Fetch current status
+    //     $request = $this->job_seeker_requests_model->get_by_id($id);
+    //     if (!$request) {
+    //         show_error('Request not found', 404);
+    //     }
+
+    //     // Prevent changing back to Submit (1) if already Approved or Rejected
+    //     if (($request->status == 2 || $request->status == 3) && $status == 1) {
+    //         $this->session->set_flashdata('error', 'Cannot revert an Approved or Rejected request back to Submit.');
+    //         redirect('job-seeker-request-list');
+    //         return;
+    //     }
+
+    //     // Update status
+    //     $updated = $this->job_seeker_requests_model->update_status($id, $status);
+
+    //     if ($updated) {
+    //         $this->session->set_flashdata('success', 'Status updated successfully.');
+    //     } else {
+    //         $this->session->set_flashdata('error', 'Failed to update status.');
+    //     }
+    //     redirect('form-requests/job-seeker-request-list'); // back to list
+    // }
     public function change_request_status($id = NULL)
     {
         // Mentor-only access
@@ -223,16 +264,23 @@ class job_seeker_requests extends CI_Controller
             show_error('Invalid Status', 400);
         }
 
-        // Fetch current status
+        // Fetch current status and job seeker details
         $request = $this->job_seeker_requests_model->get_by_id($id);
         if (!$request) {
             show_error('Request not found', 404);
         }
 
-        // Prevent changing back to Submit (1) if already Approved or Rejected
-        if (($request->status == 2 || $request->status == 3) && $status == 1) {
-            $this->session->set_flashdata('error', 'Cannot revert an Approved or Rejected request back to Submit.');
-            redirect('job-seeker-request-list');
+        // Prevent any change if already approved
+        if ($request->status == 2) {
+            $this->session->set_flashdata('error', 'Approved request cannot be modified.');
+            redirect('form-requests/job-seeker-request-list');
+            return;
+        }
+
+        // Prevent reverting Rejected → Submit
+        if ($request->status == 3 && $status == 1) {
+            $this->session->set_flashdata('error', 'Cannot revert a Rejected request back to Submit.');
+            redirect('form-requests/job-seeker-request-list');
             return;
         }
 
@@ -240,10 +288,124 @@ class job_seeker_requests extends CI_Controller
         $updated = $this->job_seeker_requests_model->update_status($id, $status);
 
         if ($updated) {
+            // If approved, create the user account
+            if ($status == 2) {
+                // Create user from job seeker request data
+                $this->create_user_from_job_seeker_request($request);
+                $this->session->set_flashdata('success', 'User registered successfully.');
+            }
+
             $this->session->set_flashdata('success', 'Status updated successfully.');
         } else {
             $this->session->set_flashdata('error', 'Failed to update status.');
         }
+
         redirect('form-requests/job-seeker-request-list'); // back to list
+    }
+
+    private function create_user_from_job_seeker_request($request)
+    {
+        // Auto-generate a random 8-character password (letters + digits)
+        function generate_simple_password($length = 8)
+        {
+            $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $password = '';
+            for ($i = 0; $i < $length; $i++) {
+                $password .= $chars[random_int(0, strlen($chars) - 1)];
+            }
+            return $password;
+        }
+
+        $password = generate_simple_password();
+
+        // Prepare user data for insertion
+        $user_data = [
+            'm_name' => $request->name,
+            'm_email' => $request->email,
+            'm_password' => $password, // Hash the password before saving
+            // 'm_category' => $request->category, // Assuming the category matches
+            'role_id' => 4, // User role ID for job seekers
+            'added_on' => datenow(),
+            'm_status' => 1, // Activate immediately
+            'm_avatar' => '', // Optionally set default avatar or other data
+            'video_cv' => ''
+        ];
+
+        $find_user = $this->profile_model->Search(['m_email' => $request->email]);
+        if (count($find_user) < 1) {
+            // Insert the user into the 'user' table
+            $user_id = $this->profile_model->Save($user_data);
+
+            if ($user_id > 0) {
+                // Send email with the login credentials
+                $this->send_registration_email($request->email, $password);
+            } else {
+                _setError("Error while creating user account for job seeker.");
+            }
+        } else {
+            _setError("You're already registered with the provided email. Please login or use forgot password.");
+        }
+
+    }
+
+    private function send_registration_email($email, $password)
+    {
+        // Prepare email subject and message
+        $subject = 'Your Registration Credentials';
+        $messageText = '<html><body>';
+        $messageText .= "Hello,<br><br>Your registration has been approved. Here are your login credentials:<br><br>";
+        $messageText .= "<b>Email:</b> " . $email . "<br>";
+        $messageText .= "<b>Password:</b> " . $password . "<br><br>";
+        $messageText .= "You can change your password later from your profile page.<br><br>";
+        $messageText .= "Thank you.<br><br>";
+        $messageText .= "*This message was sent by an automated mail server. Please do not reply.<br><br>";
+        $messageText .= "</body></html>";
+
+        // SMTP Configuration for sending email
+        // $config = array(
+        //     'protocol' => 'smtp',
+        //     'smtp_host' => 'ssl://smtp.googlemail.com', // SMTP server
+        //     'smtp_port' => 465,
+        //     'smtp_user' => SMTP_USER, // Your SMTP user (e.g., email address)
+        //     'smtp_pass' => SMTP_PASSWORD, // Your SMTP password
+        //     'mailtype' => 'html',
+        //     'charset' => 'iso-8859-1',
+        //     'wordwrap' => TRUE
+        // );
+        // $config['newline'] = "\r\n";
+        // $config['crlf'] = "\r\n";
+
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'localhost',
+            'smtp_port' => 25,
+            'smtp_user' => 'web.support@navafiz.com',
+            'smtp_pass' => 'web.support123',
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'newline' => "\r\n",
+            'crlf' => "\r\n"
+        );
+
+        // Load the email library and configure SMTP settings
+        $this->load->library("email");
+
+        $this->email->initialize($config);
+        $this->email->clear(TRUE);
+        // $this->email->set_mailtype("html");
+        // $this->email->set_newline("\r\n");
+        $this->email->from('web.support@navafiz.com', 'Navafiz');
+        $this->email->to($email);
+        $this->email->subject($subject);
+        $this->email->message($messageText);
+
+        // Send the email and log success or failure
+        if (!$this->email->send()) {
+            log_message('error', 'Email sending failed to ' . $email);
+            _setError("There was a problem sending the registration email.");
+        } else {
+            log_message('info', 'Registration email sent to ' . $email);
+            _setSuccess("Registration email sent successfully to $email.");
+        }
     }
 }

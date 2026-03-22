@@ -18,7 +18,19 @@ class premium_services_checkout extends CI_Controller
     {
         $cart = $this->session->userdata('cart');
 
+        // Redirect if cart is empty or not set
+        if (empty($cart)) {
+            redirect('cart');
+            return;
+        }
+
         $services = array_column($cart, 'id');
+
+        // Extra safety (in case something breaks)
+        if (empty($services)) {
+            redirect('cart');
+            return;
+        }
 
         $this->db->where_in('service_id', $services);
         $fields = $this->db->get('jb_premium_service_custom_fields')->result();
@@ -167,11 +179,29 @@ class premium_services_checkout extends CI_Controller
         $this->session->unset_userdata('cart');
 
         // Redirect to success page
-        redirect('checkout/success');
+        redirect('checkout/success/' . $order_id);
     }
 
-    public function success()
+    public function success($order_id)
     {
+        // if no order_id, redirect
+        if (!$order_id) {
+            redirect('cart');
+            return;
+        }
+
+        // Get order details
+        $data['order'] = $this->db
+            ->where('id', $order_id)
+            ->get('jb_premium_service_orders')
+            ->row();
+
+        // Get order items
+        $data['items'] = $this->db
+            ->where('order_id', $order_id)
+            ->get('jb_premium_service_order_items')
+            ->result();
+
         $data['content'] = 'premium_services/checkout_success';
         $this->load->view('layouts/website/website_layout', $data);
     }

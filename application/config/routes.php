@@ -57,7 +57,11 @@ $route['cart/update'] = 'premium_services_cart/update';
 // Premium services checkout
 $route['checkout'] = 'premium_services_checkout/index';
 $route['checkout/place-order'] = 'premium_services_checkout/place_order';
-$route['checkout/success'] = 'premium_services_checkout/success';
+$route['checkout/success/(:num)'] = 'premium_services_checkout/success/$1';
+// Premium service orders
+$route['orders'] = 'premium_service_orders/index';
+$route['orders/view/(:num)'] = 'premium_service_orders/view/$1';
+// $route['orders/update-status'] = 'premium_service_orders/update_status';
 
 $route['draft'] = "home/draftPage";
 $route['feature_counts'] = "home/feature_counts";

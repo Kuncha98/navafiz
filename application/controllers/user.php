@@ -15,7 +15,9 @@ class user extends CI_Controller
         $this->table_name = TABLE_PREFIX . 'jobs';
     }
 
-    function index() {}
+    function index()
+    {
+    }
 
 
 
@@ -472,6 +474,7 @@ class user extends CI_Controller
 
     function register()
     {
+
         if ($this->session->userdata('user_id')) {
             redirect('feed'); // Or wherever you want to send logged-in users
             return;

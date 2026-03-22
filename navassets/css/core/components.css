@@ -719,3 +719,9 @@
   padding: 20px;
   border-radius: 12px;
 }
+.order-view-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  border: 0.5px solid #dee2e6;
+}

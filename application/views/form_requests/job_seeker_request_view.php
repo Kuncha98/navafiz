@@ -37,7 +37,7 @@
                     <?php
                     $statusOptions = [
                         1 => 'Submit',
-                        2 => 'Approved',
+                        2 => 'Approved & registered as a member',
                         3 => 'Rejected'
                     ];
 
