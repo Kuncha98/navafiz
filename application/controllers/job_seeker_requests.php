@@ -181,7 +181,7 @@ class job_seeker_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/job_seeker_requests'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+       $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Fetch single record using IDs
@@ -203,50 +203,10 @@ class job_seeker_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/job_seeker_request_view'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+       $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Update status
-    // public function change_request_status($id = NULL)
-    // {
-    //     // Mentor-only access
-    //     require_role(array(2));
-
-    //     if ($id == NULL || !is_numeric($id)) {
-    //         show_error('Invalid Request ID', 400);
-    //     }
-
-    //     $status = $this->input->post('status');
-
-    //     // Validate status
-    //     $valid_statuses = [1, 2, 3];
-    //     if (!in_array($status, $valid_statuses)) {
-    //         show_error('Invalid Status', 400);
-    //     }
-
-    //     // Fetch current status
-    //     $request = $this->job_seeker_requests_model->get_by_id($id);
-    //     if (!$request) {
-    //         show_error('Request not found', 404);
-    //     }
-
-    //     // Prevent changing back to Submit (1) if already Approved or Rejected
-    //     if (($request->status == 2 || $request->status == 3) && $status == 1) {
-    //         $this->session->set_flashdata('error', 'Cannot revert an Approved or Rejected request back to Submit.');
-    //         redirect('job-seeker-request-list');
-    //         return;
-    //     }
-
-    //     // Update status
-    //     $updated = $this->job_seeker_requests_model->update_status($id, $status);
-
-    //     if ($updated) {
-    //         $this->session->set_flashdata('success', 'Status updated successfully.');
-    //     } else {
-    //         $this->session->set_flashdata('error', 'Failed to update status.');
-    //     }
-    //     redirect('form-requests/job-seeker-request-list'); // back to list
-    // }
     public function change_request_status($id = NULL)
     {
         // Mentor-only access
@@ -323,11 +283,10 @@ class job_seeker_requests extends CI_Controller
             'm_name' => $request->name,
             'm_email' => $request->email,
             'm_password' => $password, // Hash the password before saving
-            // 'm_category' => $request->category, // Assuming the category matches
             'role_id' => 4, // User role ID for job seekers
             'added_on' => datenow(),
             'm_status' => 1, // Activate immediately
-            'm_avatar' => '', // Optionally set default avatar or other data
+            'm_avatar' => '',
             'video_cv' => ''
         ];
 
@@ -362,19 +321,6 @@ class job_seeker_requests extends CI_Controller
         $messageText .= "</body></html>";
 
         // SMTP Configuration for sending email
-        // $config = array(
-        //     'protocol' => 'smtp',
-        //     'smtp_host' => 'ssl://smtp.googlemail.com', // SMTP server
-        //     'smtp_port' => 465,
-        //     'smtp_user' => SMTP_USER, // Your SMTP user (e.g., email address)
-        //     'smtp_pass' => SMTP_PASSWORD, // Your SMTP password
-        //     'mailtype' => 'html',
-        //     'charset' => 'iso-8859-1',
-        //     'wordwrap' => TRUE
-        // );
-        // $config['newline'] = "\r\n";
-        // $config['crlf'] = "\r\n";
-
         $config = array(
             'protocol' => 'smtp',
             'smtp_host' => 'localhost',
@@ -392,8 +338,6 @@ class job_seeker_requests extends CI_Controller
 
         $this->email->initialize($config);
         $this->email->clear(TRUE);
-        // $this->email->set_mailtype("html");
-        // $this->email->set_newline("\r\n");
         $this->email->from('web.support@navafiz.com', 'Navafiz');
         $this->email->to($email);
         $this->email->subject($subject);

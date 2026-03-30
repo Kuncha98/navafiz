@@ -21,6 +21,9 @@ $route['services/hire-a-talent/submit'] = "job_requests/submit";
 // Become a mentor form page
 $route['services/become-a-mentor'] = "home/mentor";
 $route['services/become-a-mentor/submit'] = "mentor_requests/submit";
+// Manpower supply quota form page
+$route['services/manpower-job-quota'] = "home/manpower_job_quota";
+$route['services/manpower-job-quota/submit'] = "manpower_job_quota/submit";
 
 // Mentor view of job seeker request forms
 $route['form-requests/job-seeker-request-list'] = 'job_seeker_requests/all_requests/0';
@@ -38,10 +41,15 @@ $route['form-requests/freelancer-request-view/(:num)'] = 'freelancer_requests/fr
 $route['form-requests/mentor-request-list'] = 'mentor_requests/all_requests/0';
 $route['form-requests/mentor-request-list/(:num)'] = 'mentor_requests/all_requests/$1';
 $route['form-requests/mentor-request-view/(:num)'] = 'mentor_requests/mentor_request_view/$1';
-// Mentor view of mentor forms
+// Mentor view of manpower supply forms
 $route['form-requests/manpower-supply-request-list'] = 'manpower_supply_requests/all_requests/0';
 $route['form-requests/manpower-supply-request-list/(:num)'] = 'manpower_supply_requests/all_requests/$1';
 $route['form-requests/manpower-supply-request-view/(:num)'] = 'manpower_supply_requests/manpower_supply_request_view/$1';
+// Supplier view of quota forms
+$route['form-requests/manpower-supply-quota-list'] = 'manpower_job_quota/all_requests/0';
+$route['form-requests/manpower-supply-quota-list/(:num)'] = 'manpower_job_quota/all_requests/$1';
+$route['form-requests/manpower-supply-quota-view/(:num)'] = 'manpower_job_quota/manpower_supply_request_view/$1';
+
 // Feed posts pending, approval & reject
 $route['feed/pending'] = 'feed/pending_feed_posts';
 $route['feed/approve/(:num)'] = 'feed/approve_post/$1';

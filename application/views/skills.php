@@ -33,7 +33,7 @@
                                             <b>Note:</b> Skills should be relevant to your profession, And should be
                                             mentioned as single or two words (Not like detailed description).
                                         </div>
-                                        </label>
+                                        </label> 
                                     </div>
                                     <div class="form-group">
                                         <select id="jobtags" name="jobtags[]" multiple="multiple" class="form-control"
@@ -219,7 +219,7 @@
 <?php $this->load->view('include/footer.php'); ?>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         const select = $('#jobtags');
 
@@ -254,7 +254,7 @@
             .catch(err => console.error('Error loading CSV:', err));
 
         // 🔹 Enforce word/character limits for new entries
-        select.on('select2:selecting', function (e) {
+        select.on('select2:selecting', function(e) {
             const text = e.params.args.data.text.trim();
             const wordCount = text.split(/\s+/).length;
             const charCount = text.length;
@@ -272,9 +272,9 @@
         });
 
         // 🔹 Prevent duplicate skills being added manually
-        select.on('select2:select', function (e) {
+        select.on('select2:select', function(e) {
             const added = e.params.data.text.trim().toLowerCase();
-            const allOptions = select.find('option').map(function () {
+            const allOptions = select.find('option').map(function() {
                 return $(this).val().trim().toLowerCase();
             }).get();
 

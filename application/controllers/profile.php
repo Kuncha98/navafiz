@@ -384,6 +384,8 @@ class Profile extends CI_Controller
 
 
         $data['reward_points'] = $this->feed_model->get_total_points($profile->m_id);
+        $data['pending_points'] = $this->feed_model->get_pending_points($profile->m_id);
+        $data['rewards'] = $this->feed_model->get_user_rewards($profile->m_id);
         // echo "<pre>";
         // print_r($data['reward_points']);
         // exit;

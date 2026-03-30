@@ -12,6 +12,7 @@ class manpower_supply_requests extends CI_Controller
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
         $this->load->model('manpower_supply_requests_model');
+        $this->load->model('profile_model');
     }
 
     public function submit()
@@ -233,7 +234,7 @@ class manpower_supply_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/manpower_supply_requests'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+       $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Fetch single record using IDs
@@ -255,6 +256,207 @@ class manpower_supply_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/manpower_supply_request_view'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+       $this->load->view('layouts/system/main_layout', $data);
+    }
+
+    // Update status
+    public function change_request_status($id = NULL)
+    {
+        // Mentor-only access
+        require_role(array(2));
+
+        if ($id == NULL || !is_numeric($id)) {
+            show_error('Invalid Request ID', 400);
+            return;
+        }
+
+        $status = $this->input->post('status');
+
+        // Validate status
+        $valid_statuses = [1, 2, 3];
+        if (!in_array($status, $valid_statuses)) {
+            show_error('Invalid Status', 400);
+            return;
+        }
+
+        // Fetch current status and job seeker details
+        $request = $this->manpower_supply_requests_model->get_by_id($id);
+        if (!$request) {
+            show_error('Request not found', 404);
+            return;
+        }
+
+        // Prevent any change if already approved
+        if ($request->status == 2) {
+            $this->session->set_flashdata('error', 'Approved request cannot be modified.');
+            redirect('form-requests/manpower-supply-request-list');
+            return;
+        }
+
+        // Prevent reverting Rejected → Submit
+        if ($request->status == 3 && $status == 1) {
+            $this->session->set_flashdata('error', 'Cannot revert a Rejected request back to Submit.');
+            redirect('form-requests/manpower-supply-request-list');
+            return;
+        }
+
+        // Update status
+        $updated = $this->manpower_supply_requests_model->update_status($id, $status);
+
+        if ($updated) {
+            // If approved, create the user account
+            if ($status == 2) {
+                // Create user from job seeker request data
+                $this->create_user_from_manpower_supplier_request($request);
+                $this->session->set_flashdata('success', 'User registered for the manpower supplier successfully.');
+            }
+
+            $this->session->set_flashdata('success', 'Status updated successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to update status.');
+        }
+
+        redirect('form-requests/manpower-supply-request-list'); // back to list
+    }
+
+    private function create_user_from_manpower_supplier_request($request)
+    {
+        // Auto-generate a random 8-character password (letters + digits)
+        function generate_simple_password($length = 8)
+        {
+            $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $password = '';
+            for ($i = 0; $i < $length; $i++) {
+                $password .= $chars[random_int(0, strlen($chars) - 1)];
+            }
+            return $password;
+        }
+
+        $password = generate_simple_password();
+
+        // Prepare user data for insertion
+        $user_data = [
+            'm_name' => $request->contact_person_name,
+            'm_email' => $request->email,
+            'm_password' => $password, // Hash the password before saving
+            'role_id' => 9, // User role ID for manpower suppliers
+            'added_on' => datenow(),
+            'm_status' => 1, // Activate immediately
+            'm_avatar' => '',
+            'video_cv' => ''
+        ];
+
+        $find_user = $this->profile_model->Search(['m_email' => $request->email]);
+        if (count($find_user) < 1) {
+            // Insert the user into the 'user' table
+            $user_id = $this->profile_model->Save($user_data);
+
+            if ($user_id > 0) {
+                // Send email with the login credentials
+                $this->send_registration_email($request->email, $request->contact_person_name, $request->company_name, $password);
+            } else {
+                _setError("Error while creating user account for manpower supplier.");
+            }
+        } else {
+            _setError("You're already registered with the provided email. Please login or use forgot password.");
+        }
+
+    }
+
+    private function send_registration_email($email, $contact_person_name, $company_name, $password)
+    {
+        // Prepare email subject and message
+        $subject = 'Registration Successful – Login Credentials';
+
+        $messageText = '
+                        <html>
+
+                        <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+
+                            <p>Dear ' . $contact_person_name . ',</p>
+
+                            <p>
+                                We are pleased to inform you that your registration has been successfully completed
+                                on behalf of <strong>' . $company_name . '</strong> (Manpower Supplier Company).
+                            </p>
+
+                            <p><strong>Your login credentials are as follows:</strong></p>
+
+                            <p>
+                                <strong>Email:</strong> ' . $email . '<br>
+                                <strong>Password:</strong> ' . $password . '
+                            </p>
+
+                            <p>
+                                You can access your account and manage your company profile using the link below:
+                            </p>
+
+                            <p>
+                                <a href="https://navafiz.com/login" style="color: #1a73e8;">
+                                   Navafiz Login
+                                </a>
+                            </p>
+
+                            <p>
+                                For security reasons, we strongly recommend that you change your password upon your first login.
+                                You may do so using the following link:
+                            </p>
+
+                            <p>
+                                <a href="https://navafiz.com/user/change_password" style="color: #1a73e8;">
+                                    Navafiz Change Password
+                                </a>
+                            </p>
+
+                            <p>
+                                If you require any assistance, please feel free to contact our support team.
+                            </p>
+
+                            <p>Thank you,<br>
+                                <strong>Navafiz Team</strong>
+                            </p>
+
+                            <hr style="border:none; border-top:1px solid #ddd;">
+
+                            <p style="font-size: 12px; color: #777;">
+                                This is an automated message. Please do not reply to this email.
+                            </p>
+
+                        </body>
+
+                        </html>
+                        ';
+
+        // SMTP Configuration for sending email
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'localhost',
+            'smtp_port' => 25,
+            'smtp_user' => 'web.support@navafiz.com',
+            'smtp_pass' => 'web.support123',
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'newline' => "\r\n",
+            'crlf' => "\r\n"
+        );
+
+        // Load the email library and configure SMTP settings
+        $this->load->library("email");
+
+        $this->email->initialize($config);
+        $this->email->clear(TRUE);
+        $this->email->from('web.support@navafiz.com', 'Navafiz');
+        $this->email->to($email);
+        $this->email->subject($subject);
+        $this->email->message($messageText);
+
+        // Send the email and log success or failure
+        if (!$this->email->send()) {
+            log_message('error', 'Email sending failed to ' . $email);
+            _setError("There was a problem sending the registration email.");
+        } else {
+            log_message('info', 'Registration email sent to ' . $email);
+            _setSuccess("Registration email sent successfully to $email.");
+        }
     }
 }

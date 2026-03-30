@@ -31,8 +31,6 @@
         <!-- Desktop Menu -->
         <div class="collapse navbar-collapse justify-content-end d-none d-lg-flex" id="navbarNav">
             <ul class="navbar-nav align-items-lg-center">
-                <!-- <li class="nav-item"><a class="nav-link active" href="<?= site_url() ?>">Home</a></li> -->
-                <li class="nav-item"><a class="nav-link" href="<?= site_url('about') ?>">About</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -52,6 +50,11 @@
                                 Mentor
                             </a>
                         </li>
+                        <!-- <?php if (in_array($user_id, CvReviewTeamList())) { ?>
+                            <li><a class="dropdown-item" href="<?= site_url('services/manpower-job-quota') ?>">Manpower Job
+                                    Quota</a>
+                            </li>
+                        <?php } ?> -->
                     </ul>
                 </li>
 
@@ -97,12 +100,18 @@
                     </ul>
                 </li>
 
-                <li class="nav-item"><a class="nav-link" href="<?= site_url('testimonials'); ?>">Testimonials</a></li>
-                <!-- <li class="nav-item"><a class="nav-link" href="#">Blog</a></li> -->
-                <li class="nav-item"><a class="nav-link" href="<?= site_url('contact') ?>">Contact</a></li>
-                <!-- <li class="nav-item ms-lg-3">
-                    <a href="<?= site_url('login') ?>" class="btn login-btn">Login</a>
-                </li> -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        About Us
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="<?= site_url('about') ?>">About Us</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('testimonials') ?>">Testimonials</a></li>
+                        <!-- <li><a class="dropdown-item" href="<?= site_url('blog') ?>">Blog</a></li> -->
+                        <li><a class="dropdown-item" href="<?= site_url('contact') ?>">Contact Us</a></li>
+                    </ul>
+                </li>
 
                 <li class="nav-item ms-3">
                     <?php $cart = $this->session->userdata('cart'); ?>

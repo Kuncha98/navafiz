@@ -103,7 +103,7 @@ class job_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/job_requests'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+       $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Fetch single record using IDs
@@ -125,6 +125,6 @@ class job_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/job_request_view'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+       $this->load->view('layouts/system/main_layout', $data);
     }
 }

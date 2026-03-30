@@ -1,7 +1,7 @@
 <style>
     .alert{
-        margin-top: 20px;
-        margin-bottom: 53px;
+        /* margin-top: 20px;
+        margin-bottom: 53px; */
     }
 </style>
 <?php if(!empty(_getSuccess())){?>

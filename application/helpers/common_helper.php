@@ -1512,6 +1512,13 @@ function request_forms_status($status)
     ];
 }
 
+// Validating manpower supplier role
+function is_manpower_supplier()
+{
+    $CI =& get_instance();
+    return $CI->session->userdata('role_id') == 9;
+}
+
 // Validating mentor role
 // function IsMentor()
 // {

@@ -27,7 +27,7 @@ class premium_service_orders extends CI_Controller
         $data['orders'] = $this->premium_service_orders_model->get_orders();
 
         $data['content'] = 'premium_services/orders';
-        $this->load->view('layouts/website/website_layout', $data);
+      $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Detail Page
@@ -55,7 +55,7 @@ class premium_service_orders extends CI_Controller
         ];
 
         $data['content'] = 'premium_services/order-view';
-        $this->load->view('layouts/website/website_layout', $data);
+      $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Status Update

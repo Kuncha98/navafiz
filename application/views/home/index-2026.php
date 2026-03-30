@@ -91,7 +91,8 @@
                                 </li>
                             </ul>
 
-                            <a href="/services/hire-a-talent" class="btn view-btn">Send a request</a>
+                            <a href="<?= site_url('/services/hire-a-talent') ?>" class="btn view-btn">Send a
+                                request</a>
                         </div>
 
                         <div class="col-lg-6">
@@ -129,9 +130,9 @@
                                 </li>
                             </ul>
 
-                            <a href="/services/find-a-job" class="btn view-btn">Send a request</a>
+                            <a href=" <?= site_url('/services/find-a-job') ?>" class="btn view-btn">Send a request</a>
 
-                            <a href="/user/register" class="btn view-btn">Create a profile</a>
+                            <a href=" <?= site_url('/user/register') ?>" class="btn view-btn">Create a profile</a>
 
                             <button type="button" class="btn view-btn" data-bs-toggle="modal"
                                 data-bs-target="#uploadResumeModal">
@@ -172,7 +173,8 @@
                                 </li>
                             </ul>
 
-                            <a href="/services/supply-manpower" class="btn view-btn">Join as a Manpower Partner</a>
+                            <a href="<?= site_url('/services/supply-manpower') ?>" class="btn view-btn">Join as a
+                                Manpower Partner</a>
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
@@ -205,7 +207,8 @@
                                 </li>
                             </ul>
 
-                            <a href="/services/become-a-freelancer" class="btn view-btn">Send a request</a>
+                            <a href="<?= site_url('/services/become-a-freelancer') ?>" class="btn view-btn">Send a
+                                request</a>
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
@@ -240,7 +243,8 @@
                                 </li>
                             </ul>
 
-                            <a href="/services/become-a-mentor" class="btn view-btn">Send a request</a>
+                            <a href="<?= site_url('/services/become-a-mentor') ?>" class="btn view-btn">Send a
+                                request</a>
                         </div>
                         <div class="col-lg-6">
                             <div class="service-image-wrapper">
@@ -385,6 +389,7 @@
                         you're aiming for local or regional opportunities, we'll help you make a strong first
                         impression.
                     </p>
+                    <a href="<?= site_url('premium-services') ?>" class="btn view-btn">Build</a>
                 </div>
             </div>
         </div>

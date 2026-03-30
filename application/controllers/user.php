@@ -12,6 +12,7 @@ class user extends CI_Controller
         $this->load->helper('bulksms_helper');
         $this->load->helper('cookie');
         $this->load->model('Job_Model');
+        $this->load->model('feed_model');
         $this->table_name = TABLE_PREFIX . 'jobs';
     }
 
@@ -313,6 +314,12 @@ class user extends CI_Controller
                             $this->session->set_userdata($user_session_data);
                             $user_id = $this->session->userdata('user_id');
 
+                            if ($get_user->role_id != 2) // prevent mentor reward
+                            { // give daily login reward
+                                $this->feed_model->create_daily_login_reward(
+                                    $get_user->m_id
+                                );
+                            }
 
 
                             //Update Last login date
@@ -353,6 +360,13 @@ class user extends CI_Controller
                             );
 
                             $this->session->set_userdata($user_session_data);
+
+                            if ($get_user->role_id != 2) // prevent mentor reward
+                            { // give daily login reward
+                                $this->feed_model->create_daily_login_reward(
+                                    $get_user->m_id
+                                );
+                            }
 
                             $user_id = $this->session->userdata('user_id');
                             redirect(base_url('profile/' . intval($user_id)));

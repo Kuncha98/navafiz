@@ -2,7 +2,7 @@
 
     <!-- Page header -->
     <div class="mb-4">
-        <a href="<?php echo site_url('n/' . $this->session->userdata('username')); ?>" class=""><i
+        <a href="<?php echo site_url('profile/' . $this->session->userdata('user_id')); ?>" class=""><i
                 class="fa fa-arrow-left me-2"></i>Back to dashboard</a>
         <h3 class="page-title mt-3 mb-1">Manage Pending Feed Posts</h3>
         <p class="text-muted mb-0">There is/are <?= $pending_count ?> pending post/s</p>

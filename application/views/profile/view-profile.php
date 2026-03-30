@@ -79,9 +79,9 @@ if ($query->num_rows() > 0) {
         border: 1px solid #215374;
         display: block;
         width: 60px;
-        height: 70px;
+        height: 60px;
         background-size: cover;
-        margin: 0 0 0 10px;
+        object-fit: cover;
     }
 
     .card {
@@ -128,6 +128,18 @@ if ($query->num_rows() > 0) {
             padding: 15px 0;
         }
     }
+
+    .more-points {
+        display: none;
+    }
+
+    .more-lines {
+        display: none;
+    }
+
+    .more-rec {
+        display: none;
+    }
 </style>
 <?php
 
@@ -173,8 +185,6 @@ if (!empty($isFeaturedProfile)) {
                             <?= $profile->m_branding; ?>
                         <?php } ?>
                     </p>
-
-
 
                     <p class="text-center">
                         <?= $profile->m_profession ?>
@@ -552,26 +562,6 @@ if (!empty($isFeaturedProfile)) {
                     </div>
                 </div>
             <?php } ?>
-            <?php // if($session_user_id>0){
-            ?>
-
-
-
-            <?php
-            //             print_r($recruitment_answers);                       
-            //             exit();
-            ?>
-
-
-
-
-
-
-
-
-
-
-
         </div>
 
         <div class="col-md-6">
@@ -604,17 +594,109 @@ if (!empty($isFeaturedProfile)) {
                                 <?php } ?>
                             </div>
                         <?php } ?>
-                        <?php
-                        if (!empty($get_review_status->review_status)) {
-                            if ($get_review_status->review_status == 'review_done') { ?>
-                                <div class="alert alert-secondary" role="alert">
-                                    Congrats Resume Approved by Navafiz Team.
-                                </div>
-                            <?php }
-                        } ?>
+
+                        <?php if (!empty($get_review_status) && $get_review_status->review_status == 'review_done') { ?>
+                            <div class="alert alert-secondary" role="alert">
+                                Congrats Resume Approved by Navafiz Team.
+                            </div>
+                        <?php } ?>
+
+                        <!-- <?php if (!empty($pending_points)): ?>
+                            <div class="alert alert-success" role="alert">
+
+                                You have <strong><?= $pending_points ?></strong> reward points waiting to be claimed
+
+                                <a href="<?= site_url('feed/claim_all_rewards') ?>" class="btn btn-primary mb-3"
+                                    onclick="return confirm('Claim all rewards?');">
+                                    Claim All
+                                </a>
+
+                                <?php foreach ($rewards as $reward): ?>
+                                    <div class="reward-item">
+
+                                        <?php if ($reward->action_type == 'daily_login'): ?>
+                                            <small>You received +10 points for daily login</small>
+                                        <?php elseif ($reward->action_type == 'post_approved'): ?>
+                                            <small>You received +10 points for post approval</small>
+                                        <?php endif; ?>
+
+                                        <hr>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?> -->
                     </div>
                 </div>
             <?php } ?>
+
+            <?php if (!empty($pending_points)): ?>
+                <div class="alert alert-success" role="alert">
+
+                    <p>
+                        You have <strong><?= $pending_points ?></strong> reward points waiting to be claimed
+                    </p>
+
+                    <!-- Hidden by default -->
+                    <div id="rewardDetails" style="display:none;">
+                        <!-- <?php foreach ($rewards as $reward): ?>
+                                        <ul class="reward-item mb-0">
+                                            <li>
+                                                <?php if ($reward->action_type == 'daily_login'): ?>
+                                                    <small>You received +10 points for daily login</small>
+
+                                                <?php elseif ($reward->action_type == 'post_approved'): ?>
+                                                    <small>You received +10 points for post approval</small>
+                                                <?php endif; ?>
+                                            </li>
+                                        </ul>
+                                    <?php endforeach; ?> -->
+                        <?php foreach ($rewards as $reward): ?>
+                            <ul class="reward-item">
+                                <li>
+                                    <?php if ($reward->action_type == 'daily_login'): ?>
+
+                                        <small>
+                                            You received +
+                                            <?= $reward->points ?> points for daily login
+                                            -
+                                            <?= date('d M Y', strtotime($reward->created_at)) ?>
+                                        </small>
+
+                                    <?php elseif ($reward->action_type == 'post_approved'): ?>
+
+                                        <?php
+                                        if (!empty($reward->feed_text)) {
+                                            $words = explode(' ', strip_tags($reward->feed_text));
+                                            $text = count($words) > 3
+                                                ? implode(' ', array_slice($words, 0, 3)) . '...'
+                                                : implode(' ', $words);
+                                        } else {
+                                            $text = 'Post (deleted)';
+                                        }
+                                        ?>
+
+                                        <small>
+                                            You received +<?= $reward->points ?> points for post approval -
+                                            <?= htmlspecialchars($text, ENT_QUOTES, 'UTF-8') ?>
+                                        </small>
+
+                                    <?php endif; ?>
+                                </li>
+                            </ul>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <a href="<?= site_url('feed/claim_all_rewards') ?>" class="btn btn-primary mb-2">
+                        Claim All
+                    </a>
+
+                    <button onclick="toggleRewards()" class="btn btn-secondary mb-2">
+                        More Details
+                    </button>
+
+                </div>
+            <?php endif; ?>
+
             <?php
             if (!empty($profile->video_cv)) {
                 // Parse the URL and get the video ID
@@ -647,9 +729,6 @@ if (!empty($isFeaturedProfile)) {
             }
             ?>
 
-
-
-
             <style>
                 #member_summ .summ_pts {
                     font-size: 16px
@@ -658,83 +737,45 @@ if (!empty($isFeaturedProfile)) {
 
             <div class="row">
                 <div class="col-md-12">
+
                     <div class="card profile" id="member_summ">
                         <div class="card-body">
-                            <div class="">
-                                <div style="text-align: left;">
-                                    <p class="text-center">
-                                        <b>Summary of Career</b>
-                                        <?php if ($profile_id == $session_user_id) { ?>
-                                            <a href="<?= site_url('summary-career'); ?>" style="vertical-align: inherit;"
-                                                class="btn btn-white btn-xs" title="Edit Summary of Career"><i
-                                                    class="fas fa-edit mt-0" style="font-size: 16px;"></i></a>
-                                        <?php } ?>
-                                    </p>
-                                    <p>
-                                        <?php if (!empty($summary_points->point_1)) { ?>
-                                        <p class="summ_pts">1.
-                                            <?= isset($summary_points->point_1) ? $summary_points->point_1 : ''; ?>
-                                        </p>
-                                        <hr>
+                            <div style="text-align: left;">
+                                <p class="text-center">
+                                    <b>Summary of Career</b>
+                                    <?php if ($profile_id == $session_user_id) { ?>
+                                        <a href="<?= site_url('summary-career'); ?>" style="vertical-align: inherit;"
+                                            class="btn btn-white btn-xs" title="Edit Summary of Career">
+                                            <i class="fas fa-edit mt-0" style="font-size: 16px;"></i>
+                                        </a>
+                                    <?php } ?>
+                                </p>
 
-                                    <?php } ?>
+                                <?php
+                                $points = [];
+                                for ($i = 1; $i <= 10; $i++) {
+                                    if (!empty($summary_points->{'point_' . $i})) {
+                                        $points[] = $summary_points->{'point_' . $i};
+                                    }
+                                }
+                                ?>
 
-                                    <?php if (!empty($summary_points->point_2)) { ?>
-                                        <p class="summ_pts"> 2.
-                                            <?= isset($summary_points->point_2) ? $summary_points->point_2 : ''; ?>
+                                <?php foreach ($points as $index => $point): ?>
+                                    <div class="<?= $index >= 3 ? 'more-points' : ''; ?>">
+                                        <p class="summ_pts">
+                                            <?= ($index + 1) . '. ' . $point; ?>
                                         </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_3)) { ?>
-                                        <p class="summ_pts">3.
-                                            <?= isset($summary_points->point_3) ? $summary_points->point_3 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_4)) { ?>
-                                        <p class="summ_pts">4.
-                                            <?= isset($summary_points->point_4) ? $summary_points->point_4 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_5)) { ?>
-                                        <p class="summ_pts">5.
-                                            <?= isset($summary_points->point_5) ? $summary_points->point_5 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_6)) { ?>
-                                        <p class="summ_pts">6.
-                                            <?= isset($summary_points->point_6) ? $summary_points->point_6 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_7)) { ?>
-                                        <p class="summ_pts">7.
-                                            <?= isset($summary_points->point_7) ? $summary_points->point_7 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_8)) { ?>
-                                        <p class="summ_pts">8.
-                                            <?= isset($summary_points->point_8) ? $summary_points->point_8 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_9)) { ?>
-                                        <p class="summ_pts">9.
-                                            <?= isset($summary_points->point_9) ? $summary_points->point_9 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
-                                    <?php if (!empty($summary_points->point_10)) { ?>
-                                        <p class="summ_pts">10.
-                                            <?= isset($summary_points->point_10) ? $summary_points->point_10 : ''; ?>
-                                        </p>
-                                        <hr>
-                                    <?php } ?>
+                                        <?php if ($index < count($points) - 1)
+                                            echo '<hr>'; ?>
+                                    </div>
+                                <?php endforeach; ?>
+
+                                <?php if (count($points) > 3): ?>
+                                    <p class="text-right">
+                                        <a href="javascript:void(0);" id="togglePoints" class="btn btn-sm btn-link">See
+                                            More</a>
                                     </p>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -825,7 +866,26 @@ if (!empty($isFeaturedProfile)) {
                                         <div class="row">
                                             <div class="col-sm-4"><span class="text-muted">Detail</span> </div>
                                             <div class="col-sm-8">
-                                                <p style="font-size:16px"><?= nl2br($emp_history->description); ?></p>
+                                                <!-- <p style="font-size:16px"><?= nl2br($emp_history->description); ?></p> -->
+                                                <?php
+                                                // Split description by newlines and filter empty lines
+                                                $lines = array_filter(array_map('trim', explode("\n", $emp_history->description)));
+                                                ?>
+
+                                                <div class="description-container">
+                                                    <?php foreach ($lines as $index => $line): ?>
+                                                        <div class="desc-line <?= $index >= 3 ? 'more-lines' : ''; ?>">
+                                                            <?= nl2br(htmlspecialchars($line)); ?>
+                                                        </div>
+                                                    <?php endforeach; ?>
+
+                                                    <?php if (count($lines) > 3): ?>
+                                                        <p class="text-right mt-1">
+                                                            <a href="javascript:void(0);"
+                                                                class="btn btn-sm btn-link toggle-desc">See More</a>
+                                                        </p>
+                                                    <?php endif; ?>
+                                                </div>
                                             </div>
                                         </div>
                                     </li>
@@ -881,12 +941,6 @@ if (!empty($isFeaturedProfile)) {
             </div>
 
 
-
-
-
-
-
-
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-12">
                     <h5 class=" text-center" style="padding-top: 25px;">
@@ -935,15 +989,6 @@ if (!empty($isFeaturedProfile)) {
                 </div>
             </div>
 
-
-
-
-
-
-
-
-
-
         </div>
 
         <div class="col-md-3">
@@ -972,7 +1017,11 @@ if (!empty($isFeaturedProfile)) {
                 <a href="<?= site_url('social-media'); ?>" class="btn btn-outline-success col-12"
                     style="margin-bottom: 10px;"><b>Join WhatsApp groups</b></a>
             <?php } ?>
-
+            <?php if ($role_id == 9) { ?>
+                <a href="<?= site_url('form-requests/manpower-supply-quota-list'); ?>" class="btn btn-primary col-12 mb-2">
+                    Manpower Supply Job Quota
+                </a>
+            <?php } ?>
             <?php if ($role_id == 2) { ?>
                 <div class="card">
                     <div class="card-header">
@@ -1004,29 +1053,70 @@ if (!empty($isFeaturedProfile)) {
             <?php } ?>
 
 
-            <?php if (!empty($recommand_list)) { ?>
+            <!-- <?php if (!empty($recommand_list)) { ?>
                 <div class="card" style="margin-bottom: -10px;">
                     <div class="card-header"><b>Profile Recommendations (<?= count($recommand_list) ?>)</b></div>
                 </div>
                 <?php foreach ($recommand_list as $list) { ?>
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-3" style="padding-left: 0;">
-                                    <div class="avatarpro img-fluid"
-                                        style="background-image: url('<?= site_url('assets/uploads/members/' . $list->m_avatar); ?>');">
-                                        <!--Profile Picture-->
-                                    </div>
+                            <div class="d-flex">
+                                <div class="mr-2">
+                                    <img src="<?= site_url('assets/uploads/members/' . $list->m_avatar); ?>" alt=""
+                                        class="avatarpro">
                                 </div>
-                                <div class="col-9" style="padding-left: 0;">
-                                    <a class="member_name" href="<?= site_url('profile/' . $list->recommend_by); ?>">
-                                        <strong><?= $list->m_name ?></strong> </a> <br />
+                                <div><a class="member_name" href="<?= site_url('profile/' . $list->recommend_by); ?>">
+                                        <strong>
+                                            <?= $list->m_name ?>
+                                        </strong> </a> <br />
                                     <?= $list->m_profession ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php } ?>
+            <?php } ?> -->
+
+            <?php if (!empty($recommand_list)) { ?>
+                <div class="card" style="margin-bottom: -10px;">
+                    <div class="card-header">
+                        <b>Profile Recommendations (
+                            <?= count($recommand_list) ?>)
+                        </b>
+                    </div>
+                </div>
+
+                <div class="recommendation-container">
+                    <?php foreach ($recommand_list as $index => $list) { ?>
+                        <div class="card rec-item <?= $index >= 3 ? 'more-rec' : ''; ?>">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="mr-2">
+                                        <img src="<?= site_url('assets/uploads/members/' . $list->m_avatar); ?>"
+                                            class="avatarpro">
+                                    </div>
+                                    <div>
+                                        <a class="member_name" href="<?= site_url('profile/' . $list->recommend_by); ?>">
+                                            <strong>
+                                                <?= $list->m_name ?>
+                                            </strong>
+                                        </a><br />
+                                        <?= $list->m_profession ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                    <?php if (count($recommand_list) > 3) { ?>
+                        <div class="text-center mb-2">
+                            <a href="javascript:void(0);" class="btn btn-sm btn-link toggle-rec">
+                                Show All (
+                                <?= count($recommand_list) - 3 ?> more)
+                            </a>
+                        </div>
+                    <?php } ?>
+                </div>
             <?php } ?>
 
 
@@ -1691,4 +1781,70 @@ if (!empty($isFeaturedProfile)) {
             alert("Sharing not supported on this browser. Profile link copied!");
         }
     });
+</script>
+
+<!-- Show more/ show less in career summary -->
+<script>
+    $(document).ready(function () {
+        $('#togglePoints').click(function () {
+            var morePoints = $('.more-points');
+            if (morePoints.is(':visible')) {
+                // Hide extra points
+                morePoints.slideUp();
+                $(this).text('See More');
+            } else {
+                // Show extra points
+                morePoints.slideDown();
+                $(this).text('See Less');
+            }
+        });
+    });
+</script>
+
+<!-- Show more/ show less in work experience details -->
+<script>
+    $(document).ready(function () {
+        $('.toggle-desc').click(function () {
+            var container = $(this).closest('.description-container');
+            var moreLines = container.find('.more-lines');
+
+            if (moreLines.is(':visible')) {
+                moreLines.slideUp();
+                $(this).text('See More');
+            } else {
+                moreLines.slideDown();
+                $(this).text('See Less');
+            }
+        });
+    });
+</script>
+
+<!-- Show more/ show less in profile recommedation -->
+<script>
+    $(document).ready(function () {
+        $('.toggle-rec').click(function () {
+            var container = $(this).closest('.recommendation-container');
+            var hiddenItems = container.find('.more-rec');
+
+            if (hiddenItems.is(':visible')) {
+                hiddenItems.slideUp();
+                $(this).text('Show All');
+            } else {
+                hiddenItems.slideDown();
+                $(this).text('Show Less');
+            }
+        });
+    });
+</script>
+
+<script>
+    function toggleRewards() {
+        var el = document.getElementById('rewardDetails');
+
+        if (el.style.display === 'none') {
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
+    }
 </script>

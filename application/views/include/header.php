@@ -73,6 +73,8 @@ ini_set('display_errors', 0);
     <script src="<?= site_url('nassets'); ?>/js/bs4.js"></script>
     <script src="<?= site_url('nassets'); ?>/lib/wow/wow.min.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- /FancyBOx -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
@@ -99,7 +101,7 @@ ini_set('display_errors', 0);
     <link rel="stylesheet" href="<?= base_url('navassets/css/core/utilities.css') ?>">
     <link rel="stylesheet" href="<?= base_url('navassets/css/navbar.css') ?>">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="<?= base_url('navassets/js/common.js') ?>" defer></script>

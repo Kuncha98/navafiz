@@ -204,7 +204,7 @@ class Feed extends CI_Controller
         if ($this->session->userdata('role_id') != 2) {
             show_error('Unauthorized access');
         }
- 
+
         $this->load->library('pagination');
 
         $config['base_url'] = site_url('feed/pending_feed_posts');
@@ -223,7 +223,7 @@ class Feed extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'feed/pending-feeds'; // content view
-        $this->load->view('layouts/website/website_layout', $data);
+        $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Approving posts by mentor
@@ -251,8 +251,8 @@ class Feed extends CI_Controller
             // check if reward already exists
             $exists = $this->db
                 ->where('feed_id', $feed_id)
-                ->where('action_type', 'approved')
-                ->count_all_results('jb_feed_reward_points');
+                ->where('action_type', 'post_approved')
+                ->count_all_results('jb_reward_points');
 
             if (!$exists) {
 
@@ -260,7 +260,8 @@ class Feed extends CI_Controller
                     'user_id' => $feed->user_id,
                     'feed_id' => $feed_id,
                     'points' => 10,
-                    'action_type' => 'approved',
+                    'action_type' => 'post_approved',
+                    'status' => REWARD_STATUS_PENDING,
                     'created_at' => datenow(),
                     'created_by' => $this->session_user_id
                 ];
@@ -293,6 +294,83 @@ class Feed extends CI_Controller
 
         redirect('feed/pending');
     }
+
+    public function claim_all_rewards()
+    {
+        LoginCheck(site_url('login'), current_url());
+
+        $user_id = $this->session_user_id;
+
+        // Get all pending rewards
+        $rewards = $this->db
+            ->where('user_id', $user_id)
+            ->where('status', REWARD_STATUS_PENDING)
+            ->get('jb_reward_points')
+            ->result();
+
+        if (empty($rewards)) {
+            $this->session->set_flashdata('error', 'No rewards to claim.');
+            redirect("profile/" . $this->session->userdata('user_id'));
+        }
+
+        // Collect IDs
+        $ids = array_column($rewards, 'id');
+
+        // Update all in one query (FAST & SAFE)
+        $this->db->where_in('id', $ids)->update('jb_reward_points', [
+            'status' => REWARD_STATUS_CLAIMED,
+            'claimed_at' => datenow()
+        ]);
+
+        $this->session->set_flashdata('success', 'All rewards claimed successfully!');
+
+        redirect("profile/" . $this->session->userdata('user_id'));
+    }
+
+    // Pending login rewards
+    // public function pending_login_rewards()
+    // {
+    //     LoginCheck(site_url('login'), current_url());
+
+    //     if ($this->session->userdata('role_id') != 2) {
+    //         show_error('Unauthorized access');
+    //     }
+
+    //     $this->load->library('pagination');
+
+    //     $config['base_url'] = site_url('feed/pending_login_rewards');
+    //     $config['total_rows'] = $this->feed_model->count_pending_login_rewards();
+    //     $config['per_page'] = 10;
+    //     $config['uri_segment'] = 3;
+
+    //     $this->pagination->initialize($config);
+
+    //     $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+    //     $data['rewards'] = $this->feed_model->get_pending_login_rewards($config['per_page'], $page);
+    //     $data['pagination'] = $this->pagination->create_links();
+
+    //     $data['content'] = 'feed/pending-login-rewards';
+    //     $this->load->view('layouts/website/website_layout', $data);
+    // }
+
+
+    // Approve login reward
+    // public function approve_login_reward($id)
+    // {
+    //     LoginCheck(site_url('login'), current_url());
+
+    //     if ($this->session->userdata('role_id') != 2) {
+    //         show_error('Unauthorized');
+    //     }
+
+    //     $this->db->where('id', $id)->update('jb_reward_points', [
+    //         'status' => REWARD_STATUS_CLAIMED,
+    //         'approved_at' => datenow()
+    //     ]);
+
+    //     redirect('feed/pending_login_rewards');
+    // }
 
 }
 

@@ -130,7 +130,8 @@ if (!$avatar) {
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="<?= profile_picture($user_id); ?>" class="rounded-circle me-2" width="35" height="35"
-                                style="object-fit:cover;">
+                                style="object-fit:cover;"
+                                onerror="this.onerror=null; this.src='<?= base_url('navassets/img/user-avatar.jpg'); ?>';">
                             <span>
                                 <?= $name; ?>
                             </span>
@@ -177,16 +178,16 @@ if (!$avatar) {
                                 <a class="dropdown-item"
                                     href="<?= site_url('job_portals/index/' . $session_user_id); ?>">Add Job
                                     Portals</a>
-                                <div class="dropdown-divider"></div>
                             </li>
                             <li class="nav-list">
                                 <?php if (in_array($user_id, CvReviewTeamList())) { ?>
-                                    <a class="dropdown-item" href="<?= site_url('mentors/activity'); ?>">Mentor
-                                        Activity</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="<?= site_url('blueuser/listusers'); ?>">View Blue
                                         User</a>
                                     <a class="dropdown-item" href="<?= site_url('blueuser/adduser'); ?>">Add Blue
                                         User</a>
+                                    <a class="dropdown-item" href="<?= site_url('mentors/activity'); ?>">Mentor
+                                        Activity</a>
                                     <a class="dropdown-item" href="<?= site_url('mentors/quick_job_applicants'); ?>">Easy Jobs
                                         Candidates</a>
                                     <a class="dropdown-item" href="<?= site_url('recruitment_projects/'); ?>">Recruitment
@@ -195,10 +196,14 @@ if (!$avatar) {
                                     <a class="dropdown-item" href="<?= site_url('feed/pending'); ?>">View
                                         pending feed
                                         posts</a>
+                                    <a class="dropdown-item" href="<?= site_url('orders/'); ?>">View Service
+                                        Orders</a>
+                                    <a class="dropdown-item" href="<?= site_url('services/manpower-job-quota'); ?>">Manpower Job
+                                        Quota</a>
                                 <?php } ?>
-                                <div class="dropdown-divider"></div>
                             </li>
                             <li>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="<?= site_url('user/logout'); ?>">
                                     Logout
                                 </a>

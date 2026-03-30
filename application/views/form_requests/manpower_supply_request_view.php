@@ -13,7 +13,8 @@
             </div>
 
 
-            <!-- <form method="post" action="<?= site_url('job_seeker_requests/change_request_status/' . $record->id); ?>">
+            <form method="post"
+                action="<?= site_url('manpower_supply_requests/change_request_status/' . $record->id); ?>">
                 <?php
                 // Decide background color based on current status
                 $status = (int) $record->status;
@@ -37,7 +38,7 @@
                     <?php
                     $statusOptions = [
                         1 => 'Submit',
-                        2 => 'Approved',
+                        2 => 'Approved & registered as a member',
                         3 => 'Rejected'
                     ];
 
@@ -55,7 +56,7 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
-            </form> -->
+            </form>
         </div>
 
         <!-- Form card -->

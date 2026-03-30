@@ -174,21 +174,23 @@ class Feed_model extends CI_Model
 
     public function add_reward_points($data)
     {
-        $this->db->insert('jb_feed_reward_points', $data);
+        $this->db->insert('jb_reward_points', $data);
     }
 
     public function get_feed_reward($feed_id)
     {
         $this->db->where('feed_id', $feed_id);
-        return $this->db->get('jb_feed_reward_points')->result();
+        return $this->db->get('jb_reward_points')->result();
     }
 
+    // Fetch sum of all rewards
     public function get_total_points($user_id)
     {
 
         $this->db->select_sum('points');
         $this->db->where('user_id', $user_id);
-        $query = $this->db->get('jb_feed_reward_points');
+        $this->db->where('status', REWARD_STATUS_CLAIMED);
+        $query = $this->db->get('jb_reward_points');
 
         // Get the row safely
         $row = $query->row();
@@ -201,6 +203,94 @@ class Feed_model extends CI_Model
 
         // If no row, return 0
         return 0;
+    }
+
+    // Check if user already received daily login reward today
+    public function has_today_login_reward($user_id)
+    {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('action_type', 'daily_login');
+        $this->db->where('DATE(created_at)', date('Y-m-d'));
+
+        return $this->db->count_all_results('jb_reward_points') > 0;
+    }
+
+    // Create daily login reward
+    public function create_daily_login_reward($user_id)
+    {
+        // prevent duplicates
+        if ($this->has_today_login_reward($user_id)) {
+            return false;
+        }
+
+        $data = [
+            'user_id' => $user_id,
+            'points' => 10,
+            'action_type' => 'daily_login',
+            'status' => REWARD_STATUS_PENDING,
+            'created_at' => datenow(),
+            'created_by' => $user_id
+        ];
+
+        return $this->db->insert('jb_reward_points', $data);
+    }
+
+    // Count pending login rewards
+    // public function count_pending_login_rewards()
+    // {
+    //     $this->db->where('status', REWARD_STATUS_PENDING);
+    //     $this->db->where('action_type', 'daily_login');
+    //     return $this->db->count_all_results('jb_reward_points');
+    // }
+
+    // Get pending login rewards with user info
+    // public function get_pending_login_rewards($limit, $offset)
+    // {
+    //     return $this->db
+    //         ->select('jb_reward_points.*, users.name, users.email')
+    //         ->join('users', 'users.id = jb_reward_points.user_id')
+    //         ->where('jb_reward_points.status', REWARD_STATUS_PENDING)
+    //         ->where('jb_reward_points.action_type', 'daily_login')
+    //         ->limit($limit, $offset)
+    //         ->order_by('jb_reward_points.created_at', 'DESC')
+    //         ->get('jb_reward_points')
+    //         ->result();
+    // }
+
+
+    // Fetch sum of pending rewards
+    function get_pending_points($user_id)
+    {
+        $this->db->select_sum('points');
+        $this->db->where('user_id', $user_id);
+        $this->db->where('status', REWARD_STATUS_PENDING);
+
+        $result = $this->db->get('jb_reward_points')->row();
+
+        return $result->points ? $result->points : 0;
+    }
+
+    // Fetch all the pending reward points
+    // public function get_user_rewards($user_id)
+    // {
+    //     return $this->db
+    //         ->where('user_id', $user_id)
+    //         ->where('status', REWARD_STATUS_PENDING) // claimable
+    //         ->order_by('created_at', 'DESC')
+    //         ->get('jb_reward_points')
+    //         ->result();
+    // }
+    public function get_user_rewards($user_id)
+    {
+        return $this->db
+            ->select('jb_reward_points.*, jb_feed.feed_text')
+            ->from('jb_reward_points')
+            ->join('jb_feed', 'jb_feed.feed_id = jb_reward_points.feed_id', 'left')
+            ->where('jb_reward_points.user_id', $user_id)
+            ->where('jb_reward_points.status', REWARD_STATUS_PENDING)
+            ->order_by('jb_reward_points.created_at', 'DESC')
+            ->get()
+            ->result();
     }
 }
 ?>

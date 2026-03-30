@@ -108,4 +108,13 @@ class home extends CI_Controller
         $this->load->view('layouts/website/website_layout', $data);
     }
 
+    function manpower_job_quota()
+    {
+        // Example: Check if user is logged in
+        $user_id = $this->session->userdata('user_id');
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'services/manpower_job_quota'; // content view
+        $this->load->view('layouts/system/main_layout', $data);
+    }
 }

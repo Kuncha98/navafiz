@@ -1,4 +1,5 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -39,16 +40,16 @@ define('MarkedInterviewed', 10);
 |
 */
 
-define('FOPEN_READ',							'rb');
-define('FOPEN_READ_WRITE',						'r+b');
-define('FOPEN_WRITE_CREATE_DESTRUCTIVE',		'wb'); // truncates existing file data, use with care
-define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE',	'w+b'); // truncates existing file data, use with care
-define('FOPEN_WRITE_CREATE',					'ab');
-define('FOPEN_READ_WRITE_CREATE',				'a+b');
-define('FOPEN_WRITE_CREATE_STRICT',				'xb');
-define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
+define('FOPEN_READ', 'rb');
+define('FOPEN_READ_WRITE', 'r+b');
+define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+define('FOPEN_WRITE_CREATE', 'ab');
+define('FOPEN_READ_WRITE_CREATE', 'a+b');
+define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
-define('RECAPTCHA_PUBLIC_KEY',	'6LfpMsISAAAAANEVsBetR_x8jcKZQhSpdrqWjzXY');
+define('RECAPTCHA_PUBLIC_KEY', '6LfpMsISAAAAANEVsBetR_x8jcKZQhSpdrqWjzXY');
 define('RECAPTCHA_PRIVATE_KEY', '6LfpMsISAAAAAHB4NQ-uMGoLTv7qM6wAgd3WkXwB');
 define('SMTP_USER', 'navafizweb@gmail.com');
 define('SMTP_PASSWORD', 'dxb@321321');
@@ -65,3 +66,7 @@ define('TESTIMONIALS_TABLE', 'jb_testimonials');
 define('MENTOR_SUPER6_TABLE', 'jb_mentors_super6');
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
+
+// User reward points status
+defined('REWARD_STATUS_PENDING') OR define('REWARD_STATUS_PENDING', 0);
+defined('REWARD_STATUS_CLAIMED') OR define('REWARD_STATUS_CLAIMED', 1);

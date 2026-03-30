@@ -220,3 +220,7 @@
   color: #164885;
   font-size: 1.35rem;
 }
+
+.nav-item .nav-link i {
+  color: #164885;
+}

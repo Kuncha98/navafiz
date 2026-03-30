@@ -725,3 +725,24 @@
   padding: 20px;
   border: 0.5px solid #dee2e6;
 }
+
+/* Manpower supplier quota */
+.quota-card {
+  background-color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 20px !important;
+}
+
+.quota-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  transition: all 0.5s ease;
+}
+
+.quota-card:not(:hover) {
+  transition: all 0.5s ease;
+}
+
+.quota-card .card-body {
+  padding: 0;
+}
