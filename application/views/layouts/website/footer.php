@@ -56,19 +56,31 @@
 
             <!-- Services -->
             <div class="col-sm-6 col-md-6 col-lg-2 col-12">
-                <h6 class="footer-title text-white text-uppercase mb-4">Services</h6>
+                <h6 class="footer-title text-white text-uppercase mb-4">Opportunities</h6>
                 <ul class="list-unstyled ">
                     <li class="mb-3">
-                        <p> Hire Talent</p>
+                        <a class="text-decoration-none text-white" href="<?= site_url('services/hire-a-talent') ?>">
+                            Hire
+                            Talent</a>
                     </li>
                     <li class="mb-3">
-                        <p>Find a Job</p>
+                        <a class="text-decoration-none text-white" href="<?= site_url('services/find-a-job') ?>">Find a
+                            Job</a>
                     </li>
                     <li class="mb-3">
-                        <p>Freelance Work</p>
+                        <a class="text-decoration-none text-white"
+                            href="<?= site_url('services/become-a-freelancer') ?>">Manpower
+                            Suppliers</a>
                     </li>
                     <li class="mb-3">
-                        <p>Become a Mentor</p>
+                        <a class="text-decoration-none text-white"
+                            href="<?= site_url('services/become-a-freelancer') ?>">Freelance
+                            Work</a>
+                    </li>
+                    <li class="mb-3">
+                        <a class="text-decoration-none text-white"
+                            href="<?= site_url('services/become-a-mentor') ?>">Become a
+                            Mentor</a>
                     </li>
                 </ul>
             </div>
@@ -78,16 +90,21 @@
                 <h6 class="footer-title text-white text-uppercase mb-4">Company</h6>
                 <ul class="list-unstyled ">
                     <li class="mb-3">
-                        <p>About Us</p>
+                        <a class="text-decoration-none text-white" href="<?= site_url('about') ?>">About Us</a>
                     </li>
                     <li class="mb-3">
-                        <p>Testimonials</p>
+                        <a class="text-decoration-none text-white"
+                            href="<?= site_url('testimonials') ?>">Testimonials</a>
                     </li>
                     <li class="mb-3">
-                        <p>Blog</p>
+                        <a class="text-decoration-none text-white" href="<?= site_url('contact') ?>">Contact Us</a>
                     </li>
                     <li class="mb-3">
-                        <p>Privacy Policy</p>
+                        <a class="text-decoration-none text-white" href="<?= site_url('blog') ?>">Blog</a>
+                    </li>
+                    <li class="mb-3">
+                        <a class="text-decoration-none text-white"
+                            href="<?= site_url('front/privacy_policy') ?>">Privacy Policy</a>
                     </li>
                 </ul>
             </div>
@@ -98,18 +115,20 @@
                 <ul class="list-unstyled ">
                     <li class="d-flex align-items-center mb-3">
                         <i class="me-3 fa fa-map-marker"></i>
-                        <p class="mb-0"> Business Village B, Deira, Dubai</p>
+                        <a class="text-decoration-none text-white" href="https://maps.app.goo.gl/QDfGUe7N5nHQ9bPY6">
+                            Business Village B, Deira, Dubai</a>
                     </li>
-                    <li class="d-flex align-items-center mb-3">
+                    <!-- <li class="d-flex align-items-center mb-3">
                         <i class="me-3 fa fa-phone"></i>
                         <p class="mb-0">+971 4363 5252</p>
-                    </li>
+                    </li> -->
                     <li class="d-flex align-items-center mb-3">
-                        <i class="me-3 fa fa-phone"></i> +971 4297 7879
+                        <i class="me-3 fa fa-phone"></i>
+                        <a class="text-decoration-none text-white" href="tel:+971554465332">+971 55 446 5332</a>
                     </li>
                     <li class="d-flex align-items-center mb-3">
                         <i class="me-3 fa fa-envelope"></i>
-                        <p class="mb-0"> info@navafiz.com</p>
+                        <a class="text-decoration-none text-white" href="mailto:info@navafiz.com">info@navafiz.com</a>
                     </li>
                 </ul>
             </div>

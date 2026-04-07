@@ -85,7 +85,7 @@
                     <!-- Footer -->
                     <div class="card-footer bg-white border-0 p-0 pt-2">
                         <a href="#" class="btn btn-primary w-100">
-                            View Details
+                            Collabrate on Hiring
                         </a>
                     </div>
 

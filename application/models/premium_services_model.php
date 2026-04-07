@@ -17,7 +17,7 @@ class premium_services_model extends CI_Model
         $this->db->from($this->table . ' s');              // services table alias as 's'
         $this->db->join('jb_premium_service_categories c', 'c.id = s.category_id', 'left'); // join category table
         $this->db->where('s.status', 1);
-        $this->db->order_by('c.name', 'ASC'); // optional: order by category name
+        $this->db->order_by('c.id', 'ASC'); // optional: order by category name
         $this->db->order_by('s.name', 'ASC'); // optional: order services by name
         $query = $this->db->get();
         return $query->result();

@@ -11,9 +11,11 @@
         <div id="cart-notification" class="alert alert-success text-dark" style="display: none;">
             <!-- Notification text will be injected here -->
         </div>
-        
+
         <div class="accordion" id="servicesAccordion">
-            <?php $i = 0; ?>
+            <?php $grouped_services = is_array($grouped_services) ? $grouped_services : [];
+            ksort($grouped_services);
+            $i = 0; ?>
             <?php foreach ($grouped_services as $category_id => $category): ?>
                 <?php $i++; ?>
                 <div class="accordion-item mb-3">
@@ -51,7 +53,8 @@
                                         <!-- Add to Cart Button -->
                                         <div
                                             class="col-12 col-lg-2 d-flex align-items-center justify-content-start justify-content-lg-end">
-                                            <button class="btn btn-primary add-to-cart cart-btn" data-id="<?= $service->id ?>"> Add to
+                                            <button class="btn btn-primary add-to-cart cart-btn" data-id="<?= $service->id ?>">
+                                                Add to
                                                 Cart <i class="fas fa-shopping-cart ms-1"></i></button>
                                         </div>
                                     </div>
@@ -64,4 +67,3 @@
         </div>
     </div>
 </section>
-
