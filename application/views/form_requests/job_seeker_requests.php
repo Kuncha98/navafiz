@@ -33,12 +33,11 @@
                     <?php foreach ($records as $index => $row) { ?>
                         <tr>
                             <td>
-                                <?= $index + 1 ?>
+                                <?= $index + 1 + $this->uri->segment(3) ?>
                             </td>
                             <td>
                                 <a href="<?php echo site_url('form-requests/job-seeker-request-view/' . $row->id); ?>"
                                     class="text-decoration-none"><?php echo $row->name; ?></a>
-
                             </td>
                             <td>
                                 <?php $status = request_forms_status($row->status); ?>
@@ -84,7 +83,6 @@
                             <!-- <td>
                                 <?php echo $row->highest_qualification; ?>
                             </td> -->
-                            
                             <td>
                                 <?php echo $row->created_at; ?>
                             </td>
@@ -101,8 +99,9 @@
                 <?php } ?>
             </tbody>
         </table>
+    </div>
 
-        <br>
-        <?php echo $pagination; ?>
+    <div class="d-flex justify-content-center mt-3">
+        <?= $pagination; ?>
     </div>
 </div>

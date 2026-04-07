@@ -165,18 +165,18 @@ class job_seeker_requests extends CI_Controller
     {
         require_role(array(2)); // 2 = Mentor
 
-        // echo '<pre>';
-        // print_r($this->session->all_userdata());
-        // exit;
-        $config = array();
-        $config["base_url"] = site_url('job-seeker-request-list');
-        $config["total_rows"] = $this->job_seeker_requests_model->get_total_count();
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 2;
+        $config = init_pagination(
+            'form-requests/job-seeker-request-list',
+            $this->job_seeker_requests_model->get_total_count(),
+            20,
+            3
+        );
 
-        $this->pagination->initialize($config);
+        $data["records"] = $this->job_seeker_requests_model->get_all(
+            $config["per_page"],
+            $this->uri->segment(3)
+        );
 
-        $data["records"] = $this->job_seeker_requests_model->get_all($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';

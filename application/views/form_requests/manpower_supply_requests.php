@@ -33,7 +33,7 @@
                     <?php foreach ($records as $index => $row) { ?>
                         <tr>
                             <td>
-                                <?= $index + 1 ?>
+                                <?= $index + 1 + $this->uri->segment(3) ?>
                             </td>
                             <td>
                                 <a href="<?php echo site_url('form-requests/manpower-supply-request-view/' . $row->id); ?>"
@@ -135,8 +135,8 @@
                 <?php } ?>
             </tbody>
         </table>
-
-        <br>
-        <?php echo $pagination; ?>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <?= $pagination; ?>
     </div>
 </div>

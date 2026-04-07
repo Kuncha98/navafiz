@@ -102,20 +102,23 @@ class mentor_requests extends CI_Controller
     {
         require_role(array(2)); // 2 = Mentor
 
-        $config = array();
-        $config["base_url"] = site_url('mentor-request-list');
-        $config["total_rows"] = $this->mentor_requests_model->get_total_count();
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 2;
+        $config = init_pagination(
+            'form-requests/mentor-request-list',
+            $this->mentor_requests_model->get_total_count(),
+            20,
+            3
+        );
 
-        $this->pagination->initialize($config);
+        $data["records"] = $this->mentor_requests_model->get_all(
+            $config["per_page"],
+            $this->uri->segment(3)
+        );
 
-        $data["records"] = $this->mentor_requests_model->get_all($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/mentor_requests'; // content view
-       $this->load->view('layouts/system/main_layout', $data);
+        $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Fetch single record using IDs
@@ -137,6 +140,6 @@ class mentor_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/mentor_request_view'; // content view
-       $this->load->view('layouts/system/main_layout', $data);
+        $this->load->view('layouts/system/main_layout', $data);
     }
 }

@@ -29,10 +29,11 @@
                     <?php foreach ($records as $index => $row) { ?>
                         <tr>
                             <td>
-                                <?= $index + 1 ?>
+                                <?= $index + 1 + $this->uri->segment(3) ?>
                             </td>
                             <td>
-                                <?php echo $row->company_name; ?>
+                                <a href="<?php echo site_url('form-requests/job-request-view/' . $row->id); ?>"
+                                    class="text-decoration-none"><?php echo $row->company_name; ?></a>
                             </td>
                             <td>
                                 <?php echo $row->job_title; ?>
@@ -71,8 +72,8 @@
                 <?php } ?>
             </tbody>
         </table>
-
-        <br>
-        <?php echo $pagination; ?>
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+        <?= $pagination; ?>
     </div>
 </div>

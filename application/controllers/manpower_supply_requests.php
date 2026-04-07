@@ -221,15 +221,18 @@ class manpower_supply_requests extends CI_Controller
     {
         require_role(array(2)); // 2 = Mentor
 
-        $config = array();
-        $config["base_url"] = site_url('manpower-supply-request-list');
-        $config["total_rows"] = $this->manpower_supply_requests_model->get_total_count();
-        $config["per_page"] = 10;
-        $config["uri_segment"] = 2;
+        $config = init_pagination(
+            'form-requests/manpower-supply-request-list',
+            $this->manpower_supply_requests_model->get_total_count(),
+            20,
+            3
+        );
 
-        $this->pagination->initialize($config);
+        $data["records"] = $this->manpower_supply_requests_model->get_all(
+            $config["per_page"],
+            $this->uri->segment(3)
+        );
 
-        $data["records"] = $this->manpower_supply_requests_model->get_all($config["per_page"], $page);
         $data["pagination"] = $this->pagination->create_links();
 
         $data['title'] = 'NAVAFIZ Home';
