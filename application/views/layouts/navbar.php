@@ -106,22 +106,22 @@ if (!$avatar) {
             <ul class="navbar-nav align-items-lg-center">
                 <?php if ($is_logged): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('messages/' . $user_id) ?>">
+                        <a class="nav-link position-relative" href="<?= site_url('messages/' . $user_id) ?>">
                             <i class="me-0 fas fa-envelope"></i>
                             <?php $msg = TMessagesCountByUser($user_id); ?>
                             <?php if ($msg > 0) { ?>
-                                <span class="badge badge-danger">
+                                <span class="badge badge-danger notification-badge">
                                     <?= $msg ?>
                                 </span>
                             <?php } ?>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('notifications/usernotifications/') ?>">
+                        <a class="nav-link position-relative" href="<?= site_url('notifications/usernotifications/') ?>">
                             <i class="me-0 fas fa-bell"></i>
                             <?php $not = NotificationCountByUser($user_id); ?>
                             <?php if ($not > 0) { ?>
-                                <span class="badge badge-danger"><?= $not ?></span>
+                                <span class="badge badge-danger notification-badge"><?= $not ?></span>
                             <?php } ?>
                         </a>
                     </li>

@@ -245,7 +245,7 @@ class Profile extends CI_Controller
             $result = $this->recruitment_answer->Search(array('user_id' => $user_id, 'question_id' => $key));
             if (count($result) > 0) {
 
-                $res = $this->recruitment_answer->DeleteAns($data['question_id'], $user_id);
+                $this->recruitment_answer->DeleteAns($data['question_id'], $user_id);
             }
 
             //            echo $res;

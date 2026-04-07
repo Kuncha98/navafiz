@@ -493,6 +493,7 @@ class user extends CI_Controller
             redirect('feed'); // Or wherever you want to send logged-in users
             return;
         }
+
         $this->form_validation->set_rules('regname', 'Name', 'trim|required');
         $this->form_validation->set_rules('regemail', 'Email', 'trim|required|valid_email');
         $this->form_validation->set_rules('regpwd', 'Password', 'trim|required|matches[regcpwd]');

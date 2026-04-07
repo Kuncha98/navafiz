@@ -313,6 +313,64 @@
         });
     </script>
 
+    <script>
+        $(document).on('change', '.status-select', function () {
+            let form = $(this).closest('.status-form');
+            let id = form.data('id');
+            let status = $(this).val();
+
+            $.ajax({
+                url: "<?= site_url('job_seeker_requests/change_request_status'); ?>/" + id,
+                type: "POST",
+                data: { status: status },
+                dataType: "json",
+                success: function (res) {
+
+                    if (!res.success) {
+                        alert(res.message);
+                        return;
+                    }
+
+                    // 👉 If REJECTED → reload page
+                    if (status == 3) {
+                        location.reload();
+                        return;
+                    }
+
+                    // 👉 If APPROVED → show alert + modal
+                    if (status == 2) {
+
+                        // Show alert
+                        $('#statusAlert')
+                            .removeClass('d-none alert-danger')
+                            .addClass('alert-success')
+                            .text(res.message)
+                            .fadeIn();
+
+                        // Auto hide after 5 sec
+                        setTimeout(() => {
+                            $('#statusAlert').fadeOut();
+                        }, 5000);
+
+                        // Fill modal
+                        $('#m_name').text(res.data.name);
+                        $('#m_email').text(res.data.email);
+                        $('#m_phone').text(res.data.phone);
+                        $('#m_status').text(res.data.status_text);
+
+                        // Show modal
+                        $('#statusModal').modal('show');
+                    }
+
+                    // 👉 Optional: for Submit (1) → reload
+                    if (status == 1) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

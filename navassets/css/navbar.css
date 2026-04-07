@@ -224,3 +224,10 @@
 .nav-item .nav-link i {
   color: #164885;
 }
+
+.notification-badge {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  left: unset !important;
+}

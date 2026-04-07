@@ -14,6 +14,7 @@
                 <tr>
                     <th>#</th>
                     <th>Company Name</th>
+                    <th>Status</th>
                     <th>Country of Op.</th>
                     <th>Comp. Type</th>
                     <th>Contact Person</th>
@@ -23,7 +24,6 @@
                     <th>Categories</th>
                     <th>Industries</th>
                     <th>Trade Center Ava.</th>
-                    <th>Status</th>
                     <th>Submitted</th>
                     <th>Actions</th>
                 </tr>
@@ -36,7 +36,16 @@
                                 <?= $index + 1 ?>
                             </td>
                             <td>
-                                <?php echo $row->company_name; ?>
+                                <a href="<?php echo site_url('form-requests/manpower-supply-request-view/' . $row->id); ?>"
+                                    class="text-decoration-none">
+                                    <?php echo $row->company_name; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
+                                </span>
                             </td>
                             <td>
                                 <?php echo $row->country_of_operation; ?>
@@ -109,12 +118,7 @@
                             <td>
                                 <?php echo $row->trade_testing_center == 1 ? 'Yes' : 'No' ?>
                             </td>
-                            <td>
-                                <?php $status = request_forms_status($row->status); ?>
-                                <span class="<?= $status['class'] ?>">
-                                    <?= $status['name']; ?>
-                                </span>
-                            </td>
+
                             <td>
                                 <?php echo $row->created_at; ?>
                             </td>

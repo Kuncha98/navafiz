@@ -341,6 +341,209 @@ ini_set('display_errors', 0);
         });
     </script>
 
+
+    <script>
+        function showToast(message) {
+            $('#liveToast .toast-body').text(message);
+            let toast = new bootstrap.Toast(document.getElementById('liveToast'));
+            toast.show();
+        }
+
+        $(document).on('change', '.job-seeker-status-select', function () {
+            let form = $(this).closest('.job-seeker-status-form');
+            let id = form.data('id');
+            let status = $(this).val();
+
+            $.ajax({
+                url: "<?= site_url('job_seeker_requests/change_request_status'); ?>/" + id,
+                type: "POST",
+                data: { status: status },
+                dataType: "json",
+                success: function (res) {
+
+                    if (!res.success) {
+                        alert(res.message);
+                        return;
+                    }
+
+                    // 👉 If REJECTED → reload page
+                    if (status == 3) {
+                        location.reload();
+
+                        // Show alert
+                        $('#statusAlert')
+                            .removeClass('d-none')
+                            .addClass('alert-danger')
+                            .text(res.message)
+                            .fadeIn();
+
+                        // Auto hide after 5 sec
+                        setTimeout(() => {
+                            $('#statusAlert').fadeOut();
+                        }, 5000);
+
+                        return;
+                    }
+
+                    // 👉 If APPROVED → show alert + modal
+                    if (status == 2) {
+
+                        // Fill modal
+                        $('#m_name').text(res.data.name);
+                        $('#m_email').text(res.data.email);
+                        $('#m_phone').text(res.data.phone);
+                        $('#m_status').text(res.data.status_text);
+                        $('#m_password').text(res.data.password);
+
+                        let name = res.data.name;
+                        let email = res.data.email;
+                        let phone = res.data.phone;
+                        let password = res.data.password;
+
+                        // ✅ Create message
+                        let message =
+                            `Your Registration Credentials
+                            Hello ${name},
+                            Your registration has been approved. Here are your login credentials:
+                                Email: ${email}
+                                Password: ${password}
+                            You can change your password later from your profile page.
+                            Thank you`;
+
+                        // Show message in modal
+                        $('#credential_message').text(message);
+
+                        // ✅ Encode for WhatsApp
+                        let encodedMessage = encodeURIComponent(message);
+
+                        // Clean phone (remove spaces, +, etc if needed)
+                        let whatsappNumber = phone.replace(/[^0-9]/g, '');
+
+                        let whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+
+                        // Set button link
+                        $('#whatsapp_btn').attr('href', whatsappURL);
+
+                        // Show modal
+                        $('#statusModal').modal('show');
+
+                        showToast('Profile approved & WhatsApp ready!');
+                    }
+
+                    // 👉 Optional: for Submit (1) → reload
+                    if (status == 1) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+
+        $(document).on('change', '.manpower-supplier-status-select', function () {
+            let form = $(this).closest('.manpower-supplier-status-form');
+            let id = form.data('id');
+            let status = $(this).val();
+
+            $.ajax({
+                url: "<?= site_url('manpower_supply_requests/change_request_status'); ?>/" + id,
+                type: "POST",
+                data: { status: status },
+                dataType: "json",
+                success: function (res) {
+
+                    if (!res.success) {
+                        alert(res.message);
+                        return;
+                    }
+
+                    // 👉 If REJECTED → reload page
+                    if (status == 3) {
+                        location.reload();
+
+                        // Show alert
+                        $('#statusAlert')
+                            .removeClass('d-none')
+                            .addClass('alert-danger')
+                            .text(res.message)
+                            .fadeIn();
+
+                        // Auto hide after 5 sec
+                        setTimeout(() => {
+                            $('#statusAlert').fadeOut();
+                        }, 5000);
+
+                        return;
+                    }
+
+                    // 👉 If APPROVED → show alert + modal
+                    if (status == 2) {
+
+                        // Fill modal
+                        $('#m_name').text(res.data.name);
+                        $('#m_email').text(res.data.email);
+                        $('#m_phone').text(res.data.phone);
+                        $('#m_status').text(res.data.status_text);
+                        $('#m_password').text(res.data.password);
+
+                        let name = res.data.name;
+                        let email = res.data.email;
+                        let phone = res.data.phone;
+                        let password = res.data.password;
+
+                        // ✅ Create message
+                        let message =
+                            `Your Registration Credentials
+                            Hello ${name},
+                            Your registration has been approved. Here are your login credentials:
+                                Email: ${email}
+                                Password: ${password}
+                            You can change your password later from your profile page.
+                            Thank you`;
+
+                        // Show message in modal
+                        $('#credential_message').text(message);
+
+                        // ✅ Encode for WhatsApp
+                        let encodedMessage = encodeURIComponent(message);
+
+                        // Clean phone (remove spaces, +, etc if needed)
+                        let whatsappNumber = phone.replace(/[^0-9]/g, '');
+
+                        let whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+
+                        // Set button link
+                        $('#whatsapp_btn').attr('href', whatsappURL);
+
+                        // Show modal
+                        $('#statusModal').modal('show');
+
+                        showToast('Profile approved & WhatsApp ready!');
+                    }
+
+                    // 👉 Optional: for Submit (1) → reload
+                    if (status == 1) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+        // ✅ Copy message
+        $(document).on('click', '#copy_btn', function () {
+            let text = $('#credential_message').text();
+
+            navigator.clipboard.writeText(text).then(function () {
+                showToast('Message copied to clipboard!');
+            });
+        });
+
+
+        // ✅ WhatsApp button click toast
+        $(document).on('click', '#whatsapp_btn', function () {
+            showToast('Opening WhatsApp...');
+        });
+    </script>
+
 </body>
 
 </html>

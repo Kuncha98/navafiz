@@ -234,7 +234,7 @@ class manpower_supply_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/manpower_supply_requests'; // content view
-       $this->load->view('layouts/system/main_layout', $data);
+        $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Fetch single record using IDs
@@ -256,7 +256,7 @@ class manpower_supply_requests extends CI_Controller
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'form_requests/manpower_supply_request_view'; // content view
-       $this->load->view('layouts/system/main_layout', $data);
+        $this->load->view('layouts/system/main_layout', $data);
     }
 
     // Update status
@@ -266,58 +266,165 @@ class manpower_supply_requests extends CI_Controller
         require_role(array(2));
 
         if ($id == NULL || !is_numeric($id)) {
-            show_error('Invalid Request ID', 400);
+            echo json_encode(['success' => false, 'message' => 'Invalid ID']);
             return;
         }
 
         $status = $this->input->post('status');
-
         // Validate status
         $valid_statuses = [1, 2, 3];
+
         if (!in_array($status, $valid_statuses)) {
-            show_error('Invalid Status', 400);
+            echo json_encode(['success' => false, 'message' => 'Invalid status']);
             return;
         }
 
         // Fetch current status and job seeker details
         $request = $this->manpower_supply_requests_model->get_by_id($id);
+
         if (!$request) {
-            show_error('Request not found', 404);
+            echo json_encode(['success' => false, 'message' => 'Request not found']);
             return;
         }
 
-        // Prevent any change if already approved
         if ($request->status == 2) {
-            $this->session->set_flashdata('error', 'Approved request cannot be modified.');
-            redirect('form-requests/manpower-supply-request-list');
+            echo json_encode(['success' => false, 'message' => 'Already approved']);
             return;
         }
 
-        // Prevent reverting Rejected → Submit
         if ($request->status == 3 && $status == 1) {
-            $this->session->set_flashdata('error', 'Cannot revert a Rejected request back to Submit.');
-            redirect('form-requests/manpower-supply-request-list');
+            echo json_encode(['success' => false, 'message' => 'Cannot revert rejected']);
             return;
         }
 
-        // Update status
-        $updated = $this->manpower_supply_requests_model->update_status($id, $status);
+        // Status approve
+        if ($status == 2) {
 
-        if ($updated) {
-            // If approved, create the user account
-            if ($status == 2) {
-                // Create user from job seeker request data
-                $this->create_user_from_manpower_supplier_request($request);
-                $this->session->set_flashdata('success', 'User registered for the manpower supplier successfully.');
+            $password = $this->create_user_from_manpower_supplier_request($request);
+
+            // User exists
+            if ($password === 'exists') {
+                echo json_encode([
+                    'success' => false,
+                    'message' => "You're already registered with the provided email. Please login or use forgot password."
+                ]);
+                return;
             }
 
-            $this->session->set_flashdata('success', 'Status updated successfully.');
-        } else {
-            $this->session->set_flashdata('error', 'Failed to update status.');
+            // Failed to create user
+            if ($password === false) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Error while creating user account for manpower supplier.'
+                ]);
+                return;
+            }
+
+            // Update status
+            $updated = $this->manpower_supply_requests_model->update_status($id, $status);
+
+            if (!$updated) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'User created but failed to update status.'
+                ]);
+                return;
+            }
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Profile approved & account created successfully!',
+                'data' => [
+                    'name' => $request->contact_person_name,
+                    'email' => $request->email,
+                    'phone' => $request->whatsapp_number,
+                    'status_text' => "Profile approved & member account created",
+                    'password' => $password
+                ]
+            ]);
+            return;
         }
 
-        redirect('form-requests/manpower-supply-request-list'); // back to list
+        // Status reject
+        if ($status == 3) {
+            $updated = $this->manpower_supply_requests_model->update_status($id, $status);
+
+            echo json_encode([
+                'success' => $updated,
+                'message' => $updated ? 'Profile rejected' : 'Failed to reject'
+            ]);
+            return;
+        }
+
+        // Status submit
+        if ($status == 1) {
+            $updated = $this->manpower_supply_requests_model->update_status($id, $status);
+
+            echo json_encode([
+                'success' => $updated,
+                'message' => $updated ? 'Status set to submitted' : 'Update failed'
+            ]);
+            return;
+        }
     }
+    // public function change_request_status($id = NULL)
+    // {
+    //     // Mentor-only access
+    //     require_role(array(2));
+
+    //     if ($id == NULL || !is_numeric($id)) {
+    //         show_error('Invalid Request ID', 400);
+    //         return;
+    //     }
+
+    //     $status = $this->input->post('status');
+
+    //     // Validate status
+    //     $valid_statuses = [1, 2, 3];
+    //     if (!in_array($status, $valid_statuses)) {
+    //         show_error('Invalid Status', 400);
+    //         return;
+    //     }
+
+    //     // Fetch current status and job seeker details
+    //     $request = $this->manpower_supply_requests_model->get_by_id($id);
+    //     if (!$request) {
+    //         show_error('Request not found', 404);
+    //         return;
+    //     }
+
+    //     // Prevent any change if already approved
+    //     if ($request->status == 2) {
+    //         $this->session->set_flashdata('error', 'Approved request cannot be modified.');
+    //         redirect('form-requests/manpower-supply-request-list');
+    //         return;
+    //     }
+
+    //     // Prevent reverting Rejected → Submit
+    //     if ($request->status == 3 && $status == 1) {
+    //         $this->session->set_flashdata('error', 'Cannot revert a Rejected request back to Submit.');
+    //         redirect('form-requests/manpower-supply-request-list');
+    //         return;
+    //     }
+
+    //     // Update status
+    //     $updated = $this->manpower_supply_requests_model->update_status($id, $status);
+
+    //     if ($updated) {
+    //         // If approved, create the user account
+    //         if ($status == 2) {
+    //             // Create user from job seeker request data
+    //             $this->create_user_from_manpower_supplier_request($request);
+    //             $this->session->set_flashdata('success', 'User registered for the manpower supplier successfully.');
+    //         }
+
+    //         $this->session->set_flashdata('success', 'Status updated successfully.');
+    //     } else {
+    //         $this->session->set_flashdata('error', 'Failed to update status.');
+    //     }
+
+    //     redirect('form-requests/manpower-supply-request-list'); // back to list
+    // }
 
     private function create_user_from_manpower_supplier_request($request)
     {
@@ -353,12 +460,15 @@ class manpower_supply_requests extends CI_Controller
 
             if ($user_id > 0) {
                 // Send email with the login credentials
-                $this->send_registration_email($request->email, $request->contact_person_name, $request->company_name, $password);
+                // $this->send_registration_email($request->email, $request->contact_person_name, $request->company_name, $password);
+                return $password;
             } else {
                 _setError("Error while creating user account for manpower supplier.");
+                return false;
             }
         } else {
             _setError("You're already registered with the provided email. Please login or use forgot password.");
+            return 'exists';
         }
 
     }

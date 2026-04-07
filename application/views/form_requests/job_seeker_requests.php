@@ -14,16 +14,16 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Status</th>
                     <th>Current Location</th>
                     <th>E-mail</th>
                     <th>Exp.</th>
-                    <th>Skills</th>
+                    <!-- <th>Skills</th> -->
                     <th>App. Position</th>
                     <th>Category</th>
                     <th>Pref. Country</th>
                     <th>Availability</th>
-                    <th>Highest Qual.</th>
-                    <th>Status</th>
+                    <!-- <th>Highest Qual.</th> -->
                     <th>Submitted</th>
                     <th>Actions</th>
                 </tr>
@@ -36,7 +36,15 @@
                                 <?= $index + 1 ?>
                             </td>
                             <td>
-                                <?php echo $row->name; ?>
+                                <a href="<?php echo site_url('form-requests/job-seeker-request-view/' . $row->id); ?>"
+                                    class="text-decoration-none"><?php echo $row->name; ?></a>
+
+                            </td>
+                            <td>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
+                                </span>
                             </td>
                             <td>
                                 <?php echo $row->current_location; ?>
@@ -47,7 +55,7 @@
                             <td>
                                 <?php echo $row->experience; ?> Yrs
                             </td>
-                            <td>
+                            <!-- <td>
                                 <?php
                                 $skills = explode(',', $row->skills);
                                 if (!empty($skills)):
@@ -60,7 +68,7 @@
                                     endforeach;
                                 endif;
                                 ?>
-                            </td>
+                            </td> -->
                             <td>
                                 <?php echo $row->applying_position; ?>
                             </td>
@@ -73,15 +81,10 @@
                             <td>
                                 <?php echo ucwords(str_replace('_', ' ', $row->availability)) ?>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <?php echo $row->highest_qualification; ?>
-                            </td>
-                            <td>
-                                <?php $status = request_forms_status($row->status); ?>
-                                <span class="<?= $status['class'] ?>">
-                                    <?= $status['name']; ?>
-                                </span>
-                            </td>
+                            </td> -->
+                            
                             <td>
                                 <?php echo $row->created_at; ?>
                             </td>
