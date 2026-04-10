@@ -10,6 +10,14 @@ class manpower_supply_requests_model extends CI_Model
         parent::__construct();
     }
 
+    // Check email exists
+    public function email_exists($email)
+    {
+        return $this->db->where('email', $email)
+            ->get($this->table)
+            ->num_rows() > 0;
+    }
+
     // Get total count (for pagination)
     public function get_total_count()
     {
@@ -29,6 +37,38 @@ class manpower_supply_requests_model extends CI_Model
     {
         $query = $this->db->get_where($this->table, array('id' => $id));
         return $query->row();
+    }
+
+    // Get next record by ID
+    public function get_next($id)
+    {
+        // Next = older record (smaller id)
+        return $this->db
+            ->where('id <', $id)
+            ->order_by('id', 'DESC')
+            ->limit(1)
+            ->get($this->table)
+            ->row();
+    }
+
+    // Get next record by ID
+    public function get_prev($id)
+    {
+        // Previous = newer record (bigger id)
+        return $this->db
+            ->where('id >', $id)
+            ->order_by('id', 'ASC')
+            ->limit(1)
+            ->get($this->table)
+            ->row();
+    }
+
+    // Get current record position by ID
+    public function get_position($id)
+    {
+        return $this->db
+            ->where('id >=', $id)
+            ->count_all_results($this->table);
     }
 
     // Update request status

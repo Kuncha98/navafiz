@@ -15,11 +15,23 @@ class job_seeker_requests extends CI_Controller
         $this->load->model('profile_model');
     }
 
+    public function check_email_exists()
+    {
+        $email = $this->input->post('email', TRUE);
+
+        if ($this->job_seeker_requests_model->email_exists($email)) {
+            echo json_encode(['exists' => true, 'message' => 'Request has been already submitted using this email.']);
+        } else {
+            echo json_encode(['exists' => false]);
+        }
+    }
+
     public function submit()
     {
         // Form validation
         $this->form_validation->set_rules('name', 'Full Name', 'required');
-        $this->form_validation->set_rules('mobile', 'Mobile', 'required');
+        $this->form_validation->set_rules('country_code', 'Country Code', 'required');
+        $this->form_validation->set_rules('mobile', 'Mobile', 'required|integer');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('nationality', 'Nationality', 'required');
         $this->form_validation->set_rules('current_location', 'Current Location', 'required');
@@ -44,6 +56,15 @@ class job_seeker_requests extends CI_Controller
             return;
         } else {
 
+            // Check if email exists
+            $email = $this->input->post('email', TRUE);
+
+            if ($this->job_seeker_requests_model->email_exists($email)) {
+                $this->session->set_flashdata('error', 'This email is already registered for a job seeker request.');
+                redirect('services/find-a-job');
+                return;
+            }
+
             $cv_upload_data = $this->_upload_file('cv', 'cv_', 'pdf', 'navassets/uploads/cv/');
 
             $passport_upload_data = !empty($_FILES['passport']['name'])
@@ -59,10 +80,13 @@ class job_seeker_requests extends CI_Controller
             $skills = $this->input->post('skills');
             $skills_string = is_array($skills) ? implode(',', $skills) : '';
 
+            $country_code = $this->input->post('country_code', TRUE);
+            $mobile_number = $this->input->post('mobile', TRUE);
+
             // Prepare data
             $data = array(
                 'name' => $this->input->post('name', TRUE),
-                'mobile' => $this->input->post('mobile', TRUE),
+                'mobile' => $country_code . ltrim($mobile_number, '0'),
                 'email' => $this->input->post('email', TRUE),
                 'nationality' => $this->input->post('nationality', TRUE),
                 'current_location' => $this->input->post('current_location', TRUE),
@@ -161,7 +185,7 @@ class job_seeker_requests extends CI_Controller
     }
 
     // Fetch all the form requests
-    public function all_requests($page = 0)
+    public function all_requests()
     {
         require_role(array(2)); // 2 = Mentor
 
@@ -198,6 +222,22 @@ class job_seeker_requests extends CI_Controller
         if (!$record) {
             show_404();
         }
+
+        // Get next & prev
+        $next = $this->job_seeker_requests_model->get_next($id);
+        $prev = $this->job_seeker_requests_model->get_prev($id);
+
+        // Total records
+        $total = $this->job_seeker_requests_model->get_total_count();
+
+        // Current position
+        $current_position = $this->job_seeker_requests_model->get_position($id);
+
+        $data['next_id'] = $next ? $next->id : null;
+        $data['prev_id'] = $prev ? $prev->id : null;
+
+        $data['total_records'] = $total;
+        $data['current_position'] = $current_position;
 
         $data["record"] = $record;
 
@@ -247,25 +287,28 @@ class job_seeker_requests extends CI_Controller
         // Status approve
         if ($status == 2) {
 
-            $password = $this->create_user_from_job_seeker_request($request);
+            $result = $this->create_user_from_job_seeker_request($request);
 
             // User exists
-            if ($password === 'exists') {
+            if ($result === 'exists') {
                 echo json_encode([
                     'success' => false,
-                    'message' => "You're already registered with the provided email. Please login or use forgot password."
+                    'message' => "You're already registered with the provided email."
                 ]);
                 return;
             }
 
-            // Failed to create user
-            if ($password === false) {
+            if ($result === false) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Error while creating user account for job seeker.'
+                    'message' => 'Error while creating user account.'
                 ]);
                 return;
             }
+
+            $password = $result['password'];
+            $email_failed = $result['email_failed'];
+            $navafiz_profile_link = $result['navafiz_profile_link'];
 
             // Update status
             $updated = $this->job_seeker_requests_model->update_status($id, $status);
@@ -280,13 +323,17 @@ class job_seeker_requests extends CI_Controller
 
             echo json_encode([
                 'success' => true,
-                'message' => 'Profile approved & account created successfully!',
+                'message' => $email_failed
+                    ? 'Profile approved & account created. Email failed, please send manually.'
+                    : 'Profile approved & account created successfully!',
+                'email_failed' => $email_failed,
                 'data' => [
                     'name' => $request->name,
                     'email' => $request->email,
                     'phone' => $request->mobile,
                     'status_text' => "Profile approved & member account created",
-                    'password' => $password
+                    'password' => $password,
+                    'profile_link' => $navafiz_profile_link
                 ]
             ]);
             return;
@@ -313,57 +360,6 @@ class job_seeker_requests extends CI_Controller
             ]);
             return;
         }
-
-        // // Update status
-        // $updated = $this->job_seeker_requests_model->update_status($id, $status);
-
-        // if ($updated) {
-        //     // If approved, create the user account
-        //     if ($status == 2) {
-        //         $password = $this->create_user_from_job_seeker_request($request);
-
-        //         // User already exists
-        //         if ($password === 'exists') {
-        //             echo json_encode([
-        //                 'success' => false,
-        //                 'message' => "You're already registered with the provided email. Please login or use forgot password."
-        //             ]);
-        //             return;
-        //         }
-
-        //         // Insert failed
-        //         if ($password === false) {
-        //             echo json_encode([
-        //                 'success' => false,
-        //                 'message' => 'Error while creating user account for job seeker.'
-        //             ]);
-        //             return;
-        //         }
-
-        //         $status_text = "Profile approved & member account created";
-
-        //         echo json_encode([
-        //             'success' => true,
-        //             'message' => 'Status updated successfully!',
-        //             'data' => [
-        //                 'name' => $request->name,
-        //                 'email' => $request->email,
-        //                 'phone' => $request->mobile,
-        //                 'status_text' => $status_text,
-        //                 'password' => $password
-        //             ]
-        //         ]);
-        //     } elseif ($status == 3) {
-        //         // $status_text = "Profile rejected";
-        //         echo json_encode(['success' => false, 'message' => 'Profile rejected']);
-        //     } else {
-        //         $status_text = "Submitted";
-        //     }
-
-
-        // } else {
-        //     echo json_encode(['success' => false, 'message' => 'Update failed']);
-        // }
     }
 
     private function create_user_from_job_seeker_request($request)
@@ -399,9 +395,33 @@ class job_seeker_requests extends CI_Controller
             $user_id = $this->profile_model->Save($user_data);
 
             if ($user_id > 0) {
+
+                // --- Generate unique profile link ---
+                $base_slug = $this->generate_slug($request->name);
+                $slug = $base_slug;
+                $counter = 1;
+
+                // Check uniqueness against BOTH username and navafiz_profile_link
+                while ($this->profile_model->Search([], ['username' => $slug, 'navafiz_profile_link' => $slug])) {
+                    $slug = $base_slug . '-' . $counter;
+                    $counter++;
+                }
+
+                // Save profile link and username
+                $this->profile_model->Save([
+                    'username' => $slug, // optional: username same as slug
+                    'navafiz_profile_link' => $slug
+                ], $user_id);
+
                 // Send email with the login credentials
-                $this->send_registration_email($request->email, $password);
-                return $password;
+                $email_status = $this->send_registration_email($request->email, $password);
+
+                return [
+                    'password' => $password,
+                    'email_failed' => !$email_status, // true if failed
+                    'navafiz_profile_link' => base_url('n/' . $slug)
+                ];
+
             } else {
                 _setError("Error while creating user account for job seeker.");
                 return false;
@@ -411,6 +431,26 @@ class job_seeker_requests extends CI_Controller
             return 'exists';
         }
 
+    }
+
+    function generate_slug($name)
+    {
+        // Convert to lowercase
+        $slug = strtolower($name);
+
+        // Remove any non-alphanumeric characters except spaces
+        $slug = preg_replace('/[^a-z0-9\s]+/', '', $slug);
+
+        // Replace multiple spaces with single space
+        $slug = preg_replace('/\s+/', ' ', $slug);
+
+        // Trim spaces
+        $slug = trim($slug);
+
+        // Replace spaces with dash
+        $slug = str_replace(' ', '-', $slug);
+
+        return $slug;
     }
 
     private function send_registration_email($email, $password)
@@ -449,13 +489,16 @@ class job_seeker_requests extends CI_Controller
         $this->email->subject($subject);
         $this->email->message($messageText);
 
+        // return false;
         // Send the email and log success or failure
         if (!$this->email->send()) {
             log_message('error', 'Email sending failed to ' . $email);
             _setError("There was a problem sending the registration email.");
+            return false;
         } else {
             log_message('info', 'Registration email sent to ' . $email);
             _setSuccess("Registration email sent successfully to $email.");
+            return true;
         }
     }
 }

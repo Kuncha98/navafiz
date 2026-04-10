@@ -45,17 +45,31 @@
                         <label for="name" class="form-label required-label">Full Name</label>
                         <input type="text" id="name" name="name" class="form-control required-field">
                     </div>
+
                     <div class="col-md-6 mb-3">
-                        <label for="mobile" class="form-label required-label">Mobile Number (WhatsApp)</label>
-                        <input type="text" id="mobile" name="mobile" class="form-control required-field">
+                        <label for="mobile" class="form-label required-label">Mobile Number</label>
+                        <div class="d-flex">
+                            <select id="country_code" name="country_code"
+                                class="form-control required-field w-25 rounded-end-0">
+                                <option value="">Select Country</option>
+                            </select>
+                            <input type="number" id="mobile" name="mobile"
+                                class="form-control required-field rounded-start-0 border-start-0"
+                                placeholder="Enter number without country code">
+                        </div>
+                        <small id="mobile-feedback" class="text-danger"></small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label required-label">Email</label>
                         <input type="email" id="email" name="email" class="form-control required-field">
+                        <small id="email-feedback" class="text-danger"></small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="nationality" class="form-label required-label">Nationality</label>
-                        <input type="text" id="nationality" name="nationality" class="form-control required-field">
+                        <select id="nationality" name="nationality" class="form-control required-field">
+                            <option value="">Select Nationality</option>
+                        </select>
+                        <!-- <input type="text" id="nationality" name="nationality" class="form-control required-field"> -->
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="current_location" class="form-label required-label">Current Location (City &
@@ -302,3 +316,90 @@
 `status` TINYINT(1) DEFAULT 1,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#email').on('blur', function () {
+            var email = $(this).val().trim();
+            if (email != '') {
+                $.ajax({
+                    url: '<?php echo base_url("job_seeker_requests/check_email_exists"); ?>',
+                    type: 'POST',
+                    data: { email: email },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.exists) {
+                            $('#email-feedback').text(response.message);
+                            $('#email').addClass('is-invalid');
+                        } else {
+                            $('#email-feedback').text('');
+                            $('#email').removeClass('is-invalid');
+                        }
+                    },
+                    error: function () {
+                        $('#email-feedback').text('Error checking email.');
+                    }
+                });
+            } else {
+                $('#email-feedback').text('');
+                $('#email').removeClass('is-invalid');
+            }
+        });
+
+        // Load JSON files
+        $.getJSON('../navassets/json/dial-codes.json', function (data) {
+            $.each(data, function (index, country) {
+                $('#country_code').append(
+                    $('<option></option>')
+                        .val(country.dial_code)
+                        .text(country.dial_code + ' (' + country.name + ')')
+                );
+            });
+        });
+
+        $.getJSON('../navassets/json/nationalities.json', function (data) {
+            $.each(data, function (index, country) {
+                $.each(data, function (index, nationalities) {
+                    $('#nationality').append(
+                        $('<option></option>')
+                            .val(nationalities.nationality)
+                            .text(nationalities.nationality)
+                    );
+                });
+            });
+        });
+
+        // Optional: validation
+        function validateMobile() {
+            var country = $('#country_code option:selected').val();
+            var mobile = $('#mobile').val().trim();
+            var regex = /^\d+$/;
+
+            if (!country) {
+                $('#mobile-feedback').text('Please select a country');
+                $('#mobile').addClass('is-invalid');
+                return false;
+            }
+
+            if (!regex.test(mobile)) {
+                $('#mobile-feedback').text('Mobile number should contain only digits');
+                $('#mobile').addClass('is-invalid');
+                return false;
+            }
+
+            $('#mobile-feedback').text('');
+            $('#mobile').removeClass('is-invalid');
+            return true;
+        }
+
+        $('#mobile, #country_code').on('blur change', validateMobile);
+
+        $('form').on('submit', function (e) {
+            if (!validateMobile()) {
+                e.preventDefault();
+                alert('Please fix your mobile number before submitting.');
+            }
+        });
+    });
+</script>

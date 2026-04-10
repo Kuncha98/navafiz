@@ -197,17 +197,36 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="mobile_number" class="form-label required-label">Mobile Number</label>
-                        <input type="text" id="mobile_number" name="mobile_number" class="form-control required-field">
+                        <div class="d-flex">
+                            <select id="country_code" name="country_code"
+                                class="form-control required-field w-25 rounded-end-0">
+                                <option value="">Select Country</option>
+                            </select>
+                            <input type="number" id="mobile_number" name="mobile_number"
+                                class="form-control required-field rounded-start-0 border-start-0"
+                                placeholder="Enter number without country code">
+                        </div>
+                        <small id="mobile-feedback" class="text-danger"></small>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="whatsapp_number" class="form-label">WhatsApp Number</label>
-                        <input type="text" id="whatsapp_number" name="whatsapp_number" class="form-control">
+                        <div class="d-flex">
+                            <select id="wa_country_code" name="wa_country_code"
+                                class="form-control required-field w-25 rounded-end-0">
+                                <option value="">Select Country</option>
+                            </select>
+                            <input type="number" id="whatsapp_number" name="whatsapp_number"
+                                class="form-control required-field rounded-start-0 border-start-0"
+                                placeholder="Enter number without country code">
+                        </div>
+                        <small id="wa-mobile-feedback" class="text-danger"></small>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label required-label">Email</label>
                         <input type="email" id="email" name="email" class="form-control required-field">
+                        <small id="email-feedback" class="text-danger"></small>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -449,3 +468,109 @@
 `status` TINYINT(1) DEFAULT 1,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var fields = [
+            { select: '#country_code', input: '#mobile_number', feedback: '#mobile-feedback' },
+            { select: '#wa_country_code', input: '#whatsapp_number', feedback: '#wa-mobile-feedback' }
+        ];
+
+        $('#email').on('blur', function () {
+            var email = $(this).val().trim();
+            if (email != '') {
+                $.ajax({
+                    url: '<?php echo base_url("manpower_supply_requests/check_email_exists"); ?>',
+                    type: 'POST',
+                    data: { email: email },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.exists) {
+                            $('#email-feedback').text(response.message);
+                            $('#email').addClass('is-invalid');
+                        } else {
+                            $('#email-feedback').text('');
+                            $('#email').removeClass('is-invalid');
+                        }
+                    },
+                    error: function () {
+                        $('#email-feedback').text('Error checking email.');
+                    }
+                });
+            } else {
+                $('#email-feedback').text('');
+                $('#email').removeClass('is-invalid');
+            }
+        });
+
+        // Load JSON files
+        $.getJSON('../navassets/json/dial-codes.json', function (data) {
+            fields.forEach(function (f) {
+                $.each(data, function (index, country) {
+                    $(f.select).append(
+                        $('<option></option>')
+                            .val(country.dial_code)
+                            .text(country.dial_code + ' (' + country.name + ')')
+                    );
+                });
+            });
+        });
+
+        $.getJSON('../navassets/json/nationalities.json', function (data) {
+            $.each(data, function (index, country) {
+                $.each(data, function (index, nationalities) {
+                    $('#nationality').append(
+                        $('<option></option>')
+                            .val(nationalities.nationality)
+                            .text(nationalities.nationality)
+                    );
+                });
+            });
+        });
+
+        // Validation function for any field
+        function validateField(field) {
+            var country = $(field.select + ' option:selected').val();
+            var mobile = $(field.input).val().trim();
+            var regex = /^\d+$/;
+
+            if (!country) {
+                $(field.feedback).text('Please select a country');
+                $(field.input).addClass('is-invalid');
+                return false;
+            }
+
+            if (!regex.test(mobile)) {
+                $(field.feedback).text('Mobile number should contain only digits');
+                $(field.input).addClass('is-invalid');
+                return false;
+            }
+
+            $(field.feedback).text('');
+            $(field.input).removeClass('is-invalid');
+            return true;
+        }
+
+        // Attach blur/change events to both fields
+        fields.forEach(function (f) {
+            $(f.input + ',' + f.select).on('blur change', function () {
+                validateField(f);
+            });
+        });
+
+        //     // Validate all fields on submit
+        // $('form').on('submit', function(e) {
+        //     var allValid = true;
+        //     fields.forEach(function(f) {
+        //         if (!validateField(f)) {
+        //             allValid = false;
+        //         }
+        //     });
+        //     if (!allValid) {
+        //         e.preventDefault();
+        //         alert('Please fix mobile numbers before submitting.');
+        //     }
+        // });
+    });
+</script>

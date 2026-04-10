@@ -1,4 +1,5 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------------
 | Hooks
@@ -10,7 +11,13 @@
 |
 */
 
-
+$hook['post_controller_constructor'][] = array(
+    'class' => 'LastPageHook',
+    'function' => 'track_last_page',
+    'filename' => 'LastPageHook.php',
+    'filepath' => 'hooks',
+    'params' => array()
+);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

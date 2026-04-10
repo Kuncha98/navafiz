@@ -75,19 +75,19 @@ if (!$avatar) {
                     </a>
                     <ul class="dropdown-menu" id="Recruiters">
                         <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('recruiters-support-system') : site_url('user/login?return_url=' . current_url()) ?>">Recruiters
-                                Support</a></li>
-                        <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('users_list/users_by_list/82') : site_url('user/login?return_url=' . current_url()) ?>">Featured
-                                Profiles</a>
-                        </li>
-                        <li><a class="dropdown-item"
                                 href="<?= $is_logged ? site_url('professionals') : site_url('user/login?return_url=' . current_url()) ?>">Find
                                 Professionals</a>
                         </li>
                         <li><a class="dropdown-item"
                                 href="<?= $is_logged ? site_url('place-job') : site_url('user/login?return_url=' . current_url()) ?>">Post
                                 a Job</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="<?= $is_logged ? site_url('recruiters-support-system') : site_url('user/login?return_url=' . current_url()) ?>">Recruiters
+                                Support</a></li>
+                        <li><a class="dropdown-item"
+                                href="<?= $is_logged ? site_url('users_list/users_by_list/82') : site_url('user/login?return_url=' . current_url()) ?>">Featured
+                                Profiles</a>
                         </li>
                     </ul>
                 </li>

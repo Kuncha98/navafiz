@@ -1,4 +1,5 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
@@ -27,8 +28,9 @@
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/general/controllers.html
  */
- #[\AllowDynamicProperties]
-class CI_Controller {
+#[\AllowDynamicProperties]
+class CI_Controller
+{
 
 	private static $instance;
 
@@ -38,35 +40,34 @@ class CI_Controller {
 	public function __construct()
 	{
 		self::$instance =& $this;
-		
+
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
 		// so that CI can run as one big super object.
-		foreach (is_loaded() as $var => $class)
-		{
+		foreach (is_loaded() as $var => $class) {
 			$this->$var =& load_class($class);
 		}
 
 		$this->load =& load_class('Loader', 'core');
 
 		$this->load->initialize();
-		
+
 		log_message('debug', "Controller Class Initialized");
-                
-                date_default_timezone_set('Asia/Dubai');
-                
-                /*session_start(); 
-                $this->session->set_userdata('user_id', "");
-                $this->session->set_userdata('login_id', "");            
-                $user_session_data = array(
-                    'user_id'     => "",
-                    'login_id'=> "",                
-                );
-                $this->session->unset_userdata($user_session_data);   
-                $this->session->sess_destroy();
-                delete_cookie('navafiz_email');
-                delete_cookie('navafiz_password');
-                session_destroy();*/
+
+		date_default_timezone_set('Asia/Dubai');
+
+		/*session_start(); 
+		$this->session->set_userdata('user_id', "");
+		$this->session->set_userdata('login_id', "");            
+		$user_session_data = array(
+			'user_id'     => "",
+			'login_id'=> "",                
+		);
+		$this->session->unset_userdata($user_session_data);   
+		$this->session->sess_destroy();
+		delete_cookie('navafiz_email');
+		delete_cookie('navafiz_password');
+		session_destroy();*/
 
 	}
 
@@ -74,14 +75,16 @@ class CI_Controller {
 	{
 		return self::$instance;
 	}
-        
-        public function get_post($key,$defaultValue='') {
-            return !empty($this->input->post($key)) ? $this->input->post($key):$defaultValue;
-        }   
-        
-        public function get_query($key,$defaultValue='') {
-            return !empty($this->input->get($key)) ? $this->input->get($key):$defaultValue;
-        }  
+
+	public function get_post($key, $defaultValue = '')
+	{
+		return !empty($this->input->post($key)) ? $this->input->post($key) : $defaultValue;
+	}
+
+	public function get_query($key, $defaultValue = '')
+	{
+		return !empty($this->input->get($key)) ? $this->input->get($key) : $defaultValue;
+	}
 }
 // END Controller class
 

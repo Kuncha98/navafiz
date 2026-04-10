@@ -15,6 +15,17 @@ class manpower_supply_requests extends CI_Controller
         $this->load->model('profile_model');
     }
 
+    public function check_email_exists()
+    {
+        $email = $this->input->post('email', TRUE);
+
+        if ($this->manpower_supply_requests_model->email_exists($email)) {
+            echo json_encode(['exists' => true, 'message' => 'Request has been already submitted using this email.']);
+        } else {
+            echo json_encode(['exists' => false]);
+        }
+    }
+
     public function submit()
     {
         // Form validation
@@ -22,7 +33,7 @@ class manpower_supply_requests extends CI_Controller
         $this->form_validation->set_rules('country_of_operation', 'Country of Operation', 'required');
         $this->form_validation->set_rules('city', 'City', 'required');
         $this->form_validation->set_rules('company_registration_number', 'Company Registration Number', 'required');
-        $this->form_validation->set_rules('year_established', 'Year Established', 'required|integer');
+        $this->form_validation->set_rules('year_established', 'Year Established', 'required|integer|callback_check_year_range');
         $this->form_validation->set_rules('company_type', 'Company Type', 'required');
 
         $this->form_validation->set_rules('recruitment_license_number', 'Recruitment License Number', 'required');
@@ -31,7 +42,10 @@ class manpower_supply_requests extends CI_Controller
 
         $this->form_validation->set_rules('contact_person_name', 'Contact Person Name', 'required');
         $this->form_validation->set_rules('designation', 'Designation', 'required');
-        $this->form_validation->set_rules('mobile_number', 'Mobile Number', 'required');
+        $this->form_validation->set_rules('country_code', 'Country Code', 'required');
+        $this->form_validation->set_rules('mobile_number', 'Mobile Number', 'required|integer');
+        $this->form_validation->set_rules('wa_country_code', 'Country Code', 'required');
+        $this->form_validation->set_rules('whatsapp_number', 'WhatsApp Number', 'required|integer');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('office_address', 'Office Address', 'required');
 
@@ -47,6 +61,15 @@ class manpower_supply_requests extends CI_Controller
             return;
 
         } else {
+
+            // Check if email exists
+            $email = $this->input->post('email', TRUE);
+
+            if ($this->manpower_supply_requests_model->email_exists($email)) {
+                $this->session->set_flashdata('error', 'This email is already registered for a job seeker request.');
+                redirect('services/find-a-job');
+                return;
+            }
 
             /* Upload Files */
 
@@ -72,10 +95,14 @@ class manpower_supply_requests extends CI_Controller
             $manpower_categories = $this->input->post('manpower_categories');
             $industries_served = $this->input->post('industries_served');
 
+            $country_code = $this->input->post('country_code', TRUE);
+            $mobile_number = $this->input->post('mobile_number', TRUE);
+
+            $wa_country_code = $this->input->post('wa_country_code', TRUE);
+            $whatsapp_number = $this->input->post('whatsapp_number', TRUE);
+
             /* Prepare data */
-
             $data = array(
-
                 'company_name' => $this->input->post('company_name', TRUE),
                 'country_of_operation' => $this->input->post('country_of_operation', TRUE),
                 'city' => $this->input->post('city', TRUE),
@@ -93,8 +120,8 @@ class manpower_supply_requests extends CI_Controller
 
                 'contact_person_name' => $this->input->post('contact_person_name', TRUE),
                 'designation' => $this->input->post('designation', TRUE),
-                'mobile_number' => $this->input->post('mobile_number', TRUE),
-                'whatsapp_number' => $this->input->post('whatsapp_number', TRUE),
+                'mobile_number' => $country_code . ltrim($mobile_number, '0'),
+                'whatsapp_number' => $wa_country_code . ltrim($whatsapp_number, '0'),
                 'email' => $this->input->post('email', TRUE),
                 'office_address' => $this->input->post('office_address', TRUE),
 
@@ -131,6 +158,18 @@ class manpower_supply_requests extends CI_Controller
             $this->session->set_flashdata('success', 'Your manpower supply registration has been submitted successfully.');
             redirect('services/supply-manpower');
         }
+    }
+
+    public function check_year_range($year)
+    {
+        $year = (int) $year;
+        $current_year = date('Y');
+
+        if ($year < 1900 || $year > $current_year) {
+            $this->form_validation->set_message('check_year_range', "The Year Established must be between 1900 and $current_year.");
+            return false;
+        }
+        return true;
     }
 
     private function _upload_file($field_name, $prefix, $allowed_types, $upload_path)
@@ -217,7 +256,7 @@ class manpower_supply_requests extends CI_Controller
     }
 
     // Fetch all the form requests
-    public function all_requests($page = 0)
+    public function all_requests()
     {
         require_role(array(2)); // 2 = Mentor
 
@@ -254,6 +293,22 @@ class manpower_supply_requests extends CI_Controller
         if (!$record) {
             show_404();
         }
+
+        // Get next & prev
+        $next = $this->manpower_supply_requests_model->get_next($id);
+        $prev = $this->manpower_supply_requests_model->get_prev($id);
+
+        // Total records
+        $total = $this->manpower_supply_requests_model->get_total_count();
+
+        // Current position
+        $current_position = $this->manpower_supply_requests_model->get_position($id);
+
+        $data['next_id'] = $next ? $next->id : null;
+        $data['prev_id'] = $prev ? $prev->id : null;
+
+        $data['total_records'] = $total;
+        $data['current_position'] = $current_position;
 
         $data["record"] = $record;
 
@@ -303,25 +358,28 @@ class manpower_supply_requests extends CI_Controller
         // Status approve
         if ($status == 2) {
 
-            $password = $this->create_user_from_manpower_supplier_request($request);
+            $result = $this->create_user_from_manpower_supplier_request($request);
 
             // User exists
-            if ($password === 'exists') {
+            if ($result === 'exists') {
                 echo json_encode([
                     'success' => false,
-                    'message' => "You're already registered with the provided email. Please login or use forgot password."
+                    'message' => "You're already registered with the provided email."
                 ]);
                 return;
             }
 
-            // Failed to create user
-            if ($password === false) {
+            if ($result === false) {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Error while creating user account for manpower supplier.'
+                    'message' => 'Error while creating user account.'
                 ]);
                 return;
             }
+
+            $password = $result['password'];
+            $email_failed = $result['email_failed'];
+            $navafiz_profile_link = $result['navafiz_profile_link'];
 
             // Update status
             $updated = $this->manpower_supply_requests_model->update_status($id, $status);
@@ -336,13 +394,18 @@ class manpower_supply_requests extends CI_Controller
 
             echo json_encode([
                 'success' => true,
-                'message' => 'Profile approved & account created successfully!',
+                'message' => $email_failed
+                    ? 'Profile approved & account created. Email failed, please send manually.'
+                    : 'Profile approved & account created successfully!',
+                'email_failed' => $email_failed,
                 'data' => [
                     'name' => $request->contact_person_name,
                     'email' => $request->email,
                     'phone' => $request->whatsapp_number,
                     'status_text' => "Profile approved & member account created",
-                    'password' => $password
+                    'password' => $password,
+                    'profile_link' => $navafiz_profile_link,
+                    'company_name' => $request->company_name,
                 ]
             ]);
             return;
@@ -370,64 +433,6 @@ class manpower_supply_requests extends CI_Controller
             return;
         }
     }
-    // public function change_request_status($id = NULL)
-    // {
-    //     // Mentor-only access
-    //     require_role(array(2));
-
-    //     if ($id == NULL || !is_numeric($id)) {
-    //         show_error('Invalid Request ID', 400);
-    //         return;
-    //     }
-
-    //     $status = $this->input->post('status');
-
-    //     // Validate status
-    //     $valid_statuses = [1, 2, 3];
-    //     if (!in_array($status, $valid_statuses)) {
-    //         show_error('Invalid Status', 400);
-    //         return;
-    //     }
-
-    //     // Fetch current status and job seeker details
-    //     $request = $this->manpower_supply_requests_model->get_by_id($id);
-    //     if (!$request) {
-    //         show_error('Request not found', 404);
-    //         return;
-    //     }
-
-    //     // Prevent any change if already approved
-    //     if ($request->status == 2) {
-    //         $this->session->set_flashdata('error', 'Approved request cannot be modified.');
-    //         redirect('form-requests/manpower-supply-request-list');
-    //         return;
-    //     }
-
-    //     // Prevent reverting Rejected → Submit
-    //     if ($request->status == 3 && $status == 1) {
-    //         $this->session->set_flashdata('error', 'Cannot revert a Rejected request back to Submit.');
-    //         redirect('form-requests/manpower-supply-request-list');
-    //         return;
-    //     }
-
-    //     // Update status
-    //     $updated = $this->manpower_supply_requests_model->update_status($id, $status);
-
-    //     if ($updated) {
-    //         // If approved, create the user account
-    //         if ($status == 2) {
-    //             // Create user from job seeker request data
-    //             $this->create_user_from_manpower_supplier_request($request);
-    //             $this->session->set_flashdata('success', 'User registered for the manpower supplier successfully.');
-    //         }
-
-    //         $this->session->set_flashdata('success', 'Status updated successfully.');
-    //     } else {
-    //         $this->session->set_flashdata('error', 'Failed to update status.');
-    //     }
-
-    //     redirect('form-requests/manpower-supply-request-list'); // back to list
-    // }
 
     private function create_user_from_manpower_supplier_request($request)
     {
@@ -462,9 +467,33 @@ class manpower_supply_requests extends CI_Controller
             $user_id = $this->profile_model->Save($user_data);
 
             if ($user_id > 0) {
+
+                // --- Generate unique profile link ---
+                $base_slug = $this->generate_slug($request->company_name);
+                $slug = $base_slug;
+                $counter = 1;
+
+                // Check uniqueness against BOTH username and navafiz_profile_link
+                while ($this->profile_model->Search([], ['username' => $slug, 'navafiz_profile_link' => $slug])) {
+                    $slug = $base_slug . '-' . $counter;
+                    $counter++;
+                }
+
+                // Save profile link and username
+                $this->profile_model->Save([
+                    'username' => $slug, // optional: username same as slug
+                    'navafiz_profile_link' => $slug
+                ], $user_id);
+
                 // Send email with the login credentials
-                // $this->send_registration_email($request->email, $request->contact_person_name, $request->company_name, $password);
-                return $password;
+                $email_status = $this->send_registration_email($request->email, $request->contact_person_name, $request->company_name, $password);
+
+                return [
+                    'password' => $password,
+                    'email_failed' => !$email_status, // true if failed
+                    'navafiz_profile_link' => base_url('n/' . $slug)
+                ];
+
             } else {
                 _setError("Error while creating user account for manpower supplier.");
                 return false;
@@ -474,6 +503,26 @@ class manpower_supply_requests extends CI_Controller
             return 'exists';
         }
 
+    }
+
+    function generate_slug($name)
+    {
+        // Convert to lowercase
+        $slug = strtolower($name);
+
+        // Remove any non-alphanumeric characters except spaces
+        $slug = preg_replace('/[^a-z0-9\s]+/', '', $slug);
+
+        // Replace multiple spaces with single space
+        $slug = preg_replace('/\s+/', ' ', $slug);
+
+        // Trim spaces
+        $slug = trim($slug);
+
+        // Replace spaces with dash
+        $slug = str_replace(' ', '-', $slug);
+
+        return $slug;
     }
 
     private function send_registration_email($email, $contact_person_name, $company_name, $password)
@@ -563,13 +612,16 @@ class manpower_supply_requests extends CI_Controller
         $this->email->subject($subject);
         $this->email->message($messageText);
 
+        // return false;
         // Send the email and log success or failure
         if (!$this->email->send()) {
             log_message('error', 'Email sending failed to ' . $email);
             _setError("There was a problem sending the registration email.");
+            return false;
         } else {
             log_message('info', 'Registration email sent to ' . $email);
             _setSuccess("Registration email sent successfully to $email.");
+            return true;
         }
     }
 }

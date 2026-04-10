@@ -30,7 +30,7 @@ $username = BasicInfoUser($session_user_id)->username
                             </div>                            
                         </div>
                     </div>
-                </div>                
+                </div>                 
               </form>
         </div>
         <div class="col-md-3">

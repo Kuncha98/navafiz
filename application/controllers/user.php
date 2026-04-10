@@ -256,139 +256,237 @@ class user extends CI_Controller
         }
     }
 
-
     function login()
     {
-
-        // $this->deleteOldJobs();
-
-        if ($this->session->userdata('user_id') != "") {
+        // If user already logged in, redirect to home
+        if ($this->session->userdata('user_id')) {
             redirect(base_url());
+        }
+
+        // Set validation rules
+        $this->form_validation->set_rules('email', 'User Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+
+        if ($this->form_validation->run() === FALSE) {
+            $data['selected'] = "login";
+            $this->load->view('login/login', $data);
+            return;
+        }
+
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $remember_me = $this->input->post('remember_me');
+
+        $get_user = $this->profile_model->Search([
+            'm_email' => $email,
+            'm_password' => $password
+        ]);
+
+        if (count($get_user) == 0) {
+            _setError('Invalid Email or Password, Please enter the correct information');
+            redirect('user/login');
+            return;
+        }
+
+        $user = $get_user[0];
+
+        // Account status checks
+        if ($user->m_status == 2) {
+            _setError('Your Account is suspended due to irrelevant activity');
+            redirect('user/login');
+            return;
+        } elseif ($user->m_status == 0) {
+            _setError('Your Account is Expired/Not Activated, Please enter the verification code or click Resend code.');
+            redirect('user/verify');
+            return;
+        }
+
+        // Set remember me cookies if checked
+        if (!empty($remember_me)) {
+            $this->input->set_cookie('navafiz_email', $email, 10 * 30 * 24 * 60 * 60);
+            $this->input->set_cookie('navafiz_password', $password, 10 * 30 * 24 * 60 * 60);
         } else {
+            delete_cookie('navafiz_email');
+            delete_cookie('navafiz_password');
+        }
 
-            $this->form_validation->set_rules('email', 'User Email', 'trim|required|valid_email');
-            $this->form_validation->set_rules('password', 'Password', 'trim|required');
+        // Set user session data
+        $user_session_data = [
+            'user_id' => $user->m_id,
+            'email' => $user->m_email,
+            'username' => $user->username,
+            'login_type' => "normal",
+            'cat_id' => $user->m_category,
+            'name' => $user->m_name,
+            'cv' => $user->member_cv,
+            'avatar' => $user->m_avatar,
+            'last_login_date' => $user->last_login_date,
+            'role_id' => $user->role_id
+        ];
 
-            if (isset($_REQUEST['return_url'])) {
-                $this->session->set_userdata('return_url', $_REQUEST['return_url']);
-            }
+        $this->session->set_userdata($user_session_data);
 
-            if ($this->form_validation->run() === FALSE) {
-                //                $data['loginURL'] = "https://accounts.google.com/o/oauth2/auth?response_type=code&access_type=online&client_id=5398019094-2sdk8u5ba8ef3f19r18ubr12t6l7ol7m.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A82%2Ftest%2Fncode%2Flogin&state&scope=email%20profile&approval_prompt=auto";
-                $data['selected'] = "login";
-                $this->load->view('login/login', $data);
-            } else {
-                $login_type = $this->input->post('login_type');
+        // Give daily login reward if not mentor
+        if ($user->role_id != 2) {
+            $this->feed_model->create_daily_login_reward($user->m_id);
+        }
 
-                $email = $this->input->post('email');
-                $password = $this->input->post('password');
-                $remember_me = $this->input->post('remember_me');
-                $get_user = $this->profile_model->Search(array('m_email' => $email, 'm_password' => $password));
-                if (count($get_user) > 0) {
+        // Update last login date
+        $this->profile_model->Save(['last_login_date' => datenow()], $user->m_id);
 
-                    $get_user = $get_user[0];
-                    if ($get_user->m_status == 1) {
+        // Redirect logic: last page or profile
+        $last_page = $this->session->userdata('last_page');
+        $this->session->set_userdata('last_page', ''); // clear it
 
-
-                        if (isset($remember_me) && !empty($remember_me)) {
-
-
-                            $this->input->set_cookie('navafiz_email', $email, 10 * 30 * 24 * 60 * 60); /* Create cookie for store email */
-                            $this->input->set_cookie('navafiz_password', $password, 10 * 30 * 24 * 60 * 60); /* Create cookie for password */
-
-
-                            $user_session_data = array(
-                                'user_id' => $get_user->m_id,
-                                'email' => $get_user->m_email,
-                                'username' => $get_user->username,
-                                'login_type' => "normal",
-                                'cat_id' => $get_user->m_category,
-                                'name' => $get_user->m_name,
-                                'cv' => $get_user->member_cv,
-                                'avatar' => $get_user->m_avatar,
-                                'last_login_date' => $get_user->last_login_date,
-                                'role_id' => $get_user->role_id
-
-                            );
-
-                            $this->session->set_userdata($user_session_data);
-                            $user_id = $this->session->userdata('user_id');
-
-                            if ($get_user->role_id != 2) // prevent mentor reward
-                            { // give daily login reward
-                                $this->feed_model->create_daily_login_reward(
-                                    $get_user->m_id
-                                );
-                            }
-
-
-                            //Update Last login date
-                            $this->profile_model->Save(array('last_login_date' => datenow()), $get_user->m_id);
-
-                            $return_url = $this->session->userdata('return_url');
-                            $this->session->set_userdata('return_url', '');
-                            //                                echo base_url();exit();
-                            //                                $base_url = site_url();
-                            //                                echo $base_url;
-                            //                                echo "<br />";
-                            //                                echo $return_url;
-                            //                                exit();
-
-                            if (empty($return_url)) {
-                                redirect(base_url('profile/' . intval($user_id)));
-                            }
-                            if ($return_url . '/' == site_url()) {
-                                redirect(base_url('feed'));
-                            } else {
-                                redirect($return_url);
-                            }
-                            exit();
-                        } else {
-
-                            delete_cookie('navafiz_email'); /* Delete email cookie */
-                            delete_cookie('navafiz_password]'); /* Delete email cookie */
-
-                            $user_session_data = array(
-                                'user_id' => $get_user->m_id,
-                                'email' => $get_user->m_email,
-                                'login_type' => "normal",
-                                'cat_id' => $get_user->m_category,
-                                'name' => $get_user->m_name,
-                                'cv' => $get_user->member_cv,
-                                'avatar' => $get_user->m_avatar,
-                                'role_id' => $get_user->role_id
-                            );
-
-                            $this->session->set_userdata($user_session_data);
-
-                            if ($get_user->role_id != 2) // prevent mentor reward
-                            { // give daily login reward
-                                $this->feed_model->create_daily_login_reward(
-                                    $get_user->m_id
-                                );
-                            }
-
-                            $user_id = $this->session->userdata('user_id');
-                            redirect(base_url('profile/' . intval($user_id)));
-                            exit();
-                        }
-                    } else if ($get_user->m_status == 2) {
-                        _setError('Your Account is suspanded due to irrelevant activity');
-                        redirect('user/login');
-                        exit();
-                    } else if ($get_user->m_status == 0) {
-                        _setError('Your Account is Expired/Not Activated, Please enter the verification code if you do not have it, Click on Resend code.');
-                        redirect('user/verify');
-                        exit();
-                    }
-                } else {
-                    _setError('Invalid Email or Password, Please enter the correct information');
-                }
-                redirect('user/login');
-                exit();
-            }
+        if (!empty($last_page)) {
+            redirect($last_page);
+        } else {
+            redirect(base_url('profile/' . intval($user->m_id)));
         }
     }
+
+    // function login()
+    // {
+
+    //     // $this->deleteOldJobs();
+
+    //     if ($this->session->userdata('user_id') != "") {
+    //         redirect(base_url());
+    //     } else {
+
+    //         $this->form_validation->set_rules('email', 'User Email', 'trim|required|valid_email');
+    //         $this->form_validation->set_rules('password', 'Password', 'trim|required');
+
+    //         if (isset($_REQUEST['return_url'])) {
+    //             $this->session->set_userdata('return_url', $_REQUEST['return_url']);
+    //         }
+
+    //         if ($this->form_validation->run() === FALSE) {
+    //             //                $data['loginURL'] = "https://accounts.google.com/o/oauth2/auth?response_type=code&access_type=online&client_id=5398019094-2sdk8u5ba8ef3f19r18ubr12t6l7ol7m.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A82%2Ftest%2Fncode%2Flogin&state&scope=email%20profile&approval_prompt=auto";
+    //             $data['selected'] = "login";
+    //             $this->load->view('login/login', $data);
+    //         } else {
+    //             $login_type = $this->input->post('login_type');
+
+    //             $email = $this->input->post('email');
+    //             $password = $this->input->post('password');
+    //             $remember_me = $this->input->post('remember_me');
+    //             $get_user = $this->profile_model->Search(array('m_email' => $email, 'm_password' => $password));
+    //             if (count($get_user) > 0) {
+
+    //                 $get_user = $get_user[0];
+    //                 if ($get_user->m_status == 1) {
+
+
+    //                     if (isset($remember_me) && !empty($remember_me)) {
+
+
+    //                         $this->input->set_cookie('navafiz_email', $email, 10 * 30 * 24 * 60 * 60); /* Create cookie for store email */
+    //                         $this->input->set_cookie('navafiz_password', $password, 10 * 30 * 24 * 60 * 60); /* Create cookie for password */
+
+
+    //                         $user_session_data = array(
+    //                             'user_id' => $get_user->m_id,
+    //                             'email' => $get_user->m_email,
+    //                             'username' => $get_user->username,
+    //                             'login_type' => "normal",
+    //                             'cat_id' => $get_user->m_category,
+    //                             'name' => $get_user->m_name,
+    //                             'cv' => $get_user->member_cv,
+    //                             'avatar' => $get_user->m_avatar,
+    //                             'last_login_date' => $get_user->last_login_date,
+    //                             'role_id' => $get_user->role_id
+
+    //                         );
+
+    //                         $this->session->set_userdata($user_session_data);
+    //                         $user_id = $this->session->userdata('user_id');
+
+    //                         if ($get_user->role_id != 2) // prevent mentor reward
+    //                         { // give daily login reward
+    //                             $this->feed_model->create_daily_login_reward(
+    //                                 $get_user->m_id
+    //                             );
+    //                         }
+
+
+    //                         //Update Last login date
+    //                         $this->profile_model->Save(array('last_login_date' => datenow()), $get_user->m_id);
+
+    //                         $return_url = $this->session->userdata('return_url');
+    //                         $this->session->set_userdata('return_url', '');
+    //                         //                                echo base_url();exit();
+    //                         //                                $base_url = site_url();
+    //                         //                                echo $base_url;
+    //                         //                                echo "<br />";
+    //                         //                                echo $return_url;
+    //                         //                                exit();
+
+    //                         $last_page = $this->session->userdata('last_page');
+    //                         $this->session->set_userdata('last_page', ''); // clear it
+
+    //                         if (!empty($last_page)) {
+    //                             redirect($last_page);
+    //                         } else {
+    //                             $user_id = $this->session->userdata('user_id');
+    //                             redirect(base_url('profile/' . intval($user_id)));
+    //                         }
+    //                         exit();
+    //                     } else {
+
+    //                         delete_cookie('navafiz_email'); /* Delete email cookie */
+    //                         delete_cookie('navafiz_password]'); /* Delete email cookie */
+
+    //                         $user_session_data = array(
+    //                             'user_id' => $get_user->m_id,
+    //                             'email' => $get_user->m_email,
+    //                             'login_type' => "normal",
+    //                             'cat_id' => $get_user->m_category,
+    //                             'name' => $get_user->m_name,
+    //                             'cv' => $get_user->member_cv,
+    //                             'avatar' => $get_user->m_avatar,
+    //                             'role_id' => $get_user->role_id
+    //                         );
+
+    //                         $this->session->set_userdata($user_session_data);
+
+    //                         if ($get_user->role_id != 2) // prevent mentor reward
+    //                         { // give daily login reward
+    //                             $this->feed_model->create_daily_login_reward(
+    //                                 $get_user->m_id
+    //                             );
+    //                         }
+
+    //                         $user_id = $this->session->userdata('user_id');
+    //                         // redirect(base_url('profile/' . intval($user_id)));
+    //                         $last_page = $this->session->userdata('last_page');
+    //                         $this->session->set_userdata('last_page', ''); // clear it
+
+    //                         if (!empty($last_page)) {
+    //                             redirect($last_page);
+    //                         } else {
+    //                             $user_id = $this->session->userdata('user_id');
+    //                             redirect(base_url('profile/' . intval($user_id)));
+    //                         }
+    //                         exit();
+    //                     }
+    //                 } else if ($get_user->m_status == 2) {
+    //                     _setError('Your Account is suspanded due to irrelevant activity');
+    //                     redirect('user/login');
+    //                     exit();
+    //                 } else if ($get_user->m_status == 0) {
+    //                     _setError('Your Account is Expired/Not Activated, Please enter the verification code if you do not have it, Click on Resend code.');
+    //                     redirect('user/verify');
+    //                     exit();
+    //                 }
+    //             } else {
+    //                 _setError('Invalid Email or Password, Please enter the correct information');
+    //             }
+    //             redirect('user/login');
+    //             exit();
+    //         }
+    //     }
+    // }
 
     //     function register()
     //     {
