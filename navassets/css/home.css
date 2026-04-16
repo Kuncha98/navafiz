@@ -869,6 +869,12 @@ footer .bi {
 }
 
 .resume-section {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.candidate-section {
   background: #f1f6fb;
   position: relative;
   overflow: hidden;

@@ -661,6 +661,200 @@ if ($query->num_rows() > 0) {
     .upload-ui small {
         font-size: 0.85rem;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .feed-item {
+        background: #f9fafb;
+        border: 1px solid #eee;
+        transition: 0.2s ease;
+    }
+
+    .feed-item:hover {
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .bg-primary-soft {
+        background: rgba(13, 110, 253, 0.1);
+    }
+
+    .bg-success-soft {
+        background: rgba(25, 135, 84, 0.1);
+    }
+
+    .feed-content {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    .see-more {
+        display: inline-block;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Modal container */
+    .modern-modal {
+        border-radius: 16px;
+        padding: 10px;
+    }
+
+    /* Icon circle */
+    .icon-box {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: rgba(13, 110, 253, 0.1);
+        color: #0d6efd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    /* Typography tweaks */
+    .modal-title {
+        font-size: 1.1rem;
+        letter-spacing: 0.2px;
+    }
+
+    .modal-body p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Buttons */
+    .modern-btn {
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .modern-btn:hover {
+        transform: translateY(-1px);
+        /* box-shadow: 0 6px 14px rgba(13, 110, 253, 0.25); */
+    }
+
+    /* Cancel button */
+    .btn-light {
+        border-radius: 10px;
+        background: #f8f9fa;
+        border: 1px solid #e5e7eb;
+    }
+
+    .btn-light:hover {
+        background: #f1f3f5;
+    }
+
+    /* Modal base */
+    .modern-modal {
+        border-radius: 16px;
+        padding: 10px;
+    }
+
+    /* Status badge */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+        background: rgba(25, 135, 84, 0.1);
+        color: #198754;
+        font-weight: 500;
+    }
+
+    /* Info group */
+    .info-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Each row */
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: #f9fafb;
+        border-radius: 10px;
+    }
+
+    /* Labels */
+    .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    /* Values */
+    .value {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #212529;
+    }
+
+    /* Credential message */
+    .credential-box {
+        background: #f1f3f5;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        white-space: pre-line;
+    }
+
+    /* Buttons */
+    .modern-btn {
+        border-radius: 10px;
+        padding: 6px 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .modern-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* Light button */
+    .btn-light {
+        border: 1px solid #e5e7eb;
+        background: #fff;
+    }
+
+    .btn-light:hover {
+        background: #f8f9fa;
+    }
 </style>
 <?php
 
@@ -1114,7 +1308,7 @@ if (!empty($isFeaturedProfile)) {
             </div>
 
             <!-- Matching Titles Card -->
-            <div class="card border-0 shadow-sm profile mb-3">
+            <!-- <div class="card border-0 shadow-sm profile mb-3">
                 <div class="card-body p-4">
 
                     <h6 class="fw-semibold text-primary-custom text-left mb-3">Other Matching Titles / Positions</h6>
@@ -1136,7 +1330,7 @@ if (!empty($isFeaturedProfile)) {
                     </div>
 
                 </div>
-            </div>
+            </div> -->
 
             <!-- Industry Titles Card -->
             <div class="card border-0 shadow-sm profile mb-3">
@@ -1808,7 +2002,7 @@ if (!empty($isFeaturedProfile)) {
                     <!-- Header -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h6 class="fw-semibold text-primary-custom mb-0">
-                            <i class="fas fa-briefcase me-2"></i>Certifications
+                            <i class="fas fa-certificate me-2"></i>Certifications
                         </h6>
 
                         <?php if ($profile_id == $session_user_id) { ?>
@@ -1886,6 +2080,110 @@ if (!empty($isFeaturedProfile)) {
                             <?php endif; ?>
                         </span>
                     <?php endif; ?>
+
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm profile mb-3">
+                <div class="card-body p-4">
+
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="mb-0 fw-semibold text-primary-custom text-left">
+                            <i class="fas fa-briefcase me-2"></i>Posts & Jobs Matching Titles / Positions
+                        </h6>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <?php
+                        $professions = array_filter([$profile->profession1, $profile->profession2, $profile->profession3, $profile->profession4, $profile->profession5]);
+                        foreach ($professions as $index => $profession) { ?>
+                            <span class="skill-pill">
+                                <?= $profession ?>
+                            </span>
+                        <?php } ?>
+                    </div>
+
+                    <?php if (!empty($feed_list)) { ?>
+
+                        <div id="feed-container" class="feed-list">
+
+                            <?php foreach ($feed_list as $row) { ?>
+
+                                <div class="feed-item mb-3 p-3 rounded">
+
+                                    <!-- Top Row -->
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+
+                                        <!-- Badge -->
+                                        <?php if ($row->source == 'feed') { ?>
+                                            <span class="badge position-static bg-primary-soft text-primary">Post</span>
+                                        <?php } else { ?>
+                                            <span class="badge position-static bg-success-soft text-success">Job</span>
+                                        <?php } ?>
+
+                                        <!-- Date -->
+                                        <small class="text-muted">
+                                            <?= date("M d, Y", $row->created_on) ?>
+                                        </small>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="feed-content mb-2">
+                                        <?php if (!empty(trim($row->title))) { ?>
+                                            <div class="fw-semibold mb-1">
+                                                <a href="javascript:void(0);" class="job-detail-link text-dark"
+                                                    data-id="<?= $row->id ?>">
+                                                    <?= htmlspecialchars($row->title) ?>
+                                                </a>
+                                            </div>
+                                        <?php } ?>
+                                        <span class="short-text">
+                                            <?= substr(strip_tags($row->description), 0, 120) ?>
+                                        </span>
+
+                                        <?php if (strlen(strip_tags($row->description)) > 120) { ?>
+                                            <span class="full-text d-none">
+                                                <?= nl2br(htmlspecialchars($row->description)) ?>
+                                            </span>
+
+                                            <a href="javascript:void(0);" class="see-more text-primary small">
+                                                See more
+                                            </a>
+                                        <?php } ?>
+                                    </div>
+
+                                    <!-- Footer -->
+                                    <?php if ($row->source == 'feed' && !empty($row->m_name)) { ?>
+                                        <div class="small text-muted text-right">
+                                            <i class="fas fa-user me-1"></i>
+                                            <?= htmlspecialchars($row->m_name) ?>
+                                        </div>
+                                    <?php } ?>
+
+                                </div>
+
+                            <?php } ?>
+
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <!-- <button id="loadMoreBtn" class="btn btn-outline-primary">
+                                Load More
+                            </button> -->
+
+                            <a href="<?= site_url('premium-services?show_job_modal=1') ?>" class="btn btn-outline-primary">
+                                Load More
+                            </a>
+                        </div>
+
+                    <?php } else { ?>
+
+                        <div class="text-muted small d-block text-left">
+                            No posts or jobs found.
+                        </div>
+
+                    <?php } ?>
 
                 </div>
             </div>
@@ -3044,4 +3342,216 @@ if (!empty($isFeaturedProfile)) {
             el.style.display = 'none';
         }
     }
+</script>
+
+<script>
+    document.addEventListener("click", function (e) {
+
+        if (e.target.classList.contains("see-more")) {
+
+            let parent = e.target.closest(".feed-content");
+
+            let shortText = parent.querySelector(".short-text");
+            let fullText = parent.querySelector(".full-text");
+
+            if (fullText.classList.contains("d-none")) {
+                fullText.classList.remove("d-none");
+                shortText.style.display = "none";
+                e.target.innerText = "See less";
+            } else {
+                fullText.classList.add("d-none");
+                shortText.style.display = "inline";
+                e.target.innerText = "See more";
+            }
+        }
+
+    });
+</script>
+
+<script>
+    let offset = 20;
+
+    $('#loadMoreBtn').on('click', function () {
+
+        let btn = $(this);
+        btn.text('Loading...');
+
+        $.ajax({
+            url: "<?= site_url('profile/loadMoreFeedJobs') ?>",
+            type: "POST",
+            data: {
+                offset: offset,
+                user_id: "<?= $profile_id ?>"
+            },
+            dataType: "json",
+            success: function (res) {
+
+                let html = res.html || '';
+
+                if (html.trim() !== '') {
+                    $('#feed-container').append(html);
+                    offset += 20;
+                    btn.text('Load More');
+                } else {
+                    btn.hide();
+                }
+
+                if (res.count < 20) {
+                    btn.hide();
+                }
+            }
+        });
+
+    });
+</script>
+
+<div class="modal fade" id="jobModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modern-modal border-0 shadow-lg">
+
+            <!-- HEADER -->
+            <div class="modal-header border-0">
+                <div>
+                    <h5 class="modal-title fw-semibold mb-1">
+                        Job Details
+                    </h5>
+                    <span class="status-badge" id="job_status_badge">
+                        Active
+                    </span>
+                </div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body pt-2">
+
+                <!-- JOB DESCRIPTION TOP -->
+                <div class="mb-3">
+                    <p id="job_title_text" class="mb-0 fw-semibold"></p>
+                </div>
+
+                <!-- INFO GRID -->
+                <div class="row row-gap-3">
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Company</span>
+                            <span class="value" id="job_company"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Location</span>
+                            <span class="value" id="job_location"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Country</span>
+                            <span class="value" id="job_country"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Category</span>
+                            <span class="value" id="job_category"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Education</span>
+                            <span class="value" id="job_education"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Experience</span>
+                            <span class="value" id="job_experience"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Salary</span>
+                            <span class="value" id="job_salary"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Email Apply</span>
+                            <span class="value text-primary" id="job_email"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Posted On</span>
+                            <span class="value" id="job_date"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Added By</span>
+                            <span class="value" id="job_added_by"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-item">
+                            <span class="label">Views</span>
+                            <span class="value" id="job_views"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="credential-box mt-3">
+                    <p class="mb-0" id="job_description"></p>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0">
+
+                <button class="btn btn-light modern-btn" data-bs-dismiss="modal">
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.job-detail-link', function () {
+
+        let id = $(this).data('id');
+
+        $('#jobModal').modal('show');
+
+        $.ajax({
+            url: "<?= site_url('profile/getJobDetails') ?>",
+            type: "POST",
+            data: { j_id: id },
+            dataType: "json",
+            success: function (res) {
+
+                $('#job_title_text').text(res.j_title);
+                $('#job_company').text(res.j_company);
+                $('#job_location').text(res.j_location);
+                $('#job_country').text(res.j_country);
+                $('#job_category').text(res.j_category);
+                $('#job_education').text(res.j_education);
+                $('#job_experience').text(res.j_experience);
+                $('#job_salary').text(res.j_salary);
+                $('#job_email').text(res.j_email);
+                $('#job_date').text(res.j_date);
+                $('#job_added_by').text(res.j_added_by);
+                $('#job_views').text(res.j_views);
+                $('#job_description').text(res.j_description);
+
+            }
+        });
+
+    });
 </script>

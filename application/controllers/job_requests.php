@@ -124,6 +124,22 @@ class job_requests extends CI_Controller
             show_404();
         }
 
+        // Get next & prev
+        $next = $this->job_requests_model->get_next($id);
+        $prev = $this->job_requests_model->get_prev($id);
+
+        // Total records
+        $total = $this->job_requests_model->get_total_count();
+
+        // Current position
+        $current_position = $this->job_requests_model->get_position($id);
+
+        $data['next_id'] = $next ? $next->id : null;
+        $data['prev_id'] = $prev ? $prev->id : null;
+
+        $data['total_records'] = $total;
+        $data['current_position'] = $current_position;
+
         $data["record"] = $record;
 
         $data['title'] = 'NAVAFIZ Home';

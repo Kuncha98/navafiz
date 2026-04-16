@@ -347,7 +347,7 @@
 </section>
 
 <!-- Featured candidates section -->
-<section class="resume-section" id="candidates">
+<section class="candidate-section" id="candidates">
     <div class="container position-relative z-1">
         <!-- Section header -->
         <div class="text-center mb-4">
@@ -357,6 +357,14 @@
         <div class="row g-4" id="featured-candidates-card">
             <!-- Job listings will be dynamically inserted here -->
         </div>
+
+        <!-- Bottom CTA -->
+        <div class="text-center mt-5">
+            <a href="<?= site_url('professionals') ?>" class="btn view-btn">
+                View All Candidates
+            </a>
+        </div>
+
     </div>
 </section>
 
@@ -395,7 +403,6 @@
         </div>
     </div>
 </section>
-
 
 <!-- Contact section -->
 <section class="contact-section" id="contact">
@@ -527,6 +534,186 @@
     </div>
 </section>
 
+<!-- Testimonial section -->
+<section class="testimonial-section" id="testimonial">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <p class="section-subtitle mb-1">Testimonials</p>
+                <h2 class="section-title mb-0">What Our Users Say</h2>
+            </div>
+
+            <a href="<?= site_url('testimonials') ?>" class="btn view-btn">
+                View All
+            </a>
+        </div>
+
+        <!-- Carousel -->
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000000">
+
+            <div class="carousel-inner">
+
+                <?php
+                $chunks = array_chunk($testimonials, 3);
+                $active = true;
+
+                foreach ($chunks as $chunk): ?>
+                    <div class="carousel-item <?= $active ? 'active' : '' ?>">
+                        <div class="row g-4">
+
+                            <?php foreach ($chunk as $t):
+
+                                $user = BasicInfoUser($t->user_id);
+                                $name = $user->m_name ?? 'Anonymous';
+                                $avatar = $user->m_avatar ?? '';
+                                $initial = strtoupper(substr($name, 0, 1));
+                                ?>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+
+                                    <div class="testimonial-card h-100 p-4 shadow-sm border-0 d-flex flex-column">
+
+                                        <!-- Title -->
+                                        <div class="fw-semibold mb-2">
+                                            <?= htmlspecialchars($t->title) ?>
+                                        </div>
+
+                                        <!-- Description -->
+                                        <p class="testimonial-text mb-3">
+                                            <?= substr(strip_tags($t->description), 0, 150) ?>...
+                                        </p>
+
+                                        <!-- User -->
+                                        <div class="d-flex align-items-center mt-auto">
+
+                                            <?php if (!empty($avatar)) { ?>
+                                                <img src="<?= base_url('assets/uploads/members/' . $avatar); ?>"
+                                                    class="rounded-circle me-2" width="42" height="42"
+                                                    style="object-fit:cover; min-width: 42px"
+                                                    onerror="this.onerror=null; this.src='<?= base_url('navassets/img/user-avatar.jpg'); ?>';">
+                                            <?php } else { ?>
+                                                <div class="avatar-circle me-3">
+                                                    <?= $initial ?>
+                                                </div>
+                                            <?php } ?>
+
+                                            <div>
+                                                <div class="fw-semibold"><?= htmlspecialchars($name) ?></div>
+                                                <small class="text-muted">
+                                                    <?= htmlspecialchars($user->m_profession ?? '') ?>
+                                                </small>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            <?php endforeach; ?>
+
+                        </div>
+                    </div>
+                    <?php
+                    $active = false;
+                endforeach; ?>
+
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev custom-control" type="button" data-bs-target="#testimonialCarousel"
+                data-bs-slide="prev">
+                <span class="custom-arrow">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+            </button>
+
+            <button class="carousel-control-next custom-control" type="button" data-bs-target="#testimonialCarousel"
+                data-bs-slide="next">
+                <span class="custom-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+            </button>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- Feed Preview Section -->
+<section class="feed-section" id="feed">
+    <div class="container position-relative z-1">
+
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <p class="section-subtitle">Latest Updates</p>
+            <h2 class="section-title">What People Are Sharing</h2>
+        </div>
+        <div class="feed-masonry">
+
+            <?php if (!empty($feeds)): ?>
+                <?php foreach ($feeds as $feed): ?>
+
+                    <div class="feed-item">
+
+                        <div class="feed-card">
+
+                            <!-- Media -->
+                            <?php if (!empty($feed->feed_image)): ?>
+                                <div class="feed-media">
+                                    <img src="<?= base_url('nassets/feed/uploads/' . $feed->feed_image) ?>" alt="Feed Image">
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- Body -->
+                            <div class="feed-body">
+
+                                <!-- User -->
+                                <div class="feed-user">
+
+                                    <img src="<?= base_url('assets/uploads/members/' . $feed->m_avatar); ?>"
+                                        onerror="this.onerror=null; this.src='<?= base_url('navassets/img/user-avatar.jpg'); ?>';"
+                                        width="42" height="42" style="object-fit:cover;border-radius:50%;">
+
+                                    <div>
+                                        <h6 class="mb-0">
+                                            <?= $feed->m_name ?>
+                                        </h6>
+                                        <small>
+                                            <?= date('d M Y', strtotime($feed->added_on)) ?>
+                                        </small>
+                                    </div>
+
+                                </div>
+
+                                <!-- Text -->
+                                <p class="feed-text">
+                                    <?= substr(strip_tags($feed->feed_text), 0, 250) ?>...
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="text-center mt-5">
+            <a href="<?= site_url('feed') ?>" class="btn view-btn">
+                View All Posts
+            </a>
+        </div>
+
+    </div>
+</section>
+
 <!-- CREATE TABLE `jb_resume_submissions` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(150) NOT NULL,
@@ -600,3 +787,167 @@
         </div>
     </div>
 </div>
+
+<style>
+    .testimonial-section {
+        background: #fff;
+    }
+
+    .testimonial-card {
+        background: #f1f6fb;
+        border-radius: 20px;
+        transition: all 0.25s ease;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .testimonial-text {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .avatar-circle {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #0d6efd;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+    }
+
+    /* Mobile UX */
+    @media (max-width: 576px) {
+
+        /* .carousel-control-prev,
+        .carousel-control-next {
+            display: none;
+        } */
+    }
+
+    /* Carousel controls custom style */
+    /* Position buttons */
+    #testimonialCarousel .custom-control {
+        width: 40px;
+        height: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 1;
+        /* always visible */
+    }
+
+    /* Left & right spacing */
+    #testimonialCarousel .carousel-control-prev {
+        left: -10px;
+    }
+
+    #testimonialCarousel .carousel-control-next {
+        right: -10px;
+    }
+
+    /* Circle button */
+    #testimonialCarousel .custom-arrow {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Icon */
+    #testimonialCarousel .custom-arrow i {
+        color: #fff;
+        font-size: 14px;
+    }
+
+    /* Hover effect */
+    #testimonialCarousel .custom-arrow:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+
+
+
+
+
+
+
+    .feed-masonry {
+        column-count: 3;
+        column-gap: 24px;
+    }
+
+    /* Tablet */
+    @media (max-width: 992px) {
+        .feed-masonry {
+            column-count: 2;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 576px) {
+        .feed-masonry {
+            column-count: 1;
+        }
+    }
+
+    /* IMPORTANT FIX (this is what makes it masonry) */
+    .feed-item {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 24px;
+
+        /* prevents breaking inside cards */
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Card */
+    .feed-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        transition: 0.3s ease;
+    }
+
+    .feed-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Image */
+    .feed-media img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Body */
+    .feed-body {
+        padding: 16px;
+    }
+
+    /* User */
+    .feed-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    /* Text */
+    .feed-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #444;
+    }
+</style>

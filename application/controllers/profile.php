@@ -383,6 +383,19 @@ class Profile extends CI_Controller
         $recruitment_questions = array_map("unserialize", array_unique(array_map("serialize", $recruitment_questions)));
 
 
+        $professions = array_filter(array_map('trim', [
+            $profile->profession1,
+            $profile->profession2,
+            $profile->profession3,
+            $profile->profession4,
+            $profile->profession5
+        ]));
+        $data['feed_list'] = $this->feed_model->searchFeedsAndJobsByProfessions($professions, 20, 0);
+
+        // echo '<pre>';
+        // print_r($data['feed_list']);
+        // exit;
+
         $data['reward_points'] = $this->feed_model->get_total_points($profile->m_id);
         $data['pending_points'] = $this->feed_model->get_pending_points($profile->m_id);
         $data['rewards'] = $this->feed_model->get_user_rewards($profile->m_id);
@@ -414,6 +427,137 @@ class Profile extends CI_Controller
 
         $this->load->view('profile/view-profile', $data);
 
+    }
+
+    public function loadMoreFeedJobs()
+    {
+        $offset = $this->input->post('offset');
+        $limit = 20;
+        $user_id = $this->input->post('user_id');
+
+        $profile = $this->member_model->userDetail(['user_id' => $user_id]);
+
+        $professions = array_filter(array_map('trim', [
+            $profile->profession1,
+            $profile->profession2,
+            $profile->profession3,
+            $profile->profession4,
+            $profile->profession5
+        ]));
+
+        $feed_list = $this->feed_model
+            ->searchFeedsAndJobsByProfessions($professions, $limit, $offset);
+
+        $html = "";
+
+        foreach ($feed_list as $row) {
+
+            $isFeed = ($row->source == 'feed');
+
+            $descText = strip_tags($row->description);
+            $shortDesc = substr($descText, 0, 120);
+            $fullDesc = nl2br(htmlspecialchars($row->description));
+
+            $date = date("M d, Y", $row->created_on);
+
+            // Badge
+            $badge = $isFeed
+                ? '<span class="badge position-static bg-primary-soft text-primary">Post</span>'
+                : '<span class="badge position-static bg-success-soft text-success">Job</span>';
+
+            // Title (ONLY JOB clickable)
+            $title = trim((string) $row->title);
+
+            if ($title !== '') {
+
+                if ($isFeed) {
+                    $title = '<div class="fw-semibold mb-1">'
+                        . htmlspecialchars($row->title) .
+                        '</div>';
+                } else {
+                    $title = '<div class="fw-semibold mb-1">
+                                    <a href="javascript:void(0);" 
+                                       class="job-detail-link text-dark"
+                                       data-id="' . $row->id . '">
+                                        ' . htmlspecialchars($row->title) . '
+                                    </a>
+                                  </div>';
+                }
+            }
+
+            $html .= '
+                <div class="feed-item mb-3 p-3 rounded">
+            
+                    <!-- Top Row -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        ' . $badge . '
+                        <small class="text-muted">' . $date . '</small>
+                    </div>
+            
+                    <!-- Content -->
+                    <div class="feed-content mb-2">
+            
+                        ' . $title . '
+            
+                        <span class="short-text">' . htmlspecialchars($shortDesc) . '</span>';
+
+            if (strlen($descText) > 120) {
+                $html .= '
+                        <span class="full-text d-none">' . $fullDesc . '</span>
+                        <a href="javascript:void(0);" class="see-more text-primary small">See more</a>';
+            }
+
+            $html .= '
+                    </div>';
+
+            // Footer (only feed user)
+            if ($row->source == 'feed' && !empty($row->m_name)) {
+                $html .= '
+                    <div class="small text-muted text-right">
+                        <i class="fas fa-user me-1"></i>
+                        ' . htmlspecialchars($row->m_name) . '
+                    </div>';
+            }
+
+            $html .= '
+                </div>';
+        }
+
+        echo json_encode([
+            'html' => $html,
+            'count' => count($feed_list)
+        ]);
+    }
+
+    public function getJobDetails()
+    {
+        $id = $this->input->post('j_id');
+
+        $job = $this->job_model->searchJob($id);
+
+        if (!empty($job)) {
+
+            $j = $job[0];
+
+            echo json_encode([
+                "j_title" => $j->j_title,
+                "j_company" => $j->j_company,
+                "j_location" => $j->j_location,
+                "j_country" => $j->country,
+                "j_category" => $j->c_name,
+                "j_education" => "MBA, CPA, CMA", // (if stored elsewhere later)
+                "j_experience" => "5+ Years",
+                "j_salary" => $j->j_salary . " AED",
+                "j_email" => $j->j_email_apply,
+                "j_date" => date("M d, Y", $j->j_add_date),
+                "j_added_by" => $j->m_name,
+                "j_views" => $j->views,
+                "j_description" => $j->j_descr
+            ]);
+
+        } else {
+            echo json_encode(["error" => "Job not found"]);
+        }
     }
 
     function status($user_id = '')
@@ -1129,10 +1273,18 @@ class Profile extends CI_Controller
     }
 
 
+    // public function searchFeedsAndJobs($job_title, $limit, $start)
+    // {
+    //     $profile = $this->member_model->userDetail(array('user_id' => $id));
 
-
-
-
+    //     $professions = array_filter([
+    //         $profile->profession1,
+    //         $profile->profession2,
+    //         $profile->profession3,
+    //         $profile->profession4,
+    //         $profile->profession5
+    //     ]);
+    // }
 }
 
 /* End of file front.php */

@@ -27,6 +27,8 @@ class manpower_supply_requests_model extends CI_Model
     // Get paginated records (DESC by id)
     public function get_all($limit, $start)
     {
+        $this->db->where('status !=', 2);
+        $this->db->where('status IS NOT NULL', null, false);
         $this->db->order_by('id', 'DESC');
         $query = $this->db->get($this->table, $limit, $start);
         return $query->result();
@@ -44,6 +46,7 @@ class manpower_supply_requests_model extends CI_Model
     {
         // Next = older record (smaller id)
         return $this->db
+            ->where('status !=', 2)
             ->where('id <', $id)
             ->order_by('id', 'DESC')
             ->limit(1)
@@ -56,6 +59,7 @@ class manpower_supply_requests_model extends CI_Model
     {
         // Previous = newer record (bigger id)
         return $this->db
+            ->where('status !=', 2)
             ->where('id >', $id)
             ->order_by('id', 'ASC')
             ->limit(1)
@@ -67,6 +71,7 @@ class manpower_supply_requests_model extends CI_Model
     public function get_position($id)
     {
         return $this->db
+            ->where('status !=', 2)
             ->where('id >=', $id)
             ->count_all_results($this->table);
     }

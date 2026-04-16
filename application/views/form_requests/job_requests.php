@@ -14,12 +14,12 @@
                 <tr>
                     <th>#</th>
                     <th>Company</th>
+                    <th>Status</th>
                     <th>Job Title</th>
                     <th>Workers</th>
                     <th>Category</th>
                     <th>Employment Type</th>
                     <th>Joining Date</th>
-                    <th>Status</th>
                     <th>Submitted At</th>
                     <th>Actions</th>
                 </tr>
@@ -36,6 +36,12 @@
                                     class="text-decoration-none"><?php echo $row->company_name; ?></a>
                             </td>
                             <td>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
+                                </span>
+                            </td>
+                            <td>
                                 <?php echo $row->job_title; ?>
                             </td>
                             <td>
@@ -49,12 +55,6 @@
                             </td>
                             <td>
                                 <?php echo $row->joining_date; ?>
-                            </td>
-                            <td>
-                                <?php $status = request_forms_status($row->status); ?>
-                                <span class="<?= $status['class'] ?>">
-                                    <?= $status['name']; ?>
-                                </span>
                             </td>
                             <td>
                                 <?php echo $row->created_at; ?>

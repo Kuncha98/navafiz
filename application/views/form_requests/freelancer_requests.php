@@ -14,6 +14,7 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Submitted</th>
                     <th>Current Location</th>
                     <th>Mobile</th>
                     <th>E-mail</th>
@@ -23,7 +24,6 @@
                     <th>Ava. Type</th>
                     <th>Rate</th>
                     <th>Status</th>
-                    <th>Submitted</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -39,6 +39,12 @@
                                     class="text-decoration-none">
                                     <?php echo $row->name; ?>
                                 </a>
+                            </td>
+                            <td>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
+                                </span>
                             </td>
                             <td>
                                 <?php echo $row->current_location; ?>
@@ -81,12 +87,6 @@
                                 ?> <br>
                                 <?php echo $row->rate_amount; ?>
                                 <?php echo $row->currency; ?>
-                            </td>
-                            <td>
-                                <?php $status = request_forms_status($row->status); ?>
-                                <span class="<?= $status['class'] ?>">
-                                    <?= $status['name']; ?>
-                                </span>
                             </td>
                             <td>
                                 <?php echo $row->created_at; ?>

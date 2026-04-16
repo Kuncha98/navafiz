@@ -252,3 +252,58 @@
         }
     });
 </script>
+
+<!-- Premium Access Modal -->
+<div class="modal fade" id="premiumJobModal" tabindex="-1" aria-labelledby="premiumJobModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal border-0 shadow-lg">
+
+            <!-- HEADER -->
+            <div class="modal-header border-0">
+                <div>
+                    <h5 class="modal-title fw-semibold mb-1" id="premiumJobModalLabel">Premium Access Required</h5>
+                    <span class="status-badge bg-warning text-dark">Restricted</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body pt-2">
+                <p>You need to be a premium member to browse jobs filtered according to your profile. You’ll also be
+                    assigned a personal mentor to guide you and help you land a job faster.</p>
+                <p><span class="pe-2">
+                        Contact us on WhatsApp for assistance:
+                    </span>
+                    <a href="https://wa.me/971554465332" target="_blank">
+                        <i class="fab fa-whatsapp me-1"></i>
+                        055 446 5332
+                    </a>
+                </p>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 d-flex justify-content-end">
+                <!-- <a href="<?= site_url('premium-services') ?>" class="btn btn-primary modern-btn">Go to Premium
+                    Services</a> -->
+                <button type="button" class="btn btn-light modern-btn" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Script to auto-open modal if ?show_modal=1 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const premiumModalElement = document.getElementById('premiumJobModal');
+
+        // Check if modal exists
+        if (premiumModalElement) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const showModal = urlParams.get('show_job_modal');
+
+            if (showModal === '1') {
+                const premiumModal = new bootstrap.Modal(premiumModalElement);
+                premiumModal.show();
+            }
+        }
+    });
+</script>

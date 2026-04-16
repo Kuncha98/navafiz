@@ -290,10 +290,10 @@ class job_seeker_requests extends CI_Controller
             $result = $this->create_user_from_job_seeker_request($request);
 
             // User exists
-            if ($result === 'exists') {
+            if (isset($result['status']) && $result['status'] === 'exists') {
                 echo json_encode([
                     'success' => false,
-                    'message' => "You're already registered with the provided email."
+                    'message' => "You're already registered with the provided email. Navafiz profile is " . $result['navafiz_profile_link']
                 ]);
                 return;
             }
@@ -427,8 +427,18 @@ class job_seeker_requests extends CI_Controller
                 return false;
             }
         } else {
+            // _setError("You're already registered with the provided email. Please login or use forgot password.");
+            // return 'exists';
             _setError("You're already registered with the provided email. Please login or use forgot password.");
-            return 'exists';
+
+            $existing_user = $find_user[0];
+
+            return [
+                'status' => 'exists',
+                'navafiz_profile_link' => !empty($existing_user->navafiz_profile_link)
+                    ? base_url('n/' . $existing_user->navafiz_profile_link)
+                    : ''
+            ];
         }
 
     }

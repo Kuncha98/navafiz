@@ -14,13 +14,13 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Status</th>
                     <th>Exp.</th>
                     <th>Location</th>
                     <th>Sess. Duration</th>
                     <th>Cond. Mode</th>
                     <th>Ment. Type</th>
                     <th>Ava. slots</th>
-                    <th>Status</th>
                     <th>Submitted</th>
                     <th>Actions</th>
                 </tr>
@@ -35,6 +35,12 @@
                             <td>
                                 <a href="<?php echo site_url('form-requests/mentor-request-view/' . $row->id); ?>"
                                     class="text-decoration-none"><?php echo $row->name; ?></a>
+                            </td>
+                            <td>
+                                <?php $status = request_forms_status($row->status); ?>
+                                <span class="<?= $status['class'] ?>">
+                                    <?= $status['name']; ?>
+                                </span>
                             </td>
                             <td>
                                 <?php echo $row->experience; ?>
@@ -91,12 +97,6 @@
                                     <?php endforeach; ?>
 
                                 <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php $status = request_forms_status($row->status); ?>
-                                <span class="<?= $status['class'] ?>">
-                                    <?= $status['name']; ?>
-                                </span>
                             </td>
                             <td>
                                 <?php echo $row->created_at; ?>

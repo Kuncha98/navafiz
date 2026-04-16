@@ -13,8 +13,10 @@ class home extends CI_Controller
         //     redirect(site_url('feed'));
         //     exit();
         // }
-    }
 
+        $this->load->model('testimonials_model');
+        $this->load->model('feed_model');
+    }
 
 
     function index()
@@ -33,6 +35,9 @@ class home extends CI_Controller
     {
         // Example: Check if user is logged in
         $user_id = $this->session->userdata('user_id');
+
+        $data['testimonials'] = $this->testimonials_model->getRandomTestimonials(12);
+        $data['feeds'] = $this->feed_model->getLatestFeeds(12, 0);
 
         $data['title'] = 'NAVAFIZ Home';
         $data['content'] = 'home/index-2026'; // content view

@@ -152,6 +152,7 @@ class Feed_model extends CI_Model
         }
     }
 
+    // Fetch all the pending posts
     public function get_pending_feeds($limit, $offset)
     {
         $this->db->select('f.*, m.m_name as user_name');
@@ -165,6 +166,7 @@ class Feed_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    // Get the total count of pending posts
     public function count_pending_feeds()
     {
         $this->db->where('approval_status', 0);
@@ -172,11 +174,13 @@ class Feed_model extends CI_Model
         return $this->db->count_all_results('jb_feed');
     }
 
+    // Add reward points
     public function add_reward_points($data)
     {
         $this->db->insert('jb_reward_points', $data);
     }
 
+    // Fetch feed rewards
     public function get_feed_reward($feed_id)
     {
         $this->db->where('feed_id', $feed_id);
@@ -291,6 +295,125 @@ class Feed_model extends CI_Model
             ->order_by('jb_reward_points.created_at', 'DESC')
             ->get()
             ->result();
+    }
+
+    // Fetch feed posts & jobs using match titles of the user
+    public function searchFeedsAndJobsByProfessions($professions, $limit, $start)
+    {
+        // Stop if no professions
+        if (empty($professions)) {
+            return []; // return empty result
+        }
+
+        $feed_filter = "";
+        $job_filter = "";
+
+        if (!empty($professions)) {
+
+            $feed_conditions = [];
+            $job_conditions = [];
+
+            foreach ($professions as $profession) {
+                $profession = $this->db->escape_like_str($profession);
+
+                // Feed condition
+                $feed_conditions[] = "jb_feed.feed_text LIKE '%$profession%'";
+
+                // Job condition
+                $job_conditions[] = "
+                jb_jobs.j_title LIKE '%$profession%' 
+                OR jb_jobs.j_tags LIKE '%$profession%' 
+                OR jb_jobs.j_descr LIKE '%$profession%'
+            ";
+            }
+
+            // Combine with OR
+            $feed_filter = "AND (" . implode(" OR ", $feed_conditions) . ")";
+            $job_filter = "AND (" . implode(" OR ", $job_conditions) . ")";
+        }
+
+        $sql = "
+            SELECT * FROM (
+
+                (SELECT 
+                    jb_feed.feed_id AS id,
+                    NULL AS title,
+                    jb_feed.feed_text AS description,
+                    UNIX_TIMESTAMP(jb_feed.added_on) AS created_on,
+                    'feed' AS source,
+                    jb_member.m_id,
+                    jb_member.m_name
+                FROM jb_feed
+                INNER JOIN jb_member 
+                    ON jb_member.m_id = jb_feed.user_id
+                WHERE 1=1 $feed_filter
+                ORDER BY jb_feed.added_on DESC
+                LIMIT 500)
+
+                UNION ALL
+
+                (SELECT 
+                    jb_jobs.j_id AS id,
+                    jb_jobs.j_title AS title,
+                    jb_jobs.j_descr AS description,
+                    jb_jobs.j_add_date AS created_on,
+                    'job' AS source,
+                    NULL AS m_id,
+                    NULL AS m_name
+                FROM jb_jobs
+                WHERE 1=1 $job_filter
+                ORDER BY jb_jobs.j_add_date DESC
+                LIMIT 500)
+
+            ) AS combined
+
+            ORDER BY created_on DESC
+            LIMIT $start, $limit
+        ";
+        // LIMIT $start, $limit
+
+        return $this->db->query($sql)->result();
+    }
+
+    // Fetch limited records
+    public function getLatestFeeds($limit = 12, $offset = 0)
+    {
+        $this->db->select('
+        f.feed_id,
+        f.user_id,
+        f.feed_text,
+        f.feed_image,
+        f.feed_video,
+        f.feed_link,
+        f.feed_views,
+        f.added_on,
+
+        u.m_id,
+        u.m_name,
+        u.m_avatar,
+        u.m_profession,
+
+        (SELECT COUNT(*) 
+         FROM jb_feed_likes fl 
+         WHERE fl.feed_id = f.feed_id
+        ) AS like_count,
+
+        (SELECT COUNT(*) 
+         FROM jb_feed_comments fc 
+         WHERE fc.feed_id = f.feed_id
+        ) AS comment_count
+    ');
+
+        $this->db->from('jb_feed f');
+        $this->db->join('jb_member u', 'u.m_id = f.user_id', 'left');
+
+        $this->db->where('f.del_status', 1);
+        $this->db->where('f.approval_status', 1);
+
+        $this->db->order_by('f.added_on', 'DESC');
+        $this->db->limit($limit, $offset);
+
+        return $this->db->get()->result();
     }
 }
 ?>
