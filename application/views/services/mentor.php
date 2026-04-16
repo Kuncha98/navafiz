@@ -66,6 +66,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label required-label">Email</label>
                         <input type="email" id="email" name="email" class="form-control required-field">
+                        <small id="email-feedback" class="text-danger"></small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="linkedIn" class="form-label required-label">LinkedIn Profile
@@ -269,3 +270,90 @@
 
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#email').on('blur', function () {
+            var email = $(this).val().trim();
+            if (email != '') {
+                $.ajax({
+                    url: '<?php echo base_url("mentor_requests/check_email_exists"); ?>',
+                    type: 'POST',
+                    data: { email: email },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.exists) {
+                            $('#email-feedback').text(response.message);
+                            $('#email').addClass('is-invalid');
+                        } else {
+                            $('#email-feedback').text('');
+                            $('#email').removeClass('is-invalid');
+                        }
+                    },
+                    error: function () {
+                        $('#email-feedback').text('Error checking email.');
+                    }
+                });
+            } else {
+                $('#email-feedback').text('');
+                $('#email').removeClass('is-invalid');
+            }
+        });
+
+        // Load JSON files
+        $.getJSON('../navassets/json/dial-codes.json', function (data) {
+            $.each(data, function (index, country) {
+                $('#country_code').append(
+                    $('<option></option>')
+                        .val(country.dial_code)
+                        .text(country.dial_code + ' (' + country.name + ')')
+                );
+            });
+        });
+
+        $.getJSON('../navassets/json/nationalities.json', function (data) {
+            $.each(data, function (index, country) {
+                $.each(data, function (index, nationalities) {
+                    $('#nationality').append(
+                        $('<option></option>')
+                            .val(nationalities.nationality)
+                            .text(nationalities.nationality)
+                    );
+                });
+            });
+        });
+
+        // Optional: validation
+        function validateMobile() {
+            var country = $('#country_code option:selected').val();
+            var mobile = $('#mobile').val().trim();
+            var regex = /^\d+$/;
+
+            if (!country) {
+                $('#mobile-feedback').text('Please select a country');
+                $('#mobile').addClass('is-invalid');
+                return false;
+            }
+
+            if (!regex.test(mobile)) {
+                $('#mobile-feedback').text('Mobile number should contain only digits');
+                $('#mobile').addClass('is-invalid');
+                return false;
+            }
+
+            $('#mobile-feedback').text('');
+            $('#mobile').removeClass('is-invalid');
+            return true;
+        }
+
+        $('#mobile, #country_code').on('blur change', validateMobile);
+
+        $('form').on('submit', function (e) {
+            if (!validateMobile()) {
+                e.preventDefault();
+                alert('Please fix your mobile number before submitting.');
+            }
+        });
+    });
+</script>
