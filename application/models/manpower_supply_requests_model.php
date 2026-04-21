@@ -88,4 +88,15 @@ class manpower_supply_requests_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->update($this->table, ['status' => $status]);
     }
+
+    // Get single record by email
+    public function get_by_email($email)
+    {
+        return $this->db
+            ->where('email', $email)
+            // ->where('status', 2) // only approved
+            ->limit(1)
+            ->get($this->table)
+            ->row();
+    }
 }

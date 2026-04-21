@@ -145,7 +145,7 @@
 
         <div class="accordion" id="servicesAccordion">
             <?php $grouped_services = is_array($grouped_services) ? $grouped_services : [];
-            ksort($grouped_services);
+            // ksort($grouped_services);
             $i = 0; ?>
             <?php foreach ($grouped_services as $category_id => $category): ?>
                 <?php $i++; ?>
@@ -261,7 +261,8 @@
             <!-- HEADER -->
             <div class="modal-header border-0">
                 <div>
-                    <h5 class="modal-title fw-semibold mb-1" id="premiumJobModalLabel">Premium Access Required</h5>
+                    <h5 class="modal-title fw-semibold mb-1" id="premiumJobModalLabel">Go Premium. Get Hired Faster.
+                    </h5>
                     <span class="status-badge bg-warning text-dark">Restricted</span>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -269,10 +270,14 @@
 
             <!-- BODY -->
             <div class="modal-body pt-2">
-                <p>You need to be a premium member to browse jobs filtered according to your profile. You’ll also be
-                    assigned a personal mentor to guide you and help you land a job faster.</p>
+                <p>
+                    Premium members enjoy: </br>
+                    <span class="ms-3">✔ Personalized job recommendations</br></span>
+                    <span class="ms-3">✔ A dedicated mentor for career support</br></span>
+                    <span class="ms-3">✔ Faster access to the right opportunities</br></span>
+                </p>
                 <p><span class="pe-2">
-                        Contact us on WhatsApp for assistance:
+                        Have questions? Chat with us on WhatsApp:
                     </span>
                     <a href="https://wa.me/971554465332" target="_blank">
                         <i class="fab fa-whatsapp me-1"></i>

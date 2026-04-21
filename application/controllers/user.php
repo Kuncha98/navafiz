@@ -14,6 +14,8 @@ class user extends CI_Controller
         $this->load->model('Job_Model');
         $this->load->model('feed_model');
         $this->table_name = TABLE_PREFIX . 'jobs';
+        $this->load->model('manpower_supply_requests_model');
+
     }
 
     function index()
@@ -333,6 +335,30 @@ class user extends CI_Controller
 
         // Update last login date
         $this->profile_model->Save(['last_login_date' => datenow()], $user->m_id);
+
+        // Check if user is manpower company (role_id = 10)
+        if ($user->role_id == 10) {
+
+            $company = $this->manpower_supply_requests_model->get_by_email($email);
+
+            if (!empty($company)) {
+
+                $last_page = $this->session->userdata('last_page');
+                $this->session->set_userdata('last_page', '');
+
+                if (!empty($last_page)) {
+                    redirect($last_page);
+                } else {
+                    redirect(base_url('company/' . $company->id));
+                }
+                return;
+
+            } else {
+                // No company found → fallback to profile
+                redirect(base_url('profile/' . intval($user->m_id)));
+                return;
+            }
+        }
 
         // Redirect logic: last page or profile
         $last_page = $this->session->userdata('last_page');

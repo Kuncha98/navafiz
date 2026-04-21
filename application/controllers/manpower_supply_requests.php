@@ -340,6 +340,10 @@ class manpower_supply_requests extends CI_Controller
         // Fetch current status and job seeker details
         $request = $this->manpower_supply_requests_model->get_by_id($id);
 
+        // echo '<pre>';
+        // var_dump($request->id);
+        // exit;
+
         if (!$request) {
             echo json_encode(['success' => false, 'message' => 'Request not found']);
             return;
@@ -364,7 +368,7 @@ class manpower_supply_requests extends CI_Controller
             if (isset($result['status']) && $result['status'] === 'exists') {
                 echo json_encode([
                     'success' => false,
-                    'message' => "You're already registered with the provided email. Navafiz profile is " . $result['navafiz_profile_link']
+                    'message' => "You're already registered with the provided email. Navafiz profile is " . $result['navafiz_company_profile_link']
                 ]);
                 return;
             }
@@ -379,7 +383,7 @@ class manpower_supply_requests extends CI_Controller
 
             $password = $result['password'];
             $email_failed = $result['email_failed'];
-            $navafiz_profile_link = $result['navafiz_profile_link'];
+            $navafiz_company_profile_link = $result['navafiz_company_profile_link'];
 
             // Update status
             $updated = $this->manpower_supply_requests_model->update_status($id, $status);
@@ -404,7 +408,7 @@ class manpower_supply_requests extends CI_Controller
                     'phone' => $request->whatsapp_number,
                     'status_text' => "Profile approved & member account created",
                     'password' => $password,
-                    'profile_link' => $navafiz_profile_link,
+                    'profile_link' => $navafiz_company_profile_link,
                     'company_name' => $request->company_name,
                 ]
             ]);
@@ -454,7 +458,7 @@ class manpower_supply_requests extends CI_Controller
             'm_name' => $request->contact_person_name,
             'm_email' => $request->email,
             'm_password' => $password, // Hash the password before saving
-            'role_id' => 9, // User role ID for manpower suppliers
+            'role_id' => 10, // User role ID for manpower suppliers
             'added_on' => datenow(),
             'm_status' => 1, // Activate immediately
             'm_avatar' => '',
@@ -491,7 +495,7 @@ class manpower_supply_requests extends CI_Controller
                 return [
                     'password' => $password,
                     'email_failed' => !$email_status, // true if failed
-                    'navafiz_profile_link' => base_url('n/' . $slug)
+                    'navafiz_company_profile_link' => base_url('company/' . $request->id)
                 ];
 
             } else {
@@ -502,11 +506,30 @@ class manpower_supply_requests extends CI_Controller
             _setError("You're already registered with the provided email. Please login or use forgot password.");
             $existing_user = $find_user[0];
 
+            // echo '<pre>';
+            // var_dump($existing_user->m_name);
+            // exit;
+
+            // --- Generate unique profile link ---
+            $base_slug = $this->generate_slug($existing_user->m_name);
+            $slug = $base_slug;
+            $counter = 1;
+
+            // Check uniqueness against BOTH username and navafiz_profile_link
+            while ($this->profile_model->Search([], ['username' => $slug, 'navafiz_profile_link' => $slug])) {
+                $slug = $base_slug . '-' . $counter;
+                $counter++;
+            }
+
+            // Save profile link and username
+            $this->profile_model->Save([
+                'username' => $slug, // optional: username same as slug
+                'navafiz_profile_link' => $slug
+            ], $existing_user->m_id);
+
             return [
                 'status' => 'exists',
-                'navafiz_profile_link' => !empty($existing_user->navafiz_profile_link)
-                    ? base_url('n/' . $existing_user->navafiz_profile_link)
-                    : ''
+                'navafiz_company_profile_link' => base_url('company/' . $request->id)
             ];
         }
 
@@ -630,5 +653,26 @@ class manpower_supply_requests extends CI_Controller
             _setSuccess("Registration email sent successfully to $email.");
             return true;
         }
+    }
+
+    public function company_profile($id)
+    {
+        if (empty($id)) {
+            redirect(base_url());
+        }
+
+        $company = $this->manpower_supply_requests_model->get_by_id($id);
+
+        // Validate company
+        if (empty($company)) {
+            _setError('Company not found or not approved.');
+            redirect(base_url());
+            return;
+        }
+
+        $data['company'] = $company;
+
+        // Load view
+        $this->load->view('companies/company-profile', $data);
     }
 }

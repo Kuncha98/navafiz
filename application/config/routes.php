@@ -25,15 +25,15 @@ $route['services/become-a-mentor/submit'] = "mentor_requests/submit";
 $route['services/manpower-job-quota'] = "home/manpower_job_quota";
 $route['services/manpower-job-quota/submit'] = "manpower_job_quota/submit";
 
-// Mentor view of job seeker request forms
+// Job seekers view of job seeker request forms
 $route['form-requests/job-seeker-request-list'] = 'job_seeker_requests/all_requests/0';
 $route['form-requests/job-seeker-request-list/(:num)'] = 'job_seeker_requests/all_requests/$1';
 $route['form-requests/job-seeker-request-view/(:num)'] = 'job_seeker_requests/job_seeker_request_view/$1';
-// Mentor view of job request forms
+// Jobs view of job request forms
 $route['form-requests/job-request-list'] = 'job_requests/all_requests/0';
 $route['form-requests/job-request-list/(:num)'] = 'job_requests/all_requests/$1';
 $route['form-requests/job-request-view/(:num)'] = 'job_requests/job_request_view/$1';
-// Mentor view of freelancer request forms
+// Freelancer view of freelancer request forms
 $route['form-requests/freelancer-request-list'] = 'freelancer_requests/all_requests/0';
 $route['form-requests/freelancer-request-list/(:num)'] = 'freelancer_requests/all_requests/$1';
 $route['form-requests/freelancer-request-view/(:num)'] = 'freelancer_requests/freelancer_request_view/$1';
@@ -41,10 +41,11 @@ $route['form-requests/freelancer-request-view/(:num)'] = 'freelancer_requests/fr
 $route['form-requests/mentor-request-list'] = 'mentor_requests/all_requests/0';
 $route['form-requests/mentor-request-list/(:num)'] = 'mentor_requests/all_requests/$1';
 $route['form-requests/mentor-request-view/(:num)'] = 'mentor_requests/mentor_request_view/$1';
-// Mentor view of manpower supply forms
+// Manpower supplier view of manpower supply forms
 $route['form-requests/manpower-supply-request-list'] = 'manpower_supply_requests/all_requests/0';
 $route['form-requests/manpower-supply-request-list/(:num)'] = 'manpower_supply_requests/all_requests/$1';
 $route['form-requests/manpower-supply-request-view/(:num)'] = 'manpower_supply_requests/manpower_supply_request_view/$1';
+$route['company/(:num)'] = 'manpower_supply_requests/company_profile/$1';
 // Supplier view of quota forms
 $route['form-requests/manpower-supply-quota-list'] = 'manpower_job_quota/all_requests/0';
 $route['form-requests/manpower-supply-quota-list/(:num)'] = 'manpower_job_quota/all_requests/$1';

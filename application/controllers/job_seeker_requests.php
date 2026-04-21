@@ -433,11 +433,26 @@ class job_seeker_requests extends CI_Controller
 
             $existing_user = $find_user[0];
 
+            // --- Generate unique profile link ---
+            $base_slug = $this->generate_slug($existing_user->m_name);
+            $slug = $base_slug;
+            $counter = 1;
+
+            // Check uniqueness against BOTH username and navafiz_profile_link
+            while ($this->profile_model->Search([], ['username' => $slug, 'navafiz_profile_link' => $slug])) {
+                $slug = $base_slug . '-' . $counter;
+                $counter++;
+            }
+
+            // Save profile link and username
+            $this->profile_model->Save([
+                'username' => $slug, // optional: username same as slug
+                'navafiz_profile_link' => $slug
+            ], $existing_user->m_id);
+
             return [
                 'status' => 'exists',
-                'navafiz_profile_link' => !empty($existing_user->navafiz_profile_link)
-                    ? base_url('n/' . $existing_user->navafiz_profile_link)
-                    : ''
+                'navafiz_profile_link' => base_url('n/' . $slug)
             ];
         }
 

@@ -42,6 +42,9 @@ if (!$avatar) {
         <!-- Desktop Menu -->
         <div class="collapse navbar-collapse justify-content-between d-none d-lg-flex" id="navbarNav">
             <ul class="navbar-nav align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="<?= site_url('premium-services') ?>">
+                        <i class="fas fa-shopping-bag"></i>Premium Services</a></li>
+
                 <li class="nav-item"><a class="nav-link" href="<?= site_url('feed'); ?>"><i
                             class="fas fa-home"></i>Feed</a></li>
                 <li class="nav-item dropdown">

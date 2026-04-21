@@ -358,11 +358,26 @@ class mentor_requests extends CI_Controller
 
             $existing_user = $find_user[0];
 
+            // --- Generate unique profile link ---
+            $base_slug = $this->generate_slug($existing_user->m_name);
+            $slug = $base_slug;
+            $counter = 1;
+
+            // Check uniqueness against BOTH username and navafiz_profile_link
+            while ($this->profile_model->Search([], ['username' => $slug, 'navafiz_profile_link' => $slug])) {
+                $slug = $base_slug . '-' . $counter;
+                $counter++;
+            }
+
+            // Save profile link and username
+            $this->profile_model->Save([
+                'username' => $slug, // optional: username same as slug
+                'navafiz_profile_link' => $slug
+            ], $existing_user->m_id);
+
             return [
                 'status' => 'exists',
-                'navafiz_profile_link' => !empty($existing_user->navafiz_profile_link)
-                    ? base_url('n/' . $existing_user->navafiz_profile_link)
-                    : ''
+                'navafiz_profile_link' => base_url('n/' . $slug)
             ];
         }
 
@@ -424,16 +439,16 @@ class mentor_requests extends CI_Controller
         $this->email->subject($subject);
         $this->email->message($messageText);
 
-        return false;
+        // return false;
         // Send the email and log success or failure
-        // if (!$this->email->send()) {
-        //     log_message('error', 'Email sending failed to ' . $email);
-        //     _setError("There was a problem sending the registration email.");
-        //     return false;
-        // } else {
-        //     log_message('info', 'Registration email sent to ' . $email);
-        //     _setSuccess("Registration email sent successfully to $email.");
-        //     return true;
-        // }
+        if (!$this->email->send()) {
+            log_message('error', 'Email sending failed to ' . $email);
+            _setError("There was a problem sending the registration email.");
+            return false;
+        } else {
+            log_message('info', 'Registration email sent to ' . $email);
+            _setSuccess("Registration email sent successfully to $email.");
+            return true;
+        }
     }
 }

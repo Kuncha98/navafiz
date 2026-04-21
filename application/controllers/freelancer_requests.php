@@ -340,7 +340,7 @@ class freelancer_requests extends CI_Controller
             'm_name' => $request->name,
             'm_email' => $request->email,
             'm_password' => $password, // Hash the password before saving
-            'role_id' => 4, // User role ID for job seekers
+            'role_id' => 11, // User role ID for job seekers
             'added_on' => datenow(),
             'm_status' => 1, // Activate immediately
             'm_avatar' => '',
@@ -391,11 +391,26 @@ class freelancer_requests extends CI_Controller
 
             $existing_user = $find_user[0];
 
+            // --- Generate unique profile link ---
+            $base_slug = $this->generate_slug($existing_user->m_name);
+            $slug = $base_slug;
+            $counter = 1;
+
+            // Check uniqueness against BOTH username and navafiz_profile_link
+            while ($this->profile_model->Search([], ['username' => $slug, 'navafiz_profile_link' => $slug])) {
+                $slug = $base_slug . '-' . $counter;
+                $counter++;
+            }
+
+            // Save profile link and username
+            $this->profile_model->Save([
+                'username' => $slug, // optional: username same as slug
+                'navafiz_profile_link' => $slug
+            ], $existing_user->m_id);
+
             return [
                 'status' => 'exists',
-                'navafiz_profile_link' => !empty($existing_user->navafiz_profile_link)
-                    ? base_url('n/' . $existing_user->navafiz_profile_link)
-                    : ''
+                'navafiz_profile_link' => base_url('n/' . $slug)
             ];
         }
 

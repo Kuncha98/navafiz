@@ -84,8 +84,8 @@
 
                     <!-- Footer -->
                     <div class="card-footer bg-white border-0 p-0 pt-2">
-                        <a href="#" class="btn btn-primary w-100">
-                            Collabrate on Hiring
+                        <a href="javascript:void(0)" class="btn btn-primary w-100 view-job-btn" data-id="<?= $q->id ?>">
+                            View
                         </a>
                     </div>
 
@@ -105,3 +105,131 @@
         </div>
     <?php endif; ?>
 </div>
+
+
+<div class="modal fade" id="jobViewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modern-modal border-0 shadow-lg">
+
+            <!-- HEADER -->
+            <div class="modal-header border-0">
+                <div>
+                    <h5 class="modal-title fw-semibold mb-1" id="job_title"></h5>
+                    <span id="job_status" class="status-badge"></span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body pt-2">
+
+                <div class="info-group">
+
+                    <div class="info-item">
+                        <span class="label">Salary</span>
+                        <span id="job_salary" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Workers Required</span>
+                        <span id="job_workers" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Duty Hours</span>
+                        <span id="job_duty" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Interview</span>
+                        <span id="job_interview" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">GCC Experience</span>
+                        <span id="job_gcc" class="value"></span>
+                    </div>
+
+                </div>
+
+                <!-- Benefits -->
+                <div class="mt-3" id="job_benefits"></div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('click', '.view-job-btn', function () {
+
+        let id = $(this).data('id');
+
+        $('#jobViewModal').modal('show');
+
+        // Reset
+        $('#job_title, #job_salary, #job_workers, #job_duty, #job_interview, #job_gcc').text('Loading...');
+        $('#job_benefits').html('');
+
+        $.ajax({
+            url: "<?= base_url('manpower_job_quota/job_quota_view/') ?>" + id,
+            type: "GET",
+            dataType: "json",
+            success: function (res) {
+
+                if (res.status) {
+
+                    let d = res.data;
+
+                    $('#job_title').text(d.job_title);
+                    $('#job_salary').text(d.total_salary + ' AED');
+                    $('#job_workers').text(d.workers_required);
+                    $('#job_duty').text(d.duty_hours + ' hrs');
+                    $('#job_interview').text(d.interview_type.replaceAll('_', ' '));
+                    $('#job_gcc').text(d.gcc_experience.replaceAll('_', ' '));
+
+                    // Status
+                    if (d.status == 1) {
+                        $('#job_status').text('Open').css({
+                            background: 'rgba(25,135,84,0.1)',
+                            color: '#198754'
+                        });
+                    } else {
+                        $('#job_status').text('Closed').css({
+                            background: 'rgba(108,117,125,0.1)',
+                            color: '#6c757d'
+                        });
+                    }
+
+                    // Benefits badges
+                    let benefits = '';
+
+                    if (d.accommodation == 1)
+                        benefits += `<span class="badge bg-light text-dark border me-1">🏠 Accommodation</span>`;
+
+                    if (d.transport == 1)
+                        benefits += `<span class="badge bg-light text-dark border me-1">🚐 Transport</span>`;
+
+                    if (d.food == 1)
+                        benefits += `<span class="badge bg-light text-dark border me-1">🍽 Food</span>`;
+
+                    if (d.overtime == 1)
+                        benefits += `<span class="badge bg-light text-dark border me-1">⏱ OT</span>`;
+
+                    if (d.joining_flight_ticket == 1)
+                        benefits += `<span class="badge bg-light text-dark border me-1">✈ Ticket</span>`;
+
+                    $('#job_benefits').html(benefits);
+
+                } else {
+                    $('#job_title').text('No data found');
+                }
+            },
+            error: function () {
+                alert('Something went wrong');
+            }
+        });
+    });
+</script>

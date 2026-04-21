@@ -68,7 +68,7 @@ class manpower_job_quota extends CI_Controller
     // Fetch all the form requests
     public function all_requests($page = 0)
     {
-        require_role(array(9));
+        require_role(array(10, 2));
 
         $config = init_pagination(
             'form-requests/manpower-supply-quota-request-list',
@@ -90,24 +90,25 @@ class manpower_job_quota extends CI_Controller
     }
 
     // Fetch single record using IDs
-    public function job_request_view($id = NULL)
+    public function job_quota_view($id = NULL)
     {
-        require_role(array(2)); // 2 = Mentor
+        require_role(array(10, 2));
 
-        if ($id == NULL || !is_numeric($id)) {
-            show_404();
+        if (!$id || !is_numeric($id)) {
+            echo json_encode(['status' => false]);
+            return;
         }
 
         $record = $this->manpower_job_quota_model->get_by_id($id);
 
         if (!$record) {
-            show_404();
+            echo json_encode(['status' => false]);
+            return;
         }
 
-        $data["record"] = $record;
-
-        $data['title'] = 'NAVAFIZ Home';
-        $data['content'] = 'form_requests/job_request_view'; // content view
-        $this->load->view('layouts/system/main_layout', $data);
+        echo json_encode([
+            'status' => true,
+            'data' => $record
+        ]);
     }
 }

@@ -57,7 +57,16 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="mobile" class="form-label required-label">Mobile Number (WhatsApp)</label>
-                        <input type="text" id="mobile" name="mobile" class="form-control required-field">
+                        <div class="d-flex">
+                            <select id="country_code" name="country_code"
+                                class="form-control required-field w-25 rounded-end-0">
+                                <option value="">Select Country</option>
+                            </select>
+                            <input type="number" id="mobile" name="mobile"
+                                class="form-control required-field rounded-start-0 border-start-0"
+                                placeholder="Enter number without country code">
+                        </div>
+                        <small id="mobile-feedback" class="text-danger"></small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label required-label">Email</label>

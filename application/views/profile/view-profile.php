@@ -978,161 +978,6 @@ if (!empty($isFeaturedProfile)) {
             }
             ?>
 
-            <!-- Candidate Card -->
-            <?php if ($role_id == 2 || $role_id == 8) { ?>
-                <div class="card border-0 shadow-sm profile">
-                    <div class="card-body p-4" style="background: #ecf1f5; border-radius: 16px;">
-
-                        <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="fw-semibold text-primary-custom mb-0">Candidate Details</h6>
-
-                            <?php if ($profile_id == $session_user_id) { ?>
-                                <a href="<?= site_url('edit-profile'); ?>" class="icon-btn-sm">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            <?php } ?>
-                        </div>
-
-                        <div class="profile-info">
-
-                            <div class="info-row"><i class="fas fa-city"></i>
-                                <div class="text-left">
-                                    <span>City of Job Preference</span>
-                                    <strong><?= display_or_na($profile->m_job_preference); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-passport"></i>
-                                <div class="text-left">
-                                    <span>Visa Type</span>
-                                    <strong><?= display_or_na($profile->visa_status); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-calendar-alt"></i>
-                                <div class="text-left">
-                                    <span>Visa Valid Till</span>
-                                    <strong><?= display_or_na($profile->m_valid_till); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-briefcase"></i>
-                                <div class="text-left">
-                                    <span>Current Designation</span>
-                                    <strong><?= display_or_na($profile->m_current_design); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-building"></i>
-                                <div class="text-left">
-                                    <span>Current Employer</span>
-                                    <strong><?= display_or_na($profile->m_employer); ?></strong>
-                                </div>
-                            </div>
-
-                            <?php if ($role_id == 2) { ?>
-                                <div class="info-row"><i class="fas fa-dollar-sign"></i>
-                                    <div class="text-left">
-                                        <span>Current Salary</span>
-                                        <strong><?= display_or_na($profile->m_current_salary); ?></strong>
-                                    </div>
-                                </div>
-                            <?php } ?>
-
-                            <div class="info-row"><i class="fas fa-user-tie"></i>
-                                <div class="text-left">
-                                    <span>Desired Designation</span>
-                                    <strong><?= display_or_na($profile->m_desired_design); ?></strong>
-                                </div>
-                            </div>
-
-                            <?php if ($role_id == 2) { ?>
-                                <div class="info-row"><i class="fas fa-hand-holding-usd"></i>
-                                    <div class="text-left">
-                                        <span>Desired Salary</span>
-                                        <strong><?= display_or_na($profile->m_expected_salary); ?></strong>
-                                    </div>
-                                </div>
-                            <?php } ?>
-
-                            <div class="info-row"><i class="fas fa-layer-group"></i>
-                                <div class="text-left">
-                                    <span>Field Background</span>
-                                    <strong><?= display_or_na($profile->m_f_background); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-link"></i>
-                                <div class="text-left">
-                                    <span>Navafiz Profile</span>
-                                    <strong>
-                                        <?php if (!empty($profile->navafiz_profile_link)) { ?>
-                                            <a href="<?= $profile->navafiz_profile_link ?>" target="_blank"
-                                                class="link-primary-custom">View Profile</a>
-                                        <?php } else {
-                                            echo 'N/A';
-                                        } ?>
-                                    </strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fab fa-linkedin"></i>
-                                <div class="text-left">
-                                    <span>LinkedIn Profile</span>
-                                    <strong>
-                                        <?php if (!empty($profile->linkedin_profile_link)) { ?>
-                                            <a href="<?= $profile->linkedin_profile_link ?>" target="_blank"
-                                                class="link-primary-custom">View Profile</a>
-                                        <?php } else {
-                                            echo 'N/A';
-                                        } ?>
-                                    </strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-flag"></i>
-                                <div class="text-left">
-                                    <span>Nationality</span>
-                                    <strong><?= display_or_na($profile->m_nationality); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-map-marker-alt"></i>
-                                <div class="text-left">
-                                    <span>Current Location</span>
-                                    <strong><?= display_or_na($profile->m_current_city); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-hourglass-half"></i>
-                                <div class="text-left">
-                                    <span>UAE Experience</span>
-                                    <strong><?= display_or_na($profile->uae_experience); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-clock"></i>
-                                <div class="text-left">
-                                    <span>Notice Period</span>
-                                    <strong><?= display_or_na($profile->m_notice_period); ?></strong>
-                                </div>
-                            </div>
-
-                            <div class="info-row"><i class="fas fa-sticky-note"></i>
-                                <div class="text-left">
-                                    <span>Additional Remarks</span>
-                                    <strong class="d-block mt-1">
-                                        <?= !empty($profile->m_add_remarks) ? nl2br($profile->m_add_remarks) : 'N/A'; ?>
-                                    </strong>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-
             <!-- Skills Card -->
             <div class="card border-0 shadow-sm profile">
                 <div class="card-body p-4">
@@ -1307,31 +1152,6 @@ if (!empty($isFeaturedProfile)) {
                 </div>
             </div>
 
-            <!-- Matching Titles Card -->
-            <!-- <div class="card border-0 shadow-sm profile mb-3">
-                <div class="card-body p-4">
-
-                    <h6 class="fw-semibold text-primary-custom text-left mb-3">Other Matching Titles / Positions</h6>
-
-                    <div class="profile-list">
-                        <?php
-                        $professions = array_filter([$profile->profession1, $profile->profession2, $profile->profession3, $profile->profession4, $profile->profession5]);
-                        foreach ($professions as $index => $profession) { ?>
-                            <div class="list-item">
-                                <i class="fas fa-angle-right"></i>
-                                <span><?= $profession ?></span>
-                            </div>
-                            <?php if ($index < count($professions) - 1)
-                                echo '<hr class="my-2">'; ?>
-                        <?php } ?>
-                        <?php if (empty($professions)) { ?>
-                            <span class="text-muted small text-left">No other natching titles / positions</span>
-                        <?php } ?>
-                    </div>
-
-                </div>
-            </div> -->
-
             <!-- Industry Titles Card -->
             <div class="card border-0 shadow-sm profile mb-3">
                 <div class="card-body p-4">
@@ -1501,31 +1321,6 @@ if (!empty($isFeaturedProfile)) {
                                 Congrats Resume Approved by Navafiz Team.
                             </div>
                         <?php } ?>
-
-                        <!-- <?php if (!empty($pending_points)): ?>
-                            <div class="alert alert-success" role="alert">
-
-                                You have <strong><?= $pending_points ?></strong> reward points waiting to be claimed
-
-                                <a href="<?= site_url('feed/claim_all_rewards') ?>" class="btn btn-primary mb-3"
-                                    onclick="return confirm('Claim all rewards?');">
-                                    Claim All
-                                </a>
-
-                                <?php foreach ($rewards as $reward): ?>
-                                    <div class="reward-item">
-
-                                        <?php if ($reward->action_type == 'daily_login'): ?>
-                                            <small>You received +10 points for daily login</small>
-                                        <?php elseif ($reward->action_type == 'post_approved'): ?>
-                                            <small>You received +10 points for post approval</small>
-                                        <?php endif; ?>
-
-                                        <hr>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?> -->
                     </div>
                 </div>
             <?php } ?>
@@ -2092,6 +1887,13 @@ if (!empty($isFeaturedProfile)) {
                         <h6 class="mb-0 fw-semibold text-primary-custom text-left">
                             <i class="fas fa-briefcase me-2"></i>Posts & Jobs Matching Titles / Positions
                         </h6>
+
+                        <?php if ($profile_id == $session_user_id) { ?>
+                            <a href="<?= site_url('profile/#matchingTitles'); ?>" class="icon-btn-sm"
+                                title="Manage Matching Titles">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        <?php } ?>
                     </div>
 
                     <div class="d-flex flex-wrap gap-2 mb-3">
@@ -2185,10 +1987,25 @@ if (!empty($isFeaturedProfile)) {
 
                     <?php } ?>
 
+                    <!-- Contact Info -->
+                    <div class="info-card mt-5">
+                        <div class="info-title mb-2 text-left">
+                            <!-- <i class="fas fa-address-book me-2"></i> -->
+                            Members can support each other by sharing job opportunities and earning rewards, and
+                            real income.
+                            For more details, contact us on WhatsApp: +971 55 4465332
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a href="<?= site_url('feed') ?>" class="btn btn-outline-primary">
+                                Help
+                                <?= $profile->m_name ?> to find matching jobs
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!-- End of the center section -->
 
         <div class="col-md-3">
@@ -2247,8 +2064,7 @@ if (!empty($isFeaturedProfile)) {
 
                     <?php endif; ?>
 
-                    <?php if ($role_id == 9): ?>
-                        <!-- Special Action -->
+                    <!-- <?php if ($role_id == 10 || $role_id == 2): ?>
                         <a href="<?= site_url('form-requests/manpower-supply-quota-list'); ?>"
                             class="action-item highlight">
                             <div>
@@ -2256,7 +2072,7 @@ if (!empty($isFeaturedProfile)) {
                                 Manpower Supply Job Quota
                             </div>
                         </a>
-                    <?php endif; ?>
+                    <?php endif; ?> -->
 
                 </div>
             </div>
@@ -2319,6 +2135,34 @@ if (!empty($isFeaturedProfile)) {
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-user-clock text-primary-custom me-2"></i>
                                 Freelancer Requests
+                                <i class="fas fa-chevron-right ms-auto text-muted"></i>
+                            </a>
+
+                            <hr class="my-2">
+
+                            <!-- <a href="<?= site_url('form-requests/freelancer-request-list'); ?>"
+                                class="list-item justify-content-start text-decoration-none fw-semibold">
+                                <i class="fas fa-user-clock text-primary-custom me-2"></i>
+                                Manpower Jobs
+                                <i class="fas fa-chevron-right ms-auto text-muted"></i>
+                            </a> 
+                            
+                            <hr class="my-2">
+                            -->
+
+                            <a href="<?= site_url('feed/pending'); ?>"
+                                class="list-item justify-content-start text-decoration-none fw-semibold">
+                                <i class="fas fa-clipboard text-primary-custom me-2"></i>
+                                Pending Feed Posts
+                                <i class="fas fa-chevron-right ms-auto text-muted"></i>
+                            </a>
+
+                            <hr class="my-2">
+
+                            <a href="<?= site_url('orders'); ?>"
+                                class="list-item justify-content-start text-decoration-none fw-semibold">
+                                <i class="fas fa-shopping-cart text-primary-custom me-2"></i>
+                                Premium Service Order
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2776,7 +2620,8 @@ if (!empty($isFeaturedProfile)) {
                         <!-- Contact Info -->
                         <div class="info-card mb-4">
                             <div class="info-title mb-2">
-                                <i class="fas fa-address-book me-2"></i>Contact Information
+                                <!-- <i class="fas fa-address-book me-2"></i> -->
+                                Contact Information
                             </div>
 
                             <div class="info-row">
@@ -3112,6 +2957,221 @@ if (!empty($isFeaturedProfile)) {
             <?php endif; ?>
             <!-- End Related Professionals -->
 
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <!-- Candidate Card -->
+            <?php if ($role_id == 2 || $role_id == 8) { ?>
+                <div class="card border-0 shadow-sm profile">
+                    <div class="card-body p-4" style="background: #ecf1f5; border-radius: 16px;">
+
+                        <!-- Header -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-semibold text-primary-custom mb-0">Candidate Details</h6>
+
+                            <?php if ($profile_id == $session_user_id) { ?>
+                                <a href="<?= site_url('edit-profile'); ?>" class="icon-btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            <?php } ?>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-city"></i>
+                                    <div class="text-left">
+                                        <span>City of Job Preference</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_job_preference); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-passport"></i>
+                                    <div class="text-left">
+                                        <span>Visa Type</span>
+                                        <strong>
+                                            <?= display_or_na($profile->visa_status); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-calendar-alt"></i>
+                                    <div class="text-left">
+                                        <span>Visa Valid Till</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_valid_till); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-briefcase"></i>
+                                    <div class="text-left">
+                                        <span>Current Designation</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_current_design); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-building"></i>
+                                    <div class="text-left">
+                                        <span>Current Employer</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_employer); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <?php if ($role_id == 2) { ?>
+                                    <div class="info-row"><i class="fas fa-dollar-sign"></i>
+                                        <div class="text-left">
+                                            <span>Current Salary</span>
+                                            <strong>
+                                                <?= display_or_na($profile->m_current_salary); ?>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                            </div>
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-user-tie"></i>
+                                    <div class="text-left">
+                                        <span>Desired Designation</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_desired_design); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <?php if ($role_id == 2) { ?>
+                                    <div class="info-row"><i class="fas fa-hand-holding-usd"></i>
+                                        <div class="text-left">
+                                            <span>Desired Salary</span>
+                                            <strong>
+                                                <?= display_or_na($profile->m_expected_salary); ?>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-layer-group"></i>
+                                    <div class="text-left">
+                                        <span>Field Background</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_f_background); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-link"></i>
+                                    <div class="text-left">
+                                        <span>Navafiz Profile</span>
+                                        <strong>
+                                            <?php if (!empty($profile->navafiz_profile_link)) { ?>
+                                                <a href="<?= $profile->navafiz_profile_link ?>" target="_blank"
+                                                    class="link-primary-custom">View Profile</a>
+                                            <?php } else {
+                                                echo 'N/A';
+                                            } ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fab fa-linkedin"></i>
+                                    <div class="text-left">
+                                        <span>LinkedIn Profile</span>
+                                        <strong>
+                                            <?php if (!empty($profile->linkedin_profile_link)) { ?>
+                                                <a href="<?= $profile->linkedin_profile_link ?>" target="_blank"
+                                                    class="link-primary-custom">View Profile</a>
+                                            <?php } else {
+                                                echo 'N/A';
+                                            } ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-flag"></i>
+                                    <div class="text-left">
+                                        <span>Nationality</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_nationality); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-map-marker-alt"></i>
+                                    <div class="text-left">
+                                        <span>Current Location</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_current_city); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-hourglass-half"></i>
+                                    <div class="text-left">
+                                        <span>UAE Experience</span>
+                                        <strong>
+                                            <?= display_or_na($profile->uae_experience); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-clock"></i>
+                                    <div class="text-left">
+                                        <span>Notice Period</span>
+                                        <strong>
+                                            <?= display_or_na($profile->m_notice_period); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3">
+                                <div class="info-row"><i class="fas fa-sticky-note"></i>
+                                    <div class="text-left">
+                                        <span>Additional Remarks</span>
+                                        <strong class="d-block mt-1">
+                                            <?= !empty($profile->m_add_remarks) ? nl2br($profile->m_add_remarks) : 'N/A'; ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
