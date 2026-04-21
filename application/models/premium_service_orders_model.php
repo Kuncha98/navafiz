@@ -3,11 +3,18 @@
 
 class premium_service_orders_model extends CI_Model
 {
-    private $table = 'jb_premium_services';
+    private $table = 'jb_premium_service_orders';
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    // Get status pending count
+    public function get_status_pending_count()
+    {
+        $this->db->where('status', 'pending');
+        return $this->db->count_all_results($this->table);
     }
 
     // Get total count (for pagination)

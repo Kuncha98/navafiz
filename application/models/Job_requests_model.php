@@ -24,6 +24,13 @@ class job_requests_model extends CI_Model
         return $this->db->count_all($this->table);
     }
 
+    // Get status pending count
+    public function get_status_pending_count()
+    {
+        $this->db->where('status', 1);
+        return $this->db->count_all_results($this->table);
+    }
+
     // Get paginated records (DESC by id)
     public function get_all($limit, $start)
     {

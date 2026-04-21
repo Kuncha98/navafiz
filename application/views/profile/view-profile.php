@@ -289,7 +289,7 @@ if ($query->num_rows() > 0) {
 
     .list-item span {
         font-size: 14px;
-        color: #212529;
+        /* color: #212529; */
     }
 
 
@@ -1001,11 +1001,11 @@ if (!empty($isFeaturedProfile)) {
 
                         if (!empty($str_arr)) {
                             foreach ($str_arr as $skill) {
-                                ?>
+                        ?>
                                 <span class="skill-pill">
                                     <?= trim($skill) ?>
                                 </span>
-                                <?php
+                            <?php
                             }
                         } else {
                             ?>
@@ -1036,7 +1036,7 @@ if (!empty($isFeaturedProfile)) {
                                         </strong>
                                     </div>
                                 </div>
-                            <?php }
+                        <?php }
                         } ?>
 
                         <div class="info-row">
@@ -1244,7 +1244,7 @@ if (!empty($isFeaturedProfile)) {
                                             $options[] = $opt_val;
                                         }
                                     }
-                                    ?>
+                                ?>
                                     <li class="mb-3">
 
                                         <!-- Question Title -->
@@ -1256,7 +1256,7 @@ if (!empty($isFeaturedProfile)) {
                                         <div class="d-flex flex-wrap gap-3 options-list">
                                             <?php foreach ($options as $index => $opt_val):
                                                 $opt_id = "q{$getquestion->id}_opt{$index}";
-                                                ?>
+                                            ?>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="q[<?= $getquestion->id ?>]"
                                                         id="<?= $opt_id ?>" value="<?= htmlspecialchars($opt_val) ?>">
@@ -1297,21 +1297,21 @@ if (!empty($isFeaturedProfile)) {
                                 if ($get_review_status->assign_user_to == 0) {
                                     echo '' . "CV uploaded & Waiting for Mentor assignment."; ?>
                                     <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
-                                    <?php
+                                <?php
                                 } else if ($get_review_status->assign_user_to > 0 && $get_review_status->admin_comments == '') {
                                     echo '' . "CV uploaded & Waiting Mentor Response. <b>" . (GetUserDetails($get_review_status->assign_user_to)->m_name) . "</b>"; ?>
                                     <?php if (in_array(intval($session_user_id), $cvreviews_list)) { ?>
-                                            <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
+                                        <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
                                     <?php } ?>
 
                                 <?php } else if ($get_review_status->assign_user_to > 0 && $get_review_status->admin_comments <> '' && $get_review_status->review_status <> 'review_done') {
                                     echo '' . "Commented by Mentor."; ?>
-                                            <br>
+                                    <br>
                                     <?php if (in_array(intval($session_user_id), $cvreviews_list)) { ?>
-                                                <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
+                                        <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
                                     <?php } ?>
-                                            <br>
-                                            <a href="<?= site_url('mycvreport'); ?>" target="_blank">Check Your Own Report.</a>
+                                    <br>
+                                    <a href="<?= site_url('mycvreport'); ?>" target="_blank">Check Your Own Report.</a>
                                 <?php } ?>
                             </div>
                         <?php } ?>
@@ -1395,7 +1395,7 @@ if (!empty($isFeaturedProfile)) {
                 }
 
                 if ($video_id) {
-                    ?>
+            ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card profile">
@@ -1406,7 +1406,7 @@ if (!empty($isFeaturedProfile)) {
                             </div>
                         </div>
                     </div>
-                    <?php
+            <?php
                 } else {
                     echo "Invalid YouTube link.";
                 }
@@ -1492,12 +1492,12 @@ if (!empty($isFeaturedProfile)) {
 
                     <?php if (!empty($profile->member_cv)): ?>
                         <div class="upload-box" onclick="<?php
-                        if (in_array($role_id, [1, 2, 8]) || $profile_id == $session_user_id) {
-                            echo "window.open('" . base_url('public-assets/cvreviews/' . $profile->member_cv) . "', '_blank')";
-                        } else {
-                            echo "window.location='" . site_url('premium-services?show_modal=1') . "'";
-                        }
-                        ?>">
+                                                            if (in_array($role_id, [1, 2, 8]) || $profile_id == $session_user_id) {
+                                                                echo "window.open('" . base_url('public-assets/cvreviews/' . $profile->member_cv) . "', '_blank')";
+                                                            } else {
+                                                                echo "window.location='" . site_url('premium-services?show_modal=1') . "'";
+                                                            }
+                                                            ?>">
                             <div class="upload-ui">
                                 <div class="upload-initial">
                                     <i class="fas fa-file-pdf text-danger"></i>
@@ -1831,8 +1831,8 @@ if (!empty($isFeaturedProfile)) {
                                         <div>
                                             <span class="text-muted small">Description:</span><br>
                                             <strong><?= !empty($certificate->c_description)
-                                                ? htmlspecialchars($certificate->c_description)
-                                                : '<span class="text-muted">---</span>'; ?></strong>
+                                                        ? htmlspecialchars($certificate->c_description)
+                                                        : '<span class="text-muted">---</span>'; ?></strong>
                                         </div>
 
                                     </div>
@@ -1907,6 +1907,23 @@ if (!empty($isFeaturedProfile)) {
                     </div>
 
                     <?php if (!empty($feed_list)) { ?>
+
+                        <!-- Contact Info -->
+                        <div class="info-card my-4">
+                            <div class="info-title mb-2 text-left">
+                                <!-- <i class="fas fa-address-book me-2"></i> -->
+                                Members can support each other by sharing job opportunities and earning rewards, and
+                                real income.
+                                For more details, contact us on WhatsApp: +971 55 4465332
+                            </div>
+
+                            <div class="text-center mt-3">
+                                <a href="<?= site_url('feed') ?>" class="btn btn-outline-primary">
+                                    Help
+                                    <?= $profile->m_name ?> to find matching jobs
+                                </a>
+                            </div>
+                        </div>
 
                         <div id="feed-container" class="feed-list">
 
@@ -1987,22 +2004,7 @@ if (!empty($isFeaturedProfile)) {
 
                     <?php } ?>
 
-                    <!-- Contact Info -->
-                    <div class="info-card mt-5">
-                        <div class="info-title mb-2 text-left">
-                            <!-- <i class="fas fa-address-book me-2"></i> -->
-                            Members can support each other by sharing job opportunities and earning rewards, and
-                            real income.
-                            For more details, contact us on WhatsApp: +971 55 4465332
-                        </div>
 
-                        <div class="text-center mt-3">
-                            <a href="<?= site_url('feed') ?>" class="btn btn-outline-primary">
-                                Help
-                                <?= $profile->m_name ?> to find matching jobs
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -2098,7 +2100,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('form-requests/job-request-list'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-briefcase text-primary-custom me-2"></i>
-                                Job Requests
+                                <span>
+                                    Job Requests
+                                    <span class="text-warning ms-2">(
+                                        <?= $job_requests_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2107,7 +2115,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('form-requests/job-seeker-request-list'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-user-tie text-primary-custom me-2"></i>
-                                Job Seeker Requests
+                                <span>
+                                    Job Seeker Requests
+                                    <span class="text-warning ms-2">(
+                                        <?= $job_seeker_requests_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2116,7 +2130,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('form-requests/manpower-supply-request-list'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-users-cog text-primary-custom me-2"></i>
-                                Manpower Supply Company Registrations
+                                <span>
+                                    Manpower Supply Company Registrations
+                                    <span class="text-warning ms-2">(
+                                        <?= $manpower_supplier_requests_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2125,7 +2145,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('form-requests/mentor-request-list'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-chalkboard-teacher text-primary-custom me-2"></i>
-                                Mentor Requests
+                                <span>
+                                    Mentor Requests
+                                    <span class="text-warning ms-2">(
+                                        <?= $mentor_requests_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2134,7 +2160,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('form-requests/freelancer-request-list'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-user-clock text-primary-custom me-2"></i>
-                                Freelancer Requests
+                                <span>
+                                    Freelancer Requests
+                                    <span class="text-warning ms-2">(
+                                        <?= $freelancer_requests_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2153,7 +2185,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('feed/pending'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-clipboard text-primary-custom me-2"></i>
-                                Pending Feed Posts
+                                <span>
+                                    Pending Feed Posts
+                                    <span class="text-warning ms-2">(
+                                        <?= $feed_posts_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2162,7 +2200,13 @@ if (!empty($isFeaturedProfile)) {
                             <a href="<?= site_url('orders'); ?>"
                                 class="list-item justify-content-start text-decoration-none fw-semibold">
                                 <i class="fas fa-shopping-cart text-primary-custom me-2"></i>
-                                Premium Service Order
+                                <span>
+                                    Premium Service Order
+                                    <span class="text-warning ms-2">(
+                                        <?= $service_orders_pending_count ?>
+                                        )
+                                    </span>
+                                </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
@@ -2391,7 +2435,7 @@ if (!empty($isFeaturedProfile)) {
                             Related Members
                             <?php foreach ($user_list_id as $user_list):
                                 $user_list_name = GetUserListName($user_list->list_id);
-                                ?>
+                            ?>
                                 <span class="text-muted small">(<?= @$user_list_name[0]->name ?>)</span>
                             <?php endforeach; ?>
                         </h6>
@@ -2533,7 +2577,7 @@ if (!empty($isFeaturedProfile)) {
             $allowed_mentors = [10, 56672, 63519];
 
             if (in_array(intval($session_user_id), $allowed_mentors)) {
-                ?>
+            ?>
                 <div class="card border-0 shadow-sm profile mb-3">
                     <div class="card-body p-4 text-start">
 
@@ -2732,7 +2776,7 @@ if (!empty($isFeaturedProfile)) {
                             <?php foreach ($recruitment_answers as $index => $answer): ?>
                                 <?php if (!empty($answer->question_id)):
                                     $ans = GetQuestion($answer->question_id);
-                                    ?>
+                                ?>
 
                                     <li class="mb-3">
 
@@ -3192,7 +3236,7 @@ if (!empty($isFeaturedProfile)) {
 <?php $this->load->view('include/footer'); ?>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         // Check URL for show_modal query parameter
         const urlParams = new URLSearchParams(window.location.search);
         const showModal = urlParams.get('show_modal');
@@ -3206,14 +3250,14 @@ if (!empty($isFeaturedProfile)) {
 </script>
 
 <script>
-    $(function () {
+    $(function() {
         // VIDEO PLAY MODAL
-        $(".video").click(function () {
+        $(".video").click(function() {
             var theModal = $(this).data("target"),
                 videoSRC = $(this).attr("data-video"),
                 videoSRCauto = videoSRC + "?modelbranding=1&rel=0&controls=0&showinfo=0&html5=1&autoplay=1";
             $(theModal + ' iframe').attr('src', videoSRCauto);
-            $(theModal + ' button.close').click(function () {
+            $(theModal + ' button.close').click(function() {
                 $(theModal + ' iframe').attr('src', videoSRC);
             })
         })
@@ -3258,24 +3302,24 @@ if (!empty($isFeaturedProfile)) {
     // });
 
     // Referral link copy message
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         var btn = document.getElementById("referralLink");
 
         if (!btn) return;
 
-        btn.addEventListener("click", function () {
+        btn.addEventListener("click", function() {
             var text = this.getAttribute("data-link");
 
-            navigator.clipboard.writeText(text).then(function () {
+            navigator.clipboard.writeText(text).then(function() {
 
                 var copyMessage = document.getElementById("copyMessage");
                 copyMessage.style.display = "block";
 
-                setTimeout(function () {
+                setTimeout(function() {
                     copyMessage.style.display = "none";
                 }, 2000);
 
-            }).catch(function () {
+            }).catch(function() {
                 alert("Copy failed. Please copy manually.");
             });
         });
@@ -3305,8 +3349,8 @@ if (!empty($isFeaturedProfile)) {
 
 <!-- Show more/ show less in career summary -->
 <script>
-    $(document).ready(function () {
-        $('#togglePoints').click(function () {
+    $(document).ready(function() {
+        $('#togglePoints').click(function() {
             var morePoints = $('.more-points');
             if (morePoints.is(':visible')) {
                 // Hide extra points
@@ -3323,8 +3367,8 @@ if (!empty($isFeaturedProfile)) {
 
 <!-- Show more/ show less in work experience details -->
 <script>
-    $(document).ready(function () {
-        $('.toggle-desc').click(function () {
+    $(document).ready(function() {
+        $('.toggle-desc').click(function() {
             var container = $(this).closest('.description-container');
             var moreLines = container.find('.more-lines');
 
@@ -3360,8 +3404,8 @@ if (!empty($isFeaturedProfile)) {
 
 <!-- Show more/ show less in profile recommedation -->
 <script>
-    $(document).ready(function () {
-        $('.toggle-rec').click(function () {
+    $(document).ready(function() {
+        $('.toggle-rec').click(function() {
             var listContainer = $(this).closest('.recommendation-list');
             var hiddenItems = listContainer.find('.more-rec');
 
@@ -3405,7 +3449,7 @@ if (!empty($isFeaturedProfile)) {
 </script>
 
 <script>
-    document.addEventListener("click", function (e) {
+    document.addEventListener("click", function(e) {
 
         if (e.target.classList.contains("see-more")) {
 
@@ -3431,7 +3475,7 @@ if (!empty($isFeaturedProfile)) {
 <script>
     let offset = 20;
 
-    $('#loadMoreBtn').on('click', function () {
+    $('#loadMoreBtn').on('click', function() {
 
         let btn = $(this);
         btn.text('Loading...');
@@ -3444,7 +3488,7 @@ if (!empty($isFeaturedProfile)) {
                 user_id: "<?= $profile_id ?>"
             },
             dataType: "json",
-            success: function (res) {
+            success: function(res) {
 
                 let html = res.html || '';
 
@@ -3583,7 +3627,7 @@ if (!empty($isFeaturedProfile)) {
 </div>
 
 <script>
-    $(document).on('click', '.job-detail-link', function () {
+    $(document).on('click', '.job-detail-link', function() {
 
         let id = $(this).data('id');
 
@@ -3592,9 +3636,11 @@ if (!empty($isFeaturedProfile)) {
         $.ajax({
             url: "<?= site_url('profile/getJobDetails') ?>",
             type: "POST",
-            data: { j_id: id },
+            data: {
+                j_id: id
+            },
             dataType: "json",
-            success: function (res) {
+            success: function(res) {
 
                 $('#job_title_text').text(res.j_title);
                 $('#job_company').text(res.j_company);

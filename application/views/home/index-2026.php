@@ -10,6 +10,8 @@
                 U.A.E.
             </p>
             <a href="#services" class="btn btn-start">Get Started</a>
+            <a href="<?= site_url('professionals') ?>" class="btn btn-start ms-sm-3 mt-3 mt-sm-0">Find Professionals</a>
+            <a href="<?= site_url('feed'); ?>" class="btn btn-start ms-sm-3 mt-3 mt-sm-0">Find Jobs</a>
         </div>
     </div>
 </section>

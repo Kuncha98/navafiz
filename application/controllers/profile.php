@@ -28,6 +28,12 @@ class Profile extends CI_Controller
         $this->load->model('users_by_list_model');
         $this->load->model('user_list_model');
         $this->load->model('feed_model');
+        $this->load->model('job_requests_model');
+        $this->load->model('job_seeker_requests_model');
+        $this->load->model('manpower_supply_requests_model');
+        $this->load->model('mentor_requests_model');
+        $this->load->model('freelancer_requests_model');
+        $this->load->model('premium_service_orders_model');
 
         $d = $this->front_model->getSettings();
         foreach ($d as $c) {
@@ -402,6 +408,14 @@ class Profile extends CI_Controller
         // echo "<pre>";
         // print_r($data['reward_points']);
         // exit;
+
+        $data['job_requests_pending_count'] = $this->job_requests_model->get_status_pending_count();
+        $data['job_seeker_requests_pending_count'] = $this->job_seeker_requests_model->get_status_pending_count();
+        $data['manpower_supplier_requests_pending_count'] = $this->manpower_supply_requests_model->get_status_pending_count();
+        $data['mentor_requests_pending_count'] = $this->mentor_requests_model->get_status_pending_count();
+        $data['freelancer_requests_pending_count'] = $this->freelancer_requests_model->get_status_pending_count();
+        $data['feed_posts_pending_count'] = $this->feed_model->count_pending_feeds();
+        $data['service_orders_pending_count'] = $this->premium_service_orders_model->get_status_pending_count();
 
         $data['user_list_id'] = $user_list_id;
         $data['user_list'] = $user_list;
