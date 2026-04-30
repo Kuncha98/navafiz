@@ -106,6 +106,8 @@ ini_set('display_errors', 0);
 
     <script src="<?= base_url('navassets/js/common.js') ?>" defer></script>
     <script src="<?= base_url('navassets/js/website.js') ?>" defer></script>
+    <script src="<?= base_url('navassets/js/master-form.js') ?>" defer></script>
+
     <!-- End new styles from navassets 2026 -->
 
     <?php $user_id = $this->session->userdata('user_id') == '' ? 0 : $this->session->userdata('user_id'); ?>

@@ -17,6 +17,7 @@ class Companies extends MY_Controller
         $this->load->model('company_model');
         $this->load->model('companies_model');
         $this->load->model('employment_history_model');
+        $this->load->model('manpower_job_quota_model');
         $this->session_user_id = $this->session->userdata('user_id');
     }
 
@@ -324,6 +325,105 @@ class Companies extends MY_Controller
         $companies_list = $this->companies_model->GetByAjax($keyword);
         $data['companies_list'] = $companies_list;
         $this->load->view('profile/company-list', $data);
+    }
+
+
+    public function resume_upload()
+    {
+        $company_id = $this->input->post('company_id', TRUE);
+        // $logged_company_id = $this->session->userdata('user_id');
+
+        // if (!$company_id || $company_id != $logged_company_id) {
+        //     echo json_encode(['status' => 'error', 'message' => 'Unauthorized access.']);
+        //     return;
+        // }
+
+
+        // Validation
+        $this->form_validation->set_rules('name', 'Name', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('whatsapp', 'WhatsApp Number', 'required');
+        $this->form_validation->set_rules('cv', 'CV', 'callback_file_check_cv');
+
+        if ($this->form_validation->run() === FALSE) {
+            $errors = validation_errors();
+            echo json_encode(['status' => 'error', 'message' => $errors]);
+            return;
+        }
+
+        // Upload CV
+        $cv_upload_data = $this->_upload_file('cv', 'cv_', 'pdf', 'navassets/uploads/cv/', $company_id);
+
+        if (!$cv_upload_data) {
+            echo json_encode(['status' => 'error', 'message' => 'CV upload failed.']);
+            return;
+        }
+
+        $data = [
+            'company_id' => $company_id,
+            'name' => $this->input->post('name', TRUE),
+            'email' => $this->input->post('email', TRUE),
+            'whatsapp' => $this->input->post('whatsapp', TRUE),
+            'cv' => $cv_upload_data['file_name'],
+        ];
+
+        if ($this->manpower_job_quota_model->insert_resume($data)) {
+            echo json_encode(['status' => 'success', 'message' => 'Your resume has been uploaded successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Something went wrong. Please try again.']);
+        }
+    }
+
+    // File validation callback
+    public function file_check_cv()
+    {
+        if (empty($_FILES['cv']['name'])) {
+            $this->form_validation->set_message('file_check_cv', 'CV is required.');
+            return false;
+        }
+        return true;
+    }
+
+    // File upload helper (reuse from your system)
+    private function _upload_file($field_name, $prefix, $allowed_types, $upload_path, $company_id = null)
+    {
+        if (empty($_FILES[$field_name]['name']))
+            return null;
+
+        $ext = pathinfo($_FILES[$field_name]['name'], PATHINFO_EXTENSION);
+        if (is_array($allowed_types)) {
+            if (!in_array(strtolower($ext), $allowed_types)) {
+                $this->session->set_flashdata('error', ucfirst($field_name) . ' must be ' . implode(', ', $allowed_types) . ' file.');
+                redirect('/#resume');
+                exit;
+            }
+        } else {
+            if (strtolower($ext) !== $allowed_types) {
+                $this->session->set_flashdata('error', ucfirst($field_name) . ' must be a ' . $allowed_types . ' file.');
+                redirect('/#resume');
+                exit;
+            }
+        }
+
+        $filename = $prefix . $company_id . '_' . time() . '_' . bin2hex(random_bytes(5)) . '.' . $ext;
+
+        $config = [
+            'upload_path' => $upload_path,
+            'allowed_types' => is_array($allowed_types) ? implode('|', $allowed_types) : $allowed_types,
+            'file_name' => $filename,
+            'overwrite' => FALSE,
+            'max_size' => 5120
+        ];
+
+        $this->upload->initialize($config);
+        if (!$this->upload->do_upload($field_name)) {
+            $error_msg = $this->upload->display_errors('', '');
+            $this->session->set_flashdata('error', ucfirst($field_name) . ' upload failed: ' . $error_msg);
+            redirect('/#resume');
+            exit;
+        }
+
+        return $this->upload->data();
     }
 
 

@@ -217,7 +217,16 @@ const FormCore = (() => {
         }
     });
 
+    function resetForm() {
+        currentStep = 0;
+        showStep(currentStep);
+    }
+
     showStep(currentStep);
+
+    return {
+        reset: resetForm
+    };
 
 })();
 

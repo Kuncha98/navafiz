@@ -452,7 +452,7 @@
                 }
 
                 can_fields('Education', $record->education);
-                can_fields('Experience (Years)', $record->experince);
+                can_fields('Experience (Years)', $record->experience);
                 can_fields('Key Skills Needed', $skills_html, true);
                 can_fields('Language Requirement', $language_html, true);
                 ?>

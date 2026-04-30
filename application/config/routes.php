@@ -49,7 +49,7 @@ $route['company/(:num)'] = 'manpower_supply_requests/company_profile/$1';
 // Supplier view of quota forms
 $route['form-requests/manpower-supply-quota-list'] = 'manpower_job_quota/all_requests/0';
 $route['form-requests/manpower-supply-quota-list/(:num)'] = 'manpower_job_quota/all_requests/$1';
-$route['form-requests/manpower-supply-quota-view/(:num)'] = 'manpower_job_quota/manpower_supply_request_view/$1';
+$route['form-requests/manpower-supply-quota-view/(:num)'] = 'manpower_job_quota/job_quota_view/$1';
 
 // Feed posts pending, approval & reject
 $route['feed/pending'] = 'feed/pending_feed_posts';

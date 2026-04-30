@@ -27,6 +27,7 @@ class job_requests extends CI_Controller
         $this->form_validation->set_rules('category', 'Category', 'required');
         $this->form_validation->set_rules('employment_type', 'Employment Type', 'required');
         $this->form_validation->set_rules('joining_date', 'Expected Joining Date', 'required');
+        $this->form_validation->set_rules('experience', 'Experience', 'required|integer');
         $this->form_validation->set_rules('salary_min', 'Minimum Salary', 'required|integer');
         $this->form_validation->set_rules('salary_max', 'Maximum Salary', 'required|integer');
         $this->form_validation->set_rules('interview_type', 'Interview Type', 'required');

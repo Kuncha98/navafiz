@@ -602,7 +602,10 @@
                                             <?php } ?>
 
                                             <div>
-                                                <div class="fw-semibold"><?= htmlspecialchars($name) ?></div>
+                                                <div class="fw-semibold"><a href="<?= base_url('n/' . $user->m_id); ?>"
+                                                        class="text-decoration-none text-black">
+                                                        <?= htmlspecialchars($name) ?>
+                                                    </a></div>
                                                 <small class="text-muted">
                                                     <?= htmlspecialchars($user->m_profession ?? '') ?>
                                                 </small>

@@ -84,7 +84,8 @@
 
                     <!-- Footer -->
                     <div class="card-footer bg-white border-0 p-0 pt-2">
-                        <a href="javascript:void(0)" class="btn btn-primary w-100 view-job-btn" data-id="<?= $q->id ?>">
+                        <a href="<?php echo site_url('form-requests/manpower-supply-quota-view/' . $q->id); ?>"
+                            class="btn btn-primary w-100">
                             View
                         </a>
                     </div>
@@ -174,7 +175,7 @@
         $('#job_benefits').html('');
 
         $.ajax({
-            url: "<?= base_url('manpower_job_quota/job_quota_view/') ?>" + id,
+            url: "<?= base_url('manpower_job_quota/job_quota_view') ?>/" + id,
             type: "GET",
             dataType: "json",
             success: function (res) {

@@ -12,6 +12,7 @@ class premium_services_checkout extends CI_Controller
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
         $this->load->model('premium_services_model');
+        $this->load->model('premium_service_orders_model');
     }
 
     public function index()
@@ -141,14 +142,29 @@ class premium_services_checkout extends CI_Controller
             $total += ($item['price'] * $item['qty']);
         }
 
+        $user_id = $this->session->userdata('user_id');
+        $pricing = $this->premium_service_orders_model->get_member_discount($user_id, $total);
+
         // Insert order
+        // $order = [
+        //     'customer_name' => $this->input->post('name'),
+        //     'customer_email' => $this->input->post('email'),
+        //     'customer_phone' => $this->input->post('phone'),
+        //     'total_amount' => $total,
+        //     'created_at' => date('Y-m-d H:i:s')
+        // ];
         $order = [
+            'user_id' => $user_id ? $user_id : NULL,
             'customer_name' => $this->input->post('name'),
             'customer_email' => $this->input->post('email'),
             'customer_phone' => $this->input->post('phone'),
             'total_amount' => $total,
+            'discount_percent' => number_format($pricing['percent'], 2, '.', ''),
+            'discount_amount' => number_format($pricing['amount'], 2, '.', ''),
+            'final_amount' => number_format($pricing['final'], 2, '.', ''),
             'created_at' => date('Y-m-d H:i:s')
         ];
+
         $this->db->insert('jb_premium_service_orders', $order);
         $order_id = $this->db->insert_id();
 

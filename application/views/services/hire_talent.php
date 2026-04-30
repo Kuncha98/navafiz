@@ -4,7 +4,7 @@
         <!-- Page header -->
         <div class="mb-4">
             <p class="section-subtitle">Submit your recruitment requirements to connect with qualified candidates</p>
-            <h2 class="section-title">Hire Talent Request Form</h2>
+            <h2 class="section-title">Tell Us Your Hiring Requirements</h2>
         </div>
 
         <!-- Form card -->
@@ -119,8 +119,8 @@
                         <input type="text" id="education" name="education" class="form-control">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="experience" class="form-label">Experience (Years)</label>
-                        <input type="number" id="experience" name="experience" class="form-control">
+                        <label for="experience" class="form-label required-label">Experience (Years)</label>
+                        <input type="number" id="experience" name="experience" class="form-control required-field">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="skills" class="form-label">Key Skills Needed</label>

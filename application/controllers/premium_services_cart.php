@@ -12,11 +12,32 @@ class premium_services_cart extends CI_Controller
         $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
 
         $this->load->model('premium_services_model');
+        $this->load->model('premium_service_orders_model');
     }
+
+    // public function index()
+    // {
+    //     $data['cart'] = $this->session->userdata('cart');
+
+    //     $data['content'] = 'premium_services/cart';
+    //     $this->load->view('layouts/website/website_layout', $data);
+    // }
 
     public function index()
     {
         $data['cart'] = $this->session->userdata('cart');
+
+        $total = 0;
+
+        if (!empty($data['cart'])) {
+            foreach ($data['cart'] as $item) {
+                $total += $item['price'] * $item['qty'];
+            }
+        }
+
+        $user_id = $this->session->userdata('user_id');
+
+        $data['pricing'] = $this->premium_service_orders_model->get_member_discount($user_id, $total);
 
         $data['content'] = 'premium_services/cart';
         $this->load->view('layouts/website/website_layout', $data);

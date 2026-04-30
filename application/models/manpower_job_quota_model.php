@@ -38,6 +38,38 @@ class manpower_job_quota_model extends CI_Model
         return $query->row();
     }
 
+    // Get next record by ID
+    public function get_next($id)
+    {
+        // Next = older record (smaller id)
+        return $this->db
+            ->where('id <', $id)
+            ->order_by('id', 'DESC')
+            ->limit(1)
+            ->get($this->table)
+            ->row();
+    }
+
+    // Get prev record by ID
+    public function get_prev($id)
+    {
+        // Previous = newer record (bigger id)
+        return $this->db
+            ->where('id >', $id)
+            ->order_by('id', 'ASC')
+            ->limit(1)
+            ->get($this->table)
+            ->row();
+    }
+
+    // Get current record position by ID
+    public function get_position($id)
+    {
+        return $this->db
+            ->where('id >=', $id)
+            ->count_all_results($this->table);
+    }
+
     // Update request status
     public function update_status($id, $status)
     {
@@ -49,5 +81,17 @@ class manpower_job_quota_model extends CI_Model
 
         $this->db->where('id', $id);
         return $this->db->update($this->table, ['status' => $status]);
+    }
+
+    // Upload resume by company
+    public function insert_resume($data)
+    {
+        return $this->db->insert('jb_company_candidates', $data);
+    }
+
+    // Optional for later admin listing
+    public function get_all_resumes()
+    {
+        return $this->db->order_by('created_at', 'DESC')->get($this->table)->result();
     }
 }

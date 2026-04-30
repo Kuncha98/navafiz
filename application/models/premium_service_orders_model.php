@@ -58,4 +58,80 @@ class premium_service_orders_model extends CI_Model
                 'status' => $status
             ]);
     }
+
+    public function get_member_discount($user_id, $total)
+    {
+        $discount = 0;
+
+
+
+        if (!$user_id) {
+            return [
+                'percent' => 0,
+                'amount' => 0,
+                'final' => $total
+            ];
+        }
+
+        // Get member
+        $member = $this->db
+            ->where('m_id', $user_id)
+            ->get('jb_member')
+            ->row();
+
+        if (!$member) {
+            return [
+                'percent' => 0,
+                'amount' => 0,
+                'final' => $total
+            ];
+        }
+
+        /**
+         * -----------------------------
+         * 10% First Referred Purchase
+         * -----------------------------
+         */
+
+        $this->db->where('user_id', $user_id);
+        $this->db->where_in('status', ['paid', 'completed']);
+        $count = $this->db->count_all_results('jb_premium_service_orders');
+
+
+
+        if ($count == 0 && !empty($member->referral_id)) {
+            $discount = 10;
+        }
+
+
+
+        /**
+         * -----------------------------
+         * 20% Referrer Reward
+         * -----------------------------
+         */
+
+        $sql = "
+        SELECT COUNT(DISTINCT m.m_id) as total
+        FROM jb_member m
+        JOIN jb_premium_service_orders o ON o.user_id = m.m_id
+        WHERE m.referral_id = ?
+        AND o.status IN ('paid','completed')
+    ";
+
+        $row = $this->db->query($sql, [$user_id])->row();
+
+        if ($row && $row->total >= 2) {
+            $discount = max($discount, 20);
+        }
+
+        $discount_amount = ($total * $discount) / 100;
+        $final = $total - $discount_amount;
+
+        return [
+            'percent' => $discount,
+            'amount' => $discount_amount,
+            'final' => $final
+        ];
+    }
 }

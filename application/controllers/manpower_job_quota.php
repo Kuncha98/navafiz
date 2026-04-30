@@ -26,43 +26,56 @@ class manpower_job_quota extends CI_Controller
         $this->form_validation->set_rules('gcc_experience', 'GCC Experience', 'required');
 
         if ($this->form_validation->run() == FALSE) {
-            // Validation failed
-            $this->session->set_flashdata('error', validation_errors());
-            redirect('services/manpower-job-quota');
+            echo json_encode([
+                'success' => false,
+                'message' => validation_errors()
+            ]);
             return;
-        } else {
-
-            // Prepare data
-            $data = array(
-                'job_title' => $this->input->post('job_title', TRUE),
-                'workers_required' => $this->input->post('workers_required', TRUE),
-                'duty_hours' => $this->input->post('duty_hours', TRUE),
-                'basic_salary' => $this->input->post('basic_salary', TRUE),
-                'total_salary' => $this->input->post('total_salary', TRUE),
-                'accommodation' => $this->input->post(index: 'accommodation') ? 1 : 0,
-                'transport' => $this->input->post('transport') ? 1 : 0,
-                'food' => $this->input->post('food') ? 1 : 0,
-                'overtime' => $this->input->post('overtime') ? 1 : 0,
-                'joining_flight_ticket' => $this->input->post('joining_flight_ticket') ? 1 : 0,
-                'other_benefits' => $this->input->post('other_benefits', TRUE),
-                'interview_type' => $this->input->post('interview_type', TRUE),
-                'gcc_experience' => $this->input->post('gcc_experience', TRUE),
-                'additional_notes' => $this->input->post('additional_notes', TRUE)
-            );
-
-            // Insert into DB
-            if (!$this->db->insert('jb_manpower_job_quotas', $data)) {
-                $db_error = $this->db->_error_message();
-                log_message('error', 'Job quota insert failed: ' . $db_error);
-                $this->session->set_flashdata('error', 'Something went wrong while saving your data. Please try again.');
-                redirect('services/manpower-job-quota');
-                return;
-            }
-
-            // Success message
-            $this->session->set_flashdata('success', 'Your job quota has been submitted successfully.');
-            redirect('services/manpower-job-quota');
         }
+
+        // Prepare data
+        $data = array(
+            'job_title' => $this->input->post('job_title', TRUE),
+            'workers_required' => $this->input->post('workers_required', TRUE),
+            'duty_hours' => $this->input->post('duty_hours', TRUE),
+            'basic_salary' => $this->input->post('basic_salary', TRUE),
+            'total_salary' => $this->input->post('total_salary', TRUE),
+            'accommodation' => $this->input->post(index: 'accommodation') ? 1 : 0,
+            'transport' => $this->input->post('transport') ? 1 : 0,
+            'food' => $this->input->post('food') ? 1 : 0,
+            'overtime' => $this->input->post('overtime') ? 1 : 0,
+            'joining_flight_ticket' => $this->input->post('joining_flight_ticket') ? 1 : 0,
+            'other_benefits' => $this->input->post('other_benefits', TRUE),
+            'interview_type' => $this->input->post('interview_type', TRUE),
+            'gcc_experience' => $this->input->post('gcc_experience', TRUE),
+            'additional_notes' => $this->input->post('additional_notes', TRUE)
+        );
+
+        // Insert into DB
+        if (!$this->db->insert('jb_manpower_job_quotas', $data)) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again.'
+            ]);
+            return;
+        }
+
+        // Get inserted ID
+        $insert_id = $this->db->insert_id();
+
+        // Build view link
+        $view_link = base_url('form-requests/manpower-supply-quota-view/' . $insert_id);
+
+        // Success message
+        echo json_encode([
+            'success' => true,
+            'message' => 'Your job quota has been submitted successfully.',
+            'data' => [
+                'id' => $insert_id,
+                'view_link' => $view_link
+            ]
+        ]);
+
     }
 
     // Fetch all the form requests
@@ -94,21 +107,36 @@ class manpower_job_quota extends CI_Controller
     {
         require_role(array(10, 2));
 
-        if (!$id || !is_numeric($id)) {
-            echo json_encode(['status' => false]);
-            return;
+        if ($id == NULL || !is_numeric($id)) {
+            show_404();
         }
 
         $record = $this->manpower_job_quota_model->get_by_id($id);
 
         if (!$record) {
-            echo json_encode(['status' => false]);
-            return;
+            show_404();
         }
 
-        echo json_encode([
-            'status' => true,
-            'data' => $record
-        ]);
+        // Get next & prev
+        $next = $this->manpower_job_quota_model->get_next($id);
+        $prev = $this->manpower_job_quota_model->get_prev($id);
+
+        // Total records
+        $total = $this->manpower_job_quota_model->get_total_count();
+
+        // Current position
+        $current_position = $this->manpower_job_quota_model->get_position($id);
+
+        $data['next_id'] = $next ? $next->id : null;
+        $data['prev_id'] = $prev ? $prev->id : null;
+
+        $data['total_records'] = $total;
+        $data['current_position'] = $current_position;
+
+        $data["record"] = $record;
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'form_requests/manpower_supply_quota_view'; // content view
+        $this->load->view('layouts/system/main_layout', $data);
     }
 }

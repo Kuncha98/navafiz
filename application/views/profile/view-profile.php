@@ -971,6 +971,64 @@ if (!empty($isFeaturedProfile)) {
                 </div>
             </div>
 
+            <div class="d-block d-sm-none">
+                <?php if (!empty($pending_points) && $profile_id == $session_user_id): ?>
+                    <div class="alert alert-success" role="alert">
+
+                        <p>
+                            You have <strong><?= $pending_points ?></strong> reward points waiting to be claimed
+                        </p>
+
+                        <!-- Hidden by default -->
+                        <div id="rewardDetails" style="display:none;">
+                            <?php foreach ($rewards as $reward): ?>
+                                <ul class="reward-item">
+                                    <li>
+                                        <?php if ($reward->action_type == 'daily_login'): ?>
+
+                                            <small>
+                                                You received +
+                                                <?= $reward->points ?> points for daily login
+                                                -
+                                                <?= date('d M Y', strtotime($reward->created_at)) ?>
+                                            </small>
+
+                                        <?php elseif ($reward->action_type == 'post_approved'): ?>
+
+                                            <?php
+                                            if (!empty($reward->feed_text)) {
+                                                $words = explode(' ', strip_tags($reward->feed_text));
+                                                $text = count($words) > 3
+                                                    ? implode(' ', array_slice($words, 0, 3)) . '...'
+                                                    : implode(' ', $words);
+                                            } else {
+                                                $text = 'Post (deleted)';
+                                            }
+                                            ?>
+
+                                            <small>
+                                                You received +<?= $reward->points ?> points for post approval -
+                                                <?= htmlspecialchars($text, ENT_QUOTES, 'UTF-8') ?>
+                                            </small>
+
+                                        <?php endif; ?>
+                                    </li>
+                                </ul>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <a href="<?= site_url('feed/claim_all_rewards') ?>" class="btn btn-primary mb-2">
+                            Claim All
+                        </a>
+
+                        <button onclick="toggleRewards()" class="btn btn-secondary mb-2">
+                            More Details
+                        </button>
+
+                    </div>
+                <?php endif; ?>
+            </div>
+
             <?php
             function display_or_na($value)
             {
@@ -1001,11 +1059,11 @@ if (!empty($isFeaturedProfile)) {
 
                         if (!empty($str_arr)) {
                             foreach ($str_arr as $skill) {
-                        ?>
+                                ?>
                                 <span class="skill-pill">
                                     <?= trim($skill) ?>
                                 </span>
-                            <?php
+                                <?php
                             }
                         } else {
                             ?>
@@ -1036,7 +1094,7 @@ if (!empty($isFeaturedProfile)) {
                                         </strong>
                                     </div>
                                 </div>
-                        <?php }
+                            <?php }
                         } ?>
 
                         <div class="info-row">
@@ -1244,7 +1302,7 @@ if (!empty($isFeaturedProfile)) {
                                             $options[] = $opt_val;
                                         }
                                     }
-                                ?>
+                                    ?>
                                     <li class="mb-3">
 
                                         <!-- Question Title -->
@@ -1256,7 +1314,7 @@ if (!empty($isFeaturedProfile)) {
                                         <div class="d-flex flex-wrap gap-3 options-list">
                                             <?php foreach ($options as $index => $opt_val):
                                                 $opt_id = "q{$getquestion->id}_opt{$index}";
-                                            ?>
+                                                ?>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="q[<?= $getquestion->id ?>]"
                                                         id="<?= $opt_id ?>" value="<?= htmlspecialchars($opt_val) ?>">
@@ -1297,21 +1355,21 @@ if (!empty($isFeaturedProfile)) {
                                 if ($get_review_status->assign_user_to == 0) {
                                     echo '' . "CV uploaded & Waiting for Mentor assignment."; ?>
                                     <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
-                                <?php
+                                    <?php
                                 } else if ($get_review_status->assign_user_to > 0 && $get_review_status->admin_comments == '') {
                                     echo '' . "CV uploaded & Waiting Mentor Response. <b>" . (GetUserDetails($get_review_status->assign_user_to)->m_name) . "</b>"; ?>
                                     <?php if (in_array(intval($session_user_id), $cvreviews_list)) { ?>
-                                        <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
+                                            <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
                                     <?php } ?>
 
                                 <?php } else if ($get_review_status->assign_user_to > 0 && $get_review_status->admin_comments <> '' && $get_review_status->review_status <> 'review_done') {
                                     echo '' . "Commented by Mentor."; ?>
-                                    <br>
+                                            <br>
                                     <?php if (in_array(intval($session_user_id), $cvreviews_list)) { ?>
-                                        <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
+                                                <a href="<?= site_url('cvreport/' . $profile->m_id); ?>" target="_blank">Check Report.</a>
                                     <?php } ?>
-                                    <br>
-                                    <a href="<?= site_url('mycvreport'); ?>" target="_blank">Check Your Own Report.</a>
+                                            <br>
+                                            <a href="<?= site_url('mycvreport'); ?>" target="_blank">Check Your Own Report.</a>
                                 <?php } ?>
                             </div>
                         <?php } ?>
@@ -1325,61 +1383,63 @@ if (!empty($isFeaturedProfile)) {
                 </div>
             <?php } ?>
 
-            <?php if (!empty($pending_points)): ?>
-                <div class="alert alert-success" role="alert">
+            <div class="d-none d-sm-block">
+                <?php if (!empty($pending_points) && $profile_id == $session_user_id): ?>
+                    <div class="alert alert-success" role="alert">
 
-                    <p>
-                        You have <strong><?= $pending_points ?></strong> reward points waiting to be claimed
-                    </p>
+                        <p>
+                            You have <strong><?= $pending_points ?></strong> reward points waiting to be claimed
+                        </p>
 
-                    <!-- Hidden by default -->
-                    <div id="rewardDetails" style="display:none;">
-                        <?php foreach ($rewards as $reward): ?>
-                            <ul class="reward-item">
-                                <li>
-                                    <?php if ($reward->action_type == 'daily_login'): ?>
+                        <!-- Hidden by default -->
+                        <div id="rewardDetails" style="display:none;">
+                            <?php foreach ($rewards as $reward): ?>
+                                <ul class="reward-item">
+                                    <li>
+                                        <?php if ($reward->action_type == 'daily_login'): ?>
 
-                                        <small>
-                                            You received +
-                                            <?= $reward->points ?> points for daily login
-                                            -
-                                            <?= date('d M Y', strtotime($reward->created_at)) ?>
-                                        </small>
+                                            <small>
+                                                You received +
+                                                <?= $reward->points ?> points for daily login
+                                                -
+                                                <?= date('d M Y', strtotime($reward->created_at)) ?>
+                                            </small>
 
-                                    <?php elseif ($reward->action_type == 'post_approved'): ?>
+                                        <?php elseif ($reward->action_type == 'post_approved'): ?>
 
-                                        <?php
-                                        if (!empty($reward->feed_text)) {
-                                            $words = explode(' ', strip_tags($reward->feed_text));
-                                            $text = count($words) > 3
-                                                ? implode(' ', array_slice($words, 0, 3)) . '...'
-                                                : implode(' ', $words);
-                                        } else {
-                                            $text = 'Post (deleted)';
-                                        }
-                                        ?>
+                                            <?php
+                                            if (!empty($reward->feed_text)) {
+                                                $words = explode(' ', strip_tags($reward->feed_text));
+                                                $text = count($words) > 3
+                                                    ? implode(' ', array_slice($words, 0, 3)) . '...'
+                                                    : implode(' ', $words);
+                                            } else {
+                                                $text = 'Post (deleted)';
+                                            }
+                                            ?>
 
-                                        <small>
-                                            You received +<?= $reward->points ?> points for post approval -
-                                            <?= htmlspecialchars($text, ENT_QUOTES, 'UTF-8') ?>
-                                        </small>
+                                            <small>
+                                                You received +<?= $reward->points ?> points for post approval -
+                                                <?= htmlspecialchars($text, ENT_QUOTES, 'UTF-8') ?>
+                                            </small>
 
-                                    <?php endif; ?>
-                                </li>
-                            </ul>
-                        <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </li>
+                                </ul>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <a href="<?= site_url('feed/claim_all_rewards') ?>" class="btn btn-primary mb-2">
+                            Claim All
+                        </a>
+
+                        <button onclick="toggleRewards()" class="btn btn-secondary mb-2">
+                            More Details
+                        </button>
+
                     </div>
-
-                    <a href="<?= site_url('feed/claim_all_rewards') ?>" class="btn btn-primary mb-2">
-                        Claim All
-                    </a>
-
-                    <button onclick="toggleRewards()" class="btn btn-secondary mb-2">
-                        More Details
-                    </button>
-
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
 
             <?php
             if (!empty($profile->video_cv)) {
@@ -1395,7 +1455,7 @@ if (!empty($isFeaturedProfile)) {
                 }
 
                 if ($video_id) {
-            ?>
+                    ?>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card profile">
@@ -1406,7 +1466,7 @@ if (!empty($isFeaturedProfile)) {
                             </div>
                         </div>
                     </div>
-            <?php
+                    <?php
                 } else {
                     echo "Invalid YouTube link.";
                 }
@@ -1441,7 +1501,7 @@ if (!empty($isFeaturedProfile)) {
                     <?php if ($total_points > 0): ?>
                         <!-- Summary Points as Numbered List -->
                         <div class="info-row">
-                            <ol class="m-0 p-0 ps-3">
+                            <ol class="w-100 m-0 p-0 ps-3">
                                 <?php foreach ($points as $index => $point): ?>
                                     <li class="<?= $index >= 3 ? 'more-points' : ''; ?>">
                                         <div class="summ_pts mb-1 text-left">
@@ -1492,12 +1552,12 @@ if (!empty($isFeaturedProfile)) {
 
                     <?php if (!empty($profile->member_cv)): ?>
                         <div class="upload-box" onclick="<?php
-                                                            if (in_array($role_id, [1, 2, 8]) || $profile_id == $session_user_id) {
-                                                                echo "window.open('" . base_url('public-assets/cvreviews/' . $profile->member_cv) . "', '_blank')";
-                                                            } else {
-                                                                echo "window.location='" . site_url('premium-services?show_modal=1') . "'";
-                                                            }
-                                                            ?>">
+                        if (in_array($role_id, [1, 2, 8]) || $profile_id == $session_user_id) {
+                            echo "window.open('" . base_url('public-assets/cvreviews/' . $profile->member_cv) . "', '_blank')";
+                        } else {
+                            echo "window.location='" . site_url('premium-services?show_modal=1') . "'";
+                        }
+                        ?>">
                             <div class="upload-ui">
                                 <div class="upload-initial">
                                     <i class="fas fa-file-pdf text-danger"></i>
@@ -1831,8 +1891,8 @@ if (!empty($isFeaturedProfile)) {
                                         <div>
                                             <span class="text-muted small">Description:</span><br>
                                             <strong><?= !empty($certificate->c_description)
-                                                        ? htmlspecialchars($certificate->c_description)
-                                                        : '<span class="text-muted">---</span>'; ?></strong>
+                                                ? htmlspecialchars($certificate->c_description)
+                                                : '<span class="text-muted">---</span>'; ?></strong>
                                         </div>
 
                                     </div>
@@ -2066,7 +2126,7 @@ if (!empty($isFeaturedProfile)) {
 
                     <?php endif; ?>
 
-                    <!-- <?php if ($role_id == 10 || $role_id == 2): ?>
+                    <?php if ($role_id == 10 || $role_id == 2): ?>
                         <a href="<?= site_url('form-requests/manpower-supply-quota-list'); ?>"
                             class="action-item highlight">
                             <div>
@@ -2074,7 +2134,7 @@ if (!empty($isFeaturedProfile)) {
                                 Manpower Supply Job Quota
                             </div>
                         </a>
-                    <?php endif; ?> -->
+                    <?php endif; ?>
 
                 </div>
             </div>
@@ -2210,6 +2270,59 @@ if (!empty($isFeaturedProfile)) {
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
 
+                        </div>
+
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($session_user_id > 0): ?>
+                <?php
+                $encode_ref_id = base64_encode($session_user_id);
+                $referral_link = "https://navafiz.com/user/register?referral_id=" . $encode_ref_id;
+
+                $user = UserInfo($session_user_id);
+                $m_name = (is_object($user) && isset($user->m_name)) ? $user->m_name : 'A friend';
+                ?>
+
+                <div class="card border-0 shadow-sm profile mb-3">
+                    <div class="card-body p-4 text-start">
+
+                        <!-- Header -->
+                        <h6 class="fw-semibold text-primary-custom mb-3">
+                            <i class="fas fa-gift me-2"></i>
+                            Give a Referral, Get a Reward
+                        </h6>
+
+                        <!-- Message Box -->
+                        <div class="referral-box mb-3">
+                            <p class="mb-2 small text-muted">
+                                <strong>
+                                    <?= htmlspecialchars($m_name); ?>
+                                </strong> invites you to join Navafiz.com.
+                            </p>
+
+                            <p class="mb-2 small">
+                                🎯 Get <strong>5 days FREE job support</strong> for your career search.
+                            </p>
+
+                            <p class="mb-0 small text-muted">
+                                Need help? WhatsApp <strong>+971 55 446 5332</strong>
+                            </p>
+                        </div>
+
+                        <!-- Action Button -->
+                        <a href="javascript:void(0);" id="referralLink"
+                            class="btn btn-primary-custom w-100 d-flex align-items-center justify-content-center gap-2"
+                            data-link="<?= htmlspecialchars($m_name); ?> invites you to join Navafiz.com—get 5 days free job support. Join here: <?= htmlspecialchars($referral_link); ?>">
+
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share Referral Link</span>
+                        </a>
+
+                        <!-- Copy Message -->
+                        <div id="copyMessage" class="text-success small mt-2 text-left" style="display:none;">
+                            ✅ Referral link copied! Share and earn rewards.
                         </div>
 
                     </div>
@@ -2374,57 +2487,6 @@ if (!empty($isFeaturedProfile)) {
                 </div>
             </div>
 
-            <?php if ($session_user_id > 0): ?>
-                <?php
-                $encode_ref_id = base64_encode($session_user_id);
-                $referral_link = "https://navafiz.com/user/register?referral_id=" . $encode_ref_id;
-
-                $user = UserInfo($session_user_id);
-                $m_name = (is_object($user) && isset($user->m_name)) ? $user->m_name : 'A friend';
-                ?>
-
-                <div class="card border-0 shadow-sm profile mb-3">
-                    <div class="card-body p-4 text-start">
-
-                        <!-- Header -->
-                        <h6 class="fw-semibold text-primary-custom mb-3">
-                            <i class="fas fa-gift me-2"></i>
-                            Give a Referral, Get a Reward
-                        </h6>
-
-                        <!-- Message Box -->
-                        <div class="referral-box mb-3">
-                            <p class="mb-2 small text-muted">
-                                <strong><?= htmlspecialchars($m_name); ?></strong> invites you to join Navafiz.com.
-                            </p>
-
-                            <p class="mb-2 small">
-                                🎯 Get <strong>5 days FREE job support</strong> for your career search.
-                            </p>
-
-                            <p class="mb-0 small text-muted">
-                                Need help? WhatsApp <strong>+971 56 348 7890</strong>
-                            </p>
-                        </div>
-
-                        <!-- Action Button -->
-                        <a href="javascript:void(0);" id="referralLink"
-                            class="btn btn-primary-custom w-100 d-flex align-items-center justify-content-center gap-2"
-                            data-link="<?= htmlspecialchars($m_name); ?> invites you to join Navafiz.com—get 5 days free job support. Join here: <?= htmlspecialchars($referral_link); ?>">
-
-                            <i class="fas fa-share-alt"></i>
-                            <span>Share Referral Link</span>
-                        </a>
-
-                        <!-- Copy Message -->
-                        <div id="copyMessage" class="text-success small mt-2 text-left" style="display:none;">
-                            ✅ Referral link copied! Share and earn rewards.
-                        </div>
-
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <?php if (!empty($related_userlist)): ?>
                 <div class="card border-0 shadow-sm profile mb-3 text-left">
                     <div class="card-body p-4">
@@ -2435,7 +2497,7 @@ if (!empty($isFeaturedProfile)) {
                             Related Members
                             <?php foreach ($user_list_id as $user_list):
                                 $user_list_name = GetUserListName($user_list->list_id);
-                            ?>
+                                ?>
                                 <span class="text-muted small">(<?= @$user_list_name[0]->name ?>)</span>
                             <?php endforeach; ?>
                         </h6>
@@ -2577,7 +2639,7 @@ if (!empty($isFeaturedProfile)) {
             $allowed_mentors = [10, 56672, 63519];
 
             if (in_array(intval($session_user_id), $allowed_mentors)) {
-            ?>
+                ?>
                 <div class="card border-0 shadow-sm profile mb-3">
                     <div class="card-body p-4 text-start">
 
@@ -2776,7 +2838,7 @@ if (!empty($isFeaturedProfile)) {
                             <?php foreach ($recruitment_answers as $index => $answer): ?>
                                 <?php if (!empty($answer->question_id)):
                                     $ans = GetQuestion($answer->question_id);
-                                ?>
+                                    ?>
 
                                     <li class="mb-3">
 
@@ -3236,7 +3298,7 @@ if (!empty($isFeaturedProfile)) {
 <?php $this->load->view('include/footer'); ?>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         // Check URL for show_modal query parameter
         const urlParams = new URLSearchParams(window.location.search);
         const showModal = urlParams.get('show_modal');
@@ -3250,14 +3312,14 @@ if (!empty($isFeaturedProfile)) {
 </script>
 
 <script>
-    $(function() {
+    $(function () {
         // VIDEO PLAY MODAL
-        $(".video").click(function() {
+        $(".video").click(function () {
             var theModal = $(this).data("target"),
                 videoSRC = $(this).attr("data-video"),
                 videoSRCauto = videoSRC + "?modelbranding=1&rel=0&controls=0&showinfo=0&html5=1&autoplay=1";
             $(theModal + ' iframe').attr('src', videoSRCauto);
-            $(theModal + ' button.close').click(function() {
+            $(theModal + ' button.close').click(function () {
                 $(theModal + ' iframe').attr('src', videoSRC);
             })
         })
@@ -3302,24 +3364,24 @@ if (!empty($isFeaturedProfile)) {
     // });
 
     // Referral link copy message
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         var btn = document.getElementById("referralLink");
 
         if (!btn) return;
 
-        btn.addEventListener("click", function() {
+        btn.addEventListener("click", function () {
             var text = this.getAttribute("data-link");
 
-            navigator.clipboard.writeText(text).then(function() {
+            navigator.clipboard.writeText(text).then(function () {
 
                 var copyMessage = document.getElementById("copyMessage");
                 copyMessage.style.display = "block";
 
-                setTimeout(function() {
+                setTimeout(function () {
                     copyMessage.style.display = "none";
                 }, 2000);
 
-            }).catch(function() {
+            }).catch(function () {
                 alert("Copy failed. Please copy manually.");
             });
         });
@@ -3349,8 +3411,8 @@ if (!empty($isFeaturedProfile)) {
 
 <!-- Show more/ show less in career summary -->
 <script>
-    $(document).ready(function() {
-        $('#togglePoints').click(function() {
+    $(document).ready(function () {
+        $('#togglePoints').click(function () {
             var morePoints = $('.more-points');
             if (morePoints.is(':visible')) {
                 // Hide extra points
@@ -3367,8 +3429,8 @@ if (!empty($isFeaturedProfile)) {
 
 <!-- Show more/ show less in work experience details -->
 <script>
-    $(document).ready(function() {
-        $('.toggle-desc').click(function() {
+    $(document).ready(function () {
+        $('.toggle-desc').click(function () {
             var container = $(this).closest('.description-container');
             var moreLines = container.find('.more-lines');
 
@@ -3404,8 +3466,8 @@ if (!empty($isFeaturedProfile)) {
 
 <!-- Show more/ show less in profile recommedation -->
 <script>
-    $(document).ready(function() {
-        $('.toggle-rec').click(function() {
+    $(document).ready(function () {
+        $('.toggle-rec').click(function () {
             var listContainer = $(this).closest('.recommendation-list');
             var hiddenItems = listContainer.find('.more-rec');
 
@@ -3449,7 +3511,7 @@ if (!empty($isFeaturedProfile)) {
 </script>
 
 <script>
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function (e) {
 
         if (e.target.classList.contains("see-more")) {
 
@@ -3475,7 +3537,7 @@ if (!empty($isFeaturedProfile)) {
 <script>
     let offset = 20;
 
-    $('#loadMoreBtn').on('click', function() {
+    $('#loadMoreBtn').on('click', function () {
 
         let btn = $(this);
         btn.text('Loading...');
@@ -3488,7 +3550,7 @@ if (!empty($isFeaturedProfile)) {
                 user_id: "<?= $profile_id ?>"
             },
             dataType: "json",
-            success: function(res) {
+            success: function (res) {
 
                 let html = res.html || '';
 
@@ -3627,7 +3689,7 @@ if (!empty($isFeaturedProfile)) {
 </div>
 
 <script>
-    $(document).on('click', '.job-detail-link', function() {
+    $(document).on('click', '.job-detail-link', function () {
 
         let id = $(this).data('id');
 
@@ -3640,7 +3702,7 @@ if (!empty($isFeaturedProfile)) {
                 j_id: id
             },
             dataType: "json",
-            success: function(res) {
+            success: function (res) {
 
                 $('#job_title_text').text(res.j_title);
                 $('#job_company').text(res.j_company);

@@ -182,3 +182,74 @@ CREATE TABLE `jb_manpower_job_quote` (
 `status` tinyint(1) DEFAULT '1',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; -->
+
+
+<script>
+    $(document).on('submit', '#multiStepForm', function (e) {
+        e.preventDefault();
+
+        let form = $(this);
+        let submitBtn = form.find('button[type="submit"]');
+
+        // Prevent multiple clicks
+        submitBtn.prop('disabled', true).text('Submitting...');
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            dataType: 'json',
+            success: function (res) {
+
+                // Remove old messages if any
+                $('.form-response').remove();
+
+                if (res.success) {
+
+                    // ✅ Success message + link
+                    let successHtml = `
+                    <div class="alert alert-success form-response mt-3">
+                        ${res.message}<br><br>
+                        <a href="${res.data.view_link}" target="_blank" class="btn btn-success">
+                            View Submitted Job
+                        </a>
+                    </div>
+                `;
+
+                    // Show at top of form
+                    form.prepend(successHtml);
+
+                    // Reset form fields
+                    form[0].reset();
+                    form.find('input[type="checkbox"]').prop('checked', false);
+                    form.find('.is-invalid, .is-valid').removeClass('is-invalid is-valid');
+
+                    // Reset wizard properly
+                    if (typeof FormCore !== "undefined" && FormCore.reset) {
+                        FormCore.reset();
+                    }
+
+                } else {
+
+                    let errorHtml = `
+                    <div class="alert alert-danger form-response mt-3">
+                        ${res.message}
+                    </div>
+                `;
+
+                    form.prepend(errorHtml);
+                }
+            },
+            error: function () {
+                form.prepend(`
+                <div class="alert alert-danger form-response mt-3">
+                    Server error. Please try again.
+                </div>
+            `);
+            },
+            complete: function () {
+                submitBtn.prop('disabled', false).text('Submit');
+            }
+        });
+    });
+</script>

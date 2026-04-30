@@ -9,6 +9,40 @@
             <p class="text-muted mb-0">Review the services you’ve added and manage your selections before checkout</p>
         </div>
 
+        <div class="alert alert-info mt-4" role="alert">
+            <h5 class="mb-3">🎁 Referral Discount Rewards</h5>
+
+            <ul class="mb-2 ps-3">
+                <li>
+                    <strong>10% Welcome Discount</strong> – If you joined using a referral link, you will receive
+                    <strong>10% OFF</strong> on your first premium service order.
+                </li>
+
+                <li class="mt-2">
+                    <strong>20% Referral Reward</strong> – Invite friends using your referral link. When
+                    <strong>2 referred members</strong> successfully place premium service orders, you will unlock
+                    <strong>20% OFF</strong> on your future premium service purchases.
+                </li>
+
+                <li class="mt-2">
+                    <strong>Best Discount Applied</strong> – If multiple discounts are eligible, the highest available
+                    discount will be applied automatically in here.
+                </li>
+            </ul>
+
+            <hr>
+
+            <?php if ($this->session->userdata('user_id')): ?>
+                <p class="mb-0">
+                    ✅ You are logged in. Any eligible referral discounts will be calculated automatically in here.
+                </p>
+            <?php else: ?>
+                <p class="mb-0">
+                    🔐 Please <a href="/login">log in</a> to access referral discounts and rewards.
+                </p>
+            <?php endif; ?>
+        </div>
+
         <form method="post" action="/cart/update">
 
             <div class="table-responsive">
@@ -64,23 +98,63 @@
                             </tr>
                         <?php } ?>
 
-                        <tr>
+                        <!-- <tr>
                             <td colspan="4"><b>Total</b></td>
                             <td><b><?= $total ?> AED</b></td>
                             <td></td>
+                        </tr> -->
+
+                        <tr>
+                            <td colspan="4"><b>Subtotal</b></td>
+                            <td><b>
+                                    <?= number_format($total, 2) ?> AED
+                                </b></td>
+                            <td></td>
                         </tr>
+
+                        <?php if ($pricing['percent'] > 0): ?>
+                            <tr>
+                                <td colspan="4">
+                                    <b>Discount (
+                                        <?= $pricing['percent'] ?>%)
+                                    </b>
+                                </td>
+                                <td>
+                                    <b>-
+                                        <?= number_format($pricing['amount'], 2) ?> AED
+                                    </b>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="4"><b>Final Total</b></td>
+                                <td>
+                                    <b>
+                                        <?= number_format($pricing['final'], 2) ?> AED
+                                    </b>
+                                </td>
+                                <td></td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
 
             <div class="d-flex align-items-center justify-content-end mt-4 gap-4">
+                <?php if (!$this->session->userdata('user_id')): ?>
+                    <div class="alert alert-info mt-3">
+                        Login as a member to unlock referral discounts.
+                    </div>
+                <?php endif; ?>
+
                 <?php if (!empty($cart)) { ?>
                     <button class="btn btn-primary">Update Cart</button>
-                        <a href="/checkout" class="btn btn-success">Checkout</a>
-            <?php } else { ?>
+                    <a href="/checkout" class="btn btn-success">Checkout</a>
+                <?php } else { ?>
                     <button class="btn btn-success" disabled title="Add items to cart first">
                         Checkout
-                        </button>
+                    </button>
                 <?php } ?>
             </div>
         </form>

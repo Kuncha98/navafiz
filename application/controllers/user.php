@@ -349,6 +349,9 @@ class user extends CI_Controller
                 if (!empty($last_page)) {
                     redirect($last_page);
                 } else {
+                    $this->session->set_userdata([
+                        'company_id' => $company->id
+                    ]);
                     redirect(base_url('company/' . $company->id));
                 }
                 return;

@@ -1,5 +1,6 @@
 <?php $this->load->view('include/header');
 $session_user_id = $this->session->userdata('user_id');
+$session_company_id = $this->session->userdata('company_id');
 
 $query = $this->db->select('role_id')
     ->where('m_id', $session_user_id) // assuming the user ID column is `id`
@@ -877,7 +878,7 @@ if ($query->num_rows() > 0) {
 
                     <span
                         class="badge rounded-pill bg-primary-custom-subtle text-primary-custom mb-2 position-static px-3 py-2">
-                        <?= $company->company_type ?>
+                        <?= ucwords(str_replace('_', ' ', $company->company_type)); ?>
                     </span>
 
                     <!-- Profession + City -->
@@ -958,6 +959,21 @@ if ($query->num_rows() > 0) {
                         </div>
 
                     </div>
+
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm profile mb-3">
+                <div class="card-body p-3 text-start">
+
+                    <h6 class="fw-semibold text-primary-custom mb-3">Upload Candidate Resume</h6>
+
+                    <?php if ($company->id == $session_company_id): ?>
+                        <button type="button" class="btn view-btn action-item highlight w-100" data-bs-toggle="modal"
+                            data-bs-target="#uploadResumeModal">
+                            Upload Resume
+                        </button>
+                    <?php endif; ?>
 
                 </div>
             </div>
@@ -1200,3 +1216,66 @@ if ($query->num_rows() > 0) {
 </div>
 
 <?php $this->load->view('include/footer'); ?>
+
+<!-- Upload Resume Modal -->
+<div class="modal fade" id="uploadResumeModal" tabindex="-1" aria-labelledby="uploadResumeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadResumeModalLabel">Upload Your Resume</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card p-3">
+                    <div id="uploadResumeMsg" class="mb-3"></div>
+
+                    <?php
+                    $attributes = array(
+                        'id' => 'uploadResumeForm'
+                    );
+                    echo form_open_multipart('companies/resume_upload', $attributes); ?>
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <label for="name" class="form-label required-label">Name</label>
+                            <input type="text" class="form-control required-field" id="name" name="name">
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="email" class="form-label required-label">Email</label>
+                            <input type="email" class="form-control required-field" id="email" name="email">
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="whatsapp" class="form-label required-label">WhatsApp Number</label>
+                            <input type="text" class="form-control required-field" id="whatsapp" name="whatsapp">
+                        </div>
+                        <input type="hidden" name="company_id" value="<?= $company->id ?>">
+                        <div class="col-12 col-lg-6">
+                            <label for="cv" class="form-label required-label">CV / Resume</label>
+                            <div class="upload-box" id="cvUploadBox">
+                                <input type="file" name="cv" id="cv" accept=".pdf"
+                                    class="form-control d-none required-field" data-file-upload data-preview="cvPreview"
+                                    data-initial="cvInitialState" data-max-size="5">
+
+                                <div class="upload-ui" data-trigger="cv">
+                                    <div class="upload-initial" id="cvInitialState">
+                                        <i class="fas fa-file-pdf text-danger"></i>
+                                        <p class="mt-3 mb-1">Upload CV (PDF only)</p>
+                                        <small class="text-muted">Max size: 5MB</small>
+                                    </div>
+
+                                    <!-- Preview will be injected here -->
+                                    <div class="file-preview" id="cvPreview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-end">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                    <?php echo form_close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
