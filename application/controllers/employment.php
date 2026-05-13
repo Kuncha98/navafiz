@@ -25,12 +25,12 @@ class Employment extends MY_Controller {
             }
         }
         
-        $companies_list = $this->companies->GetAll();    
+        // $companies_list = $this->companies->GetAll();    
         $employment_history = $this->employment_history_model->Search(array('user_id'=> $this->session_user_id));    
         
         $data['employment_history'] = $employment_history; 
         $data['current_emphistory'] = $current_emphistory; 
-        $data['companies_list'] = $companies_list;
+        // $data['companies_list'] = $companies_list;
         $data['emp_history_id'] = $emp_history_id;
         // echo "<pre>";
         // print_r($current_emphistory);
@@ -49,7 +49,7 @@ class Employment extends MY_Controller {
                 $current_emphistory = $current_emphistory[0];
             }
         }
-        $companies_list = $this->companies->GetAll();    
+        // $companies_list = $this->companies->GetAll();    
         $employment_history = $this->employment_history_model->Search(array('user_id'=> $this->session_user_id));    
         $data['employment_history'] = $employment_history; 
         $data['current_emphistory'] = $current_emphistory; 

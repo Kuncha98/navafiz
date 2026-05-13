@@ -980,7 +980,7 @@ if (!empty($isFeaturedProfile)) {
                         </p>
 
                         <!-- Hidden by default -->
-                        <div id="rewardDetails" style="display:none;">
+                        <div class="rewardDetails" style="display:none;">
                             <?php foreach ($rewards as $reward): ?>
                                 <ul class="reward-item">
                                     <li>
@@ -1021,7 +1021,7 @@ if (!empty($isFeaturedProfile)) {
                             Claim All
                         </a>
 
-                        <button onclick="toggleRewards()" class="btn btn-secondary mb-2">
+                        <button onclick="toggleRewards(this)" class="btn btn-secondary mb-2">
                             More Details
                         </button>
 
@@ -1392,7 +1392,7 @@ if (!empty($isFeaturedProfile)) {
                         </p>
 
                         <!-- Hidden by default -->
-                        <div id="rewardDetails" style="display:none;">
+                        <div class="rewardDetails" style="display:none;">
                             <?php foreach ($rewards as $reward): ?>
                                 <ul class="reward-item">
                                     <li>
@@ -1433,7 +1433,7 @@ if (!empty($isFeaturedProfile)) {
                             Claim All
                         </a>
 
-                        <button onclick="toggleRewards()" class="btn btn-secondary mb-2">
+                        <button onclick="toggleRewards(this)" class="btn btn-secondary mb-2">
                             More Details
                         </button>
 
@@ -2266,6 +2266,20 @@ if (!empty($isFeaturedProfile)) {
                                         <?= $service_orders_pending_count ?>
                                         )
                                     </span>
+                                </span>
+                                <i class="fas fa-chevron-right ms-auto text-muted"></i>
+                            </a>
+
+                            <hr class="my-2">
+                            <a href="<?= site_url('uploaded-resumes'); ?>"
+                                class="list-item justify-content-start text-decoration-none fw-semibold">
+                                <i class="fas fa-file-pdf text-primary-custom me-2"></i>
+                                <span>
+                                    View Uploaded Resumes
+                                    <!-- <span class="text-warning ms-2">(
+                                        <?= $service_orders_pending_count ?>
+                                        )
+                                    </span> -->
                                 </span>
                                 <i class="fas fa-chevron-right ms-auto text-muted"></i>
                             </a>
@@ -3499,10 +3513,23 @@ if (!empty($isFeaturedProfile)) {
 </script> -->
 
 <script>
-    function toggleRewards() {
-        var el = document.getElementById('rewardDetails');
+    // function toggleRewards() {
+    //     var el = document.getElementById('rewardDetails');
 
-        if (el.style.display === 'none') {
+    //     if (el.style.display === 'none') {
+    //         el.style.display = 'block';
+    //     } else {
+    //         el.style.display = 'none';
+    //     }
+    // }
+    function toggleRewards(btn) {
+        // find the closest alert container
+        var container = btn.closest('.alert');
+
+        // find the reward details inside that container
+        var el = container.querySelector('.rewardDetails');
+
+        if (el.style.display === 'none' || el.style.display === '') {
             el.style.display = 'block';
         } else {
             el.style.display = 'none';

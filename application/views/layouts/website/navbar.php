@@ -31,6 +31,9 @@
         <!-- Desktop Menu -->
         <div class="collapse navbar-collapse justify-content-end d-none d-lg-flex" id="navbarNav">
             <ul class="navbar-nav align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="<?= site_url('services/resume-service') ?>">Resume
+                        Services</a></li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">

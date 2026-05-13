@@ -44,6 +44,21 @@ class home extends CI_Controller
         $this->load->view('layouts/website/website_layout', $data);
     }
 
+    function resume_service()
+    {
+        // Example: Check if user is logged in
+        // $user_id = $this->session->userdata('user_id');
+
+        // $data['testimonials'] = $this->testimonials_model->getRandomTestimonials(12);
+        // $data['feeds'] = $this->feed_model->getLatestFeeds(12, 0);
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'home/resume_service'; // content view
+        $this->load->view('layouts/website/website_layout', $data);
+    }
+
+
+
     function draftPage()
     {
         // Example: Check if user is logged in

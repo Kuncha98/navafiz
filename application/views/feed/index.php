@@ -20,6 +20,8 @@ $session_user_id = $this->session->userdata('user_id');
             <!--        </div>-->
             <!--    </div>-->
             <!--</div>-->
+            <div id="showAlert" class="alert d-none mt-3" role="alert"></div>
+
             <div class="card">
                 <div class="card-body post_feed_box" style="position: relative;">
                     <form action="javascript:void(0);" class="form-horizontal" method="post" id="feedfrm"
@@ -67,7 +69,7 @@ $session_user_id = $this->session->userdata('user_id');
                                     <a href="javascript:void(0);" class="btn btn-primary col-12"
                                         onclick="loadJobTitle('<?= htmlspecialchars($title) ?>')"><?= htmlspecialchars($title) ?></a>
                                 </div>
-                            <?php
+                                <?php
                             endif;
                         endforeach;
                     else:
@@ -110,6 +112,21 @@ $session_user_id = $this->session->userdata('user_id');
 </div>
 <?php $this->load->view('include/footer'); ?>
 <script>
+    function showAlert(message, type = 'success') {
+        let alertBox = $('#showAlert');
+
+        alertBox
+            .removeClass('d-none alert-success alert-danger alert-warning')
+            .addClass('alert-' + type)
+            .text(message)
+            .fadeIn();
+
+        // Optional auto hide
+        setTimeout(() => alertBox.fadeOut(), 4000);
+    }
+</script>
+
+<script>
     $(document).ready(function () {
         $("#feedbtnSubmit").click(function (event) {
             $('.topfeedloader').show();
@@ -131,12 +148,35 @@ $session_user_id = $this->session->userdata('user_id');
                 crossDomain: true,
                 cache: false,
                 timeout: 600000,
-                success: function (data) {
-                    loadfeed(1, 1);
+                // success: function (data) {
+                //     loadfeed(1, 1);
+                //     $('.topfeedloader').hide();
+                //     form.reset();
+                // },
+
+                success: function (res) {
+                    let response;
+
+                    try {
+                        response = JSON.parse(res);
+                    } catch (e) {
+                        showAlert('Invalid server response', 'danger');
+                        return;
+                    }
+
                     $('.topfeedloader').hide();
-                    form.reset();
+
+                    if (response.success) {
+                        showAlert(response.message, 'success');
+                        loadfeed(1, 1);
+                        form.reset();
+                    } else {
+                        showAlert(response.message, 'danger');
+                    }
                 },
-                error: function (e) {
+                error: function () {
+                    $('.topfeedloader').hide();
+                    showAlert('Network error. Please try again.', 'danger');
                 }
             });
 

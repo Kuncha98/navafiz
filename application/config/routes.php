@@ -5,6 +5,7 @@
 // $route['default_controller'] = "search";
 // Home page
 $route['default_controller'] = "home/new_index";
+$route['services/resume-service'] = "home/resume_service";
 
 // Become a freelancer form page
 $route['services/become-a-freelancer'] = "home/freelance";
@@ -71,6 +72,10 @@ $route['checkout/success/(:num)'] = 'premium_services_checkout/success/$1';
 $route['orders'] = 'premium_service_orders/index';
 $route['orders/view/(:num)'] = 'premium_service_orders/view/$1';
 // $route['orders/update-status'] = 'premium_service_orders/update_status';
+
+$route['uploaded-resumes'] = 'upload_resume/all_requests/0';
+$route['uploaded-resumes/(:num)'] = 'upload_resume/all_requests/$1';
+
 
 $route['draft'] = "home/draftPage";
 $route['feature_counts'] = "home/feature_counts";

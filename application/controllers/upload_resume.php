@@ -7,7 +7,7 @@ class upload_resume extends CI_Controller
     {
         parent::__construct();
         $this->load->model('upload_resume_model');
-        $this->load->library('form_validation');
+        $this->load->library(array('form_validation', 'email', 'session', 'pagination'));
         $this->load->library('upload');
     }
 
@@ -17,14 +17,24 @@ class upload_resume extends CI_Controller
         $this->load->view('upload_resume_form');
     }
 
+    public function check_email_exists()
+    {
+        $email = $this->input->post('email', TRUE);
+
+        if ($this->upload_resume_model->email_exists($email)) {
+            echo json_encode(['exists' => true, 'message' => 'Resume has been already submitted using this email.']);
+        } else {
+            echo json_encode(['exists' => false]);
+        }
+    }
+
     public function submit()
     {
-
-
         // Validation
         $this->form_validation->set_rules('name', 'Name', 'required');
         $this->form_validation->set_rules('profession', 'Profession', 'required');
         $this->form_validation->set_rules('phone', 'WhatsApp Number', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_rules('cv', 'CV', 'callback_file_check_cv');
 
         if ($this->form_validation->run() === FALSE) {
@@ -45,6 +55,7 @@ class upload_resume extends CI_Controller
             'name' => $this->input->post('name', TRUE),
             'profession' => $this->input->post('profession', TRUE),
             'phone' => $this->input->post('phone', TRUE),
+            'email' => $this->input->post('email', TRUE),
             'cv' => $cv_upload_data['file_name'],
             'created_at' => date('Y-m-d H:i:s'),
             'ip_address' => $this->input->ip_address()
@@ -107,5 +118,29 @@ class upload_resume extends CI_Controller
         }
 
         return $this->upload->data();
+    }
+
+    // Fetch all the form requests
+    public function all_requests()
+    {
+        require_role(array(2)); // 2 = Mentor
+
+        $config = init_pagination(
+            'uploaded-resumes',
+            $this->upload_resume_model->get_total_count(),
+            20,
+            2
+        );
+
+        $data["records"] = $this->upload_resume_model->get_all(
+            $config["per_page"],
+            $this->uri->segment(2)
+        );
+
+        $data["pagination"] = $this->pagination->create_links();
+
+        $data['title'] = 'NAVAFIZ Home';
+        $data['content'] = 'form_requests/resume_uploads'; // content view
+        $this->load->view('layouts/system/main_layout', $data);
     }
 }

@@ -453,6 +453,165 @@ ini_set('display_errors', 0);
         gtag('config', 'G-PLWY694W29');
     </script>
 
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('uploadResumeForm');
+            const modal = new bootstrap.Modal(document.getElementById('uploadResumeModal'));
+            const msgBox = document.getElementById('uploadResumeMsg');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Prevent normal submission
+                msgBox.innerHTML = ''; // Clear previous messages
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            msgBox.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+
+                            // Close modal after 2 seconds
+                            setTimeout(() => {
+                                modal.hide();
+                                form.reset();
+                                document.getElementById('cvPreview').innerHTML = ''; // Clear file preview
+                                document.getElementById('cvInitialState').style.display = 'block';
+                                msgBox.innerHTML = ''
+                            }, 2000);
+
+                        } else if (data.status === 'error') {
+                            msgBox.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        msgBox.innerHTML = `<div class="alert alert-danger">Something went wrong. Try again.</div>`;
+                    });
+            });
+        });
+    </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const form = document.getElementById('uploadResumeForm');
+            const modal = new bootstrap.Modal(document.getElementById('uploadResumeModal'));
+            const msgBox = document.getElementById('uploadResumeMsg');
+            const submitBtn = document.getElementById('resumeSubmitBtn');
+
+            form.addEventListener('submit', async function (e) {
+
+                e.preventDefault();
+
+                // Prevent multiple clicks
+                if (submitBtn.disabled) {
+                    return;
+                }
+
+                msgBox.innerHTML = '';
+
+                // Disable button
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Uploading...';
+
+                // Get email field value
+                const email = form.querySelector('[name="email"]').value;
+
+                try {
+
+                    // STEP 1: Check email exists
+                    const emailCheckResponse = await fetch("<?= base_url('upload_resume/check_email_exists'); ?>", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            email: email
+                        })
+                    });
+
+                    const emailCheckData = await emailCheckResponse.json();
+
+                    // If email already exists
+                    if (emailCheckData.exists) {
+                        msgBox.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${emailCheckData.message}
+                    </div>
+                `;
+                        // Enable button again
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Upload';
+                        return;
+                    }
+
+                    // STEP 2: Submit form if email does not exist
+                    const formData = new FormData(form);
+
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+
+                        msgBox.innerHTML = `
+                    <div class="alert alert-success">
+                        ${data.message}
+                    </div>
+                `;
+
+                        setTimeout(() => {
+                            modal.hide();
+                            form.reset();
+
+                            document.getElementById('cvPreview').innerHTML = '';
+                            document.getElementById('cvInitialState').style.display = 'block';
+
+                            msgBox.innerHTML = '';
+
+                            // Enable button again
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = 'Upload';
+                        }, 2000);
+
+                    } else {
+
+                        msgBox.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${data.message}
+                    </div>
+                `;
+
+                        // Enable button again
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Upload';
+                    }
+
+                } catch (err) {
+
+                    console.error(err);
+
+                    msgBox.innerHTML = `
+                <div class="alert alert-danger">
+                    Something went wrong. Try again.
+                </div>
+            `;
+
+                    // Enable button again
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Upload';
+                }
+
+            });
+
+        });
+    </script>
 
 </head>
 
@@ -489,4 +648,72 @@ ini_set('display_errors', 0);
             <?php } ?>
         </div>
 
+    </div>
+
+
+    <!-- Upload Resume Modal -->
+    <div class="modal fade" id="uploadResumeModal" tabindex="-1" aria-labelledby="uploadResumeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadResumeModalLabel">Upload Your Resume</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card p-3">
+                        <div id="uploadResumeMsg" class="mb-3"></div>
+
+                        <?php
+                        $attributes = array(
+                            'id' => 'uploadResumeForm'
+                        );
+                        echo form_open_multipart('upload_resume/submit', $attributes); ?>
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-6">
+                                <label for="name" class="form-label required-label">Name</label>
+                                <input type="text" class="form-control required-field" id="name" name="name">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="profession" class="form-label required-label">Profession</label>
+                                <input type="text" class="form-control required-field" id="profession"
+                                    name="profession">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="email" class="form-label required-label">E-mail</label>
+                                <input type="email" class="form-control required-field" id="email" name="email">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="phone" class="form-label required-label">WhatsApp Number</label>
+                                <input type="text" class="form-control required-field" id="phone" name="phone">
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <label for="cv" class="form-label required-label">CV / Resume</label>
+                                <div class="upload-box" id="cvUploadBox">
+                                    <input type="file" name="cv" id="cv" accept=".pdf"
+                                        class="form-control d-none required-field" data-file-upload
+                                        data-preview="cvPreview" data-initial="cvInitialState" data-max-size="5">
+
+                                    <div class="upload-ui" data-trigger="cv">
+                                        <div class="upload-initial" id="cvInitialState">
+                                            <i class="fas fa-file-pdf text-danger"></i>
+                                            <p class="mt-3 mb-1">Upload CV (PDF only)</p>
+                                            <small class="text-muted">Max size: 5MB</small>
+                                        </div>
+
+                                        <!-- Preview will be injected here -->
+                                        <div class="file-preview" id="cvPreview"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 text-end">
+                            <button type="submit" id="resumeSubmitBtn" class="btn btn-primary">Upload</button>
+                        </div>
+                        <?php echo form_close(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>

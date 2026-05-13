@@ -227,7 +227,7 @@
 
         });
     </script> -->
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('uploadResumeForm');
             const modal = new bootstrap.Modal(document.getElementById('uploadResumeModal'));
@@ -266,6 +266,125 @@
                         msgBox.innerHTML = `<div class="alert alert-danger">Something went wrong. Try again.</div>`;
                     });
             });
+        });
+    </script> -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const form = document.getElementById('uploadResumeForm');
+            const modal = new bootstrap.Modal(document.getElementById('uploadResumeModal'));
+            const msgBox = document.getElementById('uploadResumeMsg');
+            const submitBtn = document.getElementById('resumeSubmitBtn');
+
+            form.addEventListener('submit', async function (e) {
+
+                e.preventDefault();
+
+                // Prevent multiple clicks
+                if (submitBtn.disabled) {
+                    return;
+                }
+
+                msgBox.innerHTML = '';
+
+                // Disable button
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Uploading...';
+
+                // Get email field value
+                const email = form.querySelector('[name="email"]').value;
+
+                try {
+
+                    // STEP 1: Check email exists
+                    const emailCheckResponse = await fetch("<?= base_url('upload_resume/check_email_exists'); ?>", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            email: email
+                        })
+                    });
+
+                    const emailCheckData = await emailCheckResponse.json();
+
+                    // If email already exists
+                    if (emailCheckData.exists) {
+                        msgBox.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${emailCheckData.message}
+                    </div>
+                `;
+                        // Enable button again
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Upload';
+                        return;
+                    }
+
+                    // STEP 2: Submit form if email does not exist
+                    const formData = new FormData(form);
+
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'success') {
+
+                        msgBox.innerHTML = `
+                    <div class="alert alert-success">
+                        ${data.message}
+                    </div>
+                `;
+
+                        setTimeout(() => {
+                            modal.hide();
+                            form.reset();
+
+                            document.getElementById('cvPreview').innerHTML = '';
+                            document.getElementById('cvInitialState').style.display = 'block';
+
+                            msgBox.innerHTML = '';
+
+                            // Enable button again
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = 'Upload';
+                        }, 2000);
+
+                    } else {
+
+                        msgBox.innerHTML = `
+                    <div class="alert alert-danger">
+                        ${data.message}
+                    </div>
+                `;
+
+                        // Enable button again
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Upload';
+                    }
+
+                } catch (err) {
+
+                    console.error(err);
+
+                    msgBox.innerHTML = `
+                <div class="alert alert-danger">
+                    Something went wrong. Try again.
+                </div>
+            `;
+
+                    // Enable button again
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Upload';
+                }
+
+            });
+
         });
     </script>
 

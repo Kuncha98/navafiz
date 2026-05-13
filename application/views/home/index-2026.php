@@ -370,172 +370,6 @@
     </div>
 </section>
 
-<!-- Resume builder section -->
-<section class="resume-section" id="resume">
-    <div class="container position-relative z-1">
-        <div class="row g-5 align-items-center">
-
-            <!-- Image -->
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <div class="image-wrapper">
-                    <img src="navassets/img/resume-builder/resume-1.jpg" alt="Resume Image 1">
-                    <img src="navassets/img/resume-builder/resume-2.jpg" alt="Resume Image 2">
-                    <img src="navassets/img/resume-builder/resume-3.jpg" alt="Resume Image 3">
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="col-lg-6">
-                <div class="resume-content">
-                    <!-- Section header -->
-                    <div class="mb-4">
-                        <p class="section-subtitle">Resume Builder</p>
-                        <h2 class="section-title">Build Your Professional Resume With The Help Of Expert</h2>
-                    </div>
-                    <p class="resume-text">
-                        Enhance your career prospects with a standout resume tailored to the U.A.E. and GCC job market.
-                        Our expert resume writers specialize in crafting documents that highlight your skills,
-                        experience, and achievements in a way that resonates with employers across the region. Whether
-                        you're aiming for local or regional opportunities, we'll help you make a strong first
-                        impression.
-                    </p>
-                    <a href="<?= site_url('premium-services') ?>" class="btn view-btn">Build</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact section -->
-<section class="contact-section" id="contact">
-    <div class="container position-relative z-1">
-        <div class="row g-5">
-
-            <!-- FAQ card -->
-            <div class="col-12 col-lg-6">
-                <!-- Section header -->
-                <div class="mb-4">
-                    <p class="section-subtitle">Faq</p>
-                    <h2 class="section-title">Asked Any Questions</h2>
-                </div>
-                <div class="accordion" id="faqAccordion">
-                    <div class="accordion-item mb-3">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                How does Navafiz help employers find professionals?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                            data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>
-                                    Navafiz allows employers and recruiters to browse verified professional profiles,
-                                    post job listings, and connect directly with qualified candidates. Our platform
-                                    makes it easy to filter by skills, experience, and industry to find the right talent
-                                    quickly.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Is registration required to use the platform?
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>
-                                    Yes. Creating an account allows you to access full features such as posting jobs,
-                                    applying for positions, managing applications, and connecting with professionals
-                                    securely.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                How can I apply for jobs on Navafiz?
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                            data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>
-                                    Job seekers can create a professional profile, upload their details, and apply
-                                    directly to available job listings. Once applied, employers can review your profile
-                                    and contact you for the next steps.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item mb-3">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                Can freelancers find short-term or project-based work?
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                            data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>
-                                    Yes. Freelancers can explore assignment-based opportunities and connect with
-                                    businesses looking for short-term or specialized support. You can showcase your
-                                    expertise and get matched with relevant projects.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Contact card -->
-            <div class="col-12 col-lg-6">
-                <div class="card contact-card">
-                    <!-- Section header -->
-                    <div>
-                        <p class="section-subtitle">Let’s talk</p>
-                        <h2 class="section-title">Get In Touch With us</h2>
-                    </div>
-                    <div class="form-group"> <span class="successmessage">
-                            <?php echo $this->session->flashdata('msg'); ?>
-                        </span> </div>
-                    <div class="form-group"> <span class="errormessage">
-                            <?php echo $this->session->flashdata('errormsg'); ?>
-                        </span> </div>
-                    <form class="row g-3" action="<?= base_url() ?>sendcontact" method="post">
-                        <div class="col-12 col-lg-6">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <label for="email" class="form-label">E-Mail</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <label for="phone" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="phone" name="phone" required>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <label for="subject" class="form-label">Subject</label>
-                            <input type="text" class="form-control" id="subject" name="subject" required>
-                        </div>
-                        <div class="col-12 col-lg-12">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" rows="3" id="message" name="message" required></textarea>
-                        </div>
-                        <div>
-                            <button type="submit" value="Send Message" class="btn btn-submit">Submit Now</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Testimonial section -->
 <section class="testimonial-section" id="testimonial">
     <div class="container">
@@ -719,6 +553,172 @@
     </div>
 </section>
 
+<!-- Resume builder section -->
+<section class="resume-section" id="resume">
+    <div class="container position-relative z-1">
+        <div class="row g-5 align-items-center">
+
+            <!-- Image -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="image-wrapper">
+                    <img src="navassets/img/resume-builder/resume-1.jpg" alt="Resume Image 1">
+                    <img src="navassets/img/resume-builder/resume-2.jpg" alt="Resume Image 2">
+                    <img src="navassets/img/resume-builder/resume-3.jpg" alt="Resume Image 3">
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-lg-6">
+                <div class="resume-content">
+                    <!-- Section header -->
+                    <div class="mb-4">
+                        <p class="section-subtitle">Resume Builder</p>
+                        <h2 class="section-title">Build Your Professional Resume With The Help Of Expert</h2>
+                    </div>
+                    <p class="resume-text">
+                        Enhance your career prospects with a standout resume tailored to the U.A.E. and GCC job market.
+                        Our expert resume writers specialize in crafting documents that highlight your skills,
+                        experience, and achievements in a way that resonates with employers across the region. Whether
+                        you're aiming for local or regional opportunities, we'll help you make a strong first
+                        impression.
+                    </p>
+                    <a href="<?= site_url('premium-services') ?>" class="btn view-btn">Build</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact section -->
+<section class="contact-section" id="contact">
+    <div class="container position-relative z-1">
+        <div class="row g-5">
+
+            <!-- FAQ card -->
+            <div class="col-12 col-lg-6">
+                <!-- Section header -->
+                <div class="mb-4">
+                    <p class="section-subtitle">Faq</p>
+                    <h2 class="section-title">Asked Any Questions</h2>
+                </div>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                How does Navafiz help employers find professionals?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Navafiz allows employers and recruiters to browse verified professional profiles,
+                                    post job listings, and connect directly with qualified candidates. Our platform
+                                    makes it easy to filter by skills, experience, and industry to find the right talent
+                                    quickly.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Is registration required to use the platform?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Yes. Creating an account allows you to access full features such as posting jobs,
+                                    applying for positions, managing applications, and connecting with professionals
+                                    securely.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                How can I apply for jobs on Navafiz?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Job seekers can create a professional profile, upload their details, and apply
+                                    directly to available job listings. Once applied, employers can review your profile
+                                    and contact you for the next steps.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Can freelancers find short-term or project-based work?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Yes. Freelancers can explore assignment-based opportunities and connect with
+                                    businesses looking for short-term or specialized support. You can showcase your
+                                    expertise and get matched with relevant projects.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact card -->
+            <div class="col-12 col-lg-6">
+                <div class="card contact-card">
+                    <!-- Section header -->
+                    <div>
+                        <p class="section-subtitle">Let’s talk</p>
+                        <h2 class="section-title">Get In Touch With us</h2>
+                    </div>
+                    <div class="form-group"> <span class="successmessage">
+                            <?php echo $this->session->flashdata('msg'); ?>
+                        </span> </div>
+                    <div class="form-group"> <span class="errormessage">
+                            <?php echo $this->session->flashdata('errormsg'); ?>
+                        </span> </div>
+                    <form class="row g-3" action="<?= base_url() ?>sendcontact" method="post">
+                        <div class="col-12 col-lg-6">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="email" class="form-label">E-Mail</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject" required>
+                        </div>
+                        <div class="col-12 col-lg-12">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" rows="3" id="message" name="message" required></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" value="Send Message" class="btn btn-submit">Submit Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- CREATE TABLE `jb_resume_submissions` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(150) NOT NULL,
@@ -759,6 +759,10 @@
                             <input type="text" class="form-control required-field" id="profession" name="profession">
                         </div>
                         <div class="col-12 col-lg-6">
+                            <label for="email" class="form-label required-label">E-mail</label>
+                            <input type="email" class="form-control required-field" id="email" name="email">
+                        </div>
+                        <div class="col-12 col-lg-6">
                             <label for="phone" class="form-label required-label">WhatsApp Number</label>
                             <input type="text" class="form-control required-field" id="phone" name="phone">
                         </div>
@@ -784,7 +788,7 @@
                     </div>
 
                     <div class="mt-3 text-end">
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="submit" id="resumeSubmitBtn" class="btn btn-primary">Upload</button>
                     </div>
                     <?php echo form_close(); ?>
                 </div>

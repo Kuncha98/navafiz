@@ -42,17 +42,20 @@ if (!$avatar) {
         <!-- Desktop Menu -->
         <div class="collapse navbar-collapse justify-content-between d-none d-lg-flex" id="navbarNav">
             <ul class="navbar-nav align-items-lg-center">
-                <li class="nav-item"><a class="nav-link" href="<?= site_url('premium-services') ?>">
-                        <i class="fas fa-shopping-bag"></i>Premium Services</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="<?= site_url('premium-services') ?>">
+                        <i class="fas fa-shopping-bag"></i>Premium Services</a></li> -->
 
-                <li class="nav-item"><a class="nav-link" href="<?= site_url('feed'); ?>"><i
-                            class="fas fa-home"></i>Feed</a></li>
+                <!-- <li class="nav-item"><a class="nav-link" href="<?= site_url('feed'); ?>"><i
+                            class="fas fa-home"></i>Feed</a></li> -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#JobSeekers" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="fas fa-briefcase"></i> Job Seekers
                     </a>
                     <ul class="dropdown-menu" id="JobSeekers">
+                        <li><a class="dropdown-item" href="<?= site_url('feed') ?>">Opportunities</a>
+                        <li><a class=" dropdown-item" href="<?= site_url('premium-services') ?>">Premium Services</a>
+                        </li>
                         <li><a class="dropdown-item"
                                 href="<?= $is_logged ? site_url('job-seeker-support-system') : site_url('user/login?return_url=' . current_url()) ?>">Job
                                 Seekers
@@ -66,45 +69,56 @@ if (!$avatar) {
                                 href="<?= $is_logged ? site_url('find-job') : site_url('user/login?return_url=' . current_url()) ?>">Find
                                 a Job</a>
                         </li>
-                        <li><a class=" dropdown-item"
-                                href="<?= $is_logged ? site_url('events') : site_url('user/login?return_url=' . current_url()) ?>">Events</a>
-                        </li>
-                    </ul>
                 </li>
-                <li class=" nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#Recruiters" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fas fa-file-alt"></i> Recruiters
-                    </a>
-                    <ul class="dropdown-menu" id="Recruiters">
-                        <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('professionals') : site_url('user/login?return_url=' . current_url()) ?>">Find
-                                Professionals</a>
-                        </li>
-                        <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('place-job') : site_url('user/login?return_url=' . current_url()) ?>">Post
-                                a Job</a>
-                        </li>
-                        <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('recruiters-support-system') : site_url('user/login?return_url=' . current_url()) ?>">Recruiters
-                                Support</a></li>
-                        <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('users_list/users_by_list/82') : site_url('user/login?return_url=' . current_url()) ?>">Featured
-                                Profiles</a>
-                        </li>
-                    </ul>
+                <li><a class=" dropdown-item"
+                        href="<?= $is_logged ? site_url('events') : site_url('user/login?return_url=' . current_url()) ?>">Events</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#TrainerCoachMentor" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-users"></i> Trainer / Coach / Mentor
-                    </a>
-                    <ul class="dropdown-menu" id="TrainerCoachMentor">
-                        <li><a class="dropdown-item"
-                                href="<?= $is_logged ? site_url('mentors') : site_url('user/login?return_url=' . current_url()) ?>">Navafiz
-                                Mentor</a></li>
-                    </ul>
-                </li>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#uploadResumeModal">
+                    Upload Resume
+                </button>
+            </ul>
+            </li>
+            <li class=" nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#Recruiters" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fas fa-file-alt"></i> Recruiters
+                </a>
+                <ul class="dropdown-menu" id="Recruiters">
+                    <li><a class="dropdown-item" href="<?= site_url('feed') ?>">Opportunities</a>
+                    <li><a class=" dropdown-item" href="<?= site_url('premium-services') ?>">Premium Services</a>
+                    </li>
+                    <li><a class="dropdown-item"
+                            href="<?= $is_logged ? site_url('professionals') : site_url('user/login?return_url=' . current_url()) ?>">Find
+                            Professionals</a>
+                    </li>
+                    <li><a class="dropdown-item"
+                            href="<?= $is_logged ? site_url('place-job') : site_url('user/login?return_url=' . current_url()) ?>">Post
+                            a Job</a>
+                    </li>
+                    <li><a class="dropdown-item"
+                            href="<?= $is_logged ? site_url('recruiters-support-system') : site_url('user/login?return_url=' . current_url()) ?>">Recruiters
+                            Support</a></li>
+                    <li><a class="dropdown-item"
+                            href="<?= $is_logged ? site_url('users_list/users_by_list/82') : site_url('user/login?return_url=' . current_url()) ?>">Featured
+                            Profiles</a>
+                    </li>
+            </li>
+            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#uploadResumeModal">
+                Upload Resume
+            </button>
+            </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#TrainerCoachMentor" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fas fa-users"></i> Trainer / Coach / Mentor
+                </a>
+                <ul class="dropdown-menu" id="TrainerCoachMentor">
+                    <li><a class="dropdown-item"
+                            href="<?= $is_logged ? site_url('mentors') : site_url('user/login?return_url=' . current_url()) ?>">Navafiz
+                            Mentor</a></li>
+                </ul>
+            </li>
             </ul>
             <ul class="navbar-nav align-items-lg-center">
                 <?php if ($is_logged): ?>
@@ -178,8 +192,7 @@ if (!$avatar) {
                                 <a class="dropdown-item" href="<?= site_url('education'); ?>">Add Education</a>
                                 <a class="dropdown-item" href="<?= site_url('skills'); ?>">Add Skills</a>
                                 <a class="dropdown-item" href="<?= site_url('employment'); ?>">Add Experience</a>
-                                <a class="dropdown-item"
-                                    href="<?= site_url('job_portals/index/' . $session_user_id); ?>">Add Job
+                                <a class="dropdown-item" href="<?= site_url('job_portals/index/' . $user_id); ?>">Add Job
                                     Portals</a>
                             </li>
                             <li class="nav-list">
@@ -196,13 +209,15 @@ if (!$avatar) {
                                     <a class="dropdown-item" href="<?= site_url('recruitment_projects/'); ?>">Recruitment
                                         Project
                                         Contacts</a>
-                                    <a class="dropdown-item" href="<?= site_url('feed/pending'); ?>">View
+                                    <!-- <a class="dropdown-item" href="<?= site_url('feed/pending'); ?>">View
                                         pending feed
                                         posts</a>
                                     <a class="dropdown-item" href="<?= site_url('orders/'); ?>">View Service
                                         Orders</a>
                                     <a class="dropdown-item" href="<?= site_url('services/manpower-job-quota'); ?>">Manpower Job
                                         Quota</a>
+                                    <a class="dropdown-item" href="<?= site_url('uploaded-resumes'); ?>">View Uploaded
+                                        Resumes</a> -->
                                 <?php } ?>
                             </li>
                             <li>

@@ -4,7 +4,7 @@
         <!-- Page header -->
         <div class="mb-4">
             <p class="section-subtitle">Submit your recruitment requirements to connect with qualified candidates</p>
-            <h2 class="section-title">Tell Us Your Hiring Requirements</h2>
+            <h2 class="section-title">Employer Hiring Request Form (For Companies Only)</h2>
         </div>
 
         <!-- Form card -->
@@ -52,7 +52,7 @@
                         <input type="text" id="mobile" name="mobile" class="form-control required-field">
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="email" class="form-label required-label">Email</label>
+                        <label for="email" class="form-label required-label">Company Email</label>
                         <input type="email" id="email" name="email" class="form-control required-field">
                     </div>
                     <div class="col-md-6 mb-3">
@@ -255,3 +255,52 @@ CREATE TABLE `jb_job_requests` (
 `status` tinyint(1) DEFAULT '1',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci; -->
+
+<div class="modal fade" id="userTypeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center p-4">
+
+            <h4 class="mb-3">Are you an Employer / Recruiter?</h4>
+
+            <div class="d-flex justify-content-center gap-3 mt-3">
+                <button id="btnYes" class="btn btn-success px-4">
+                    Yes, proceed
+                </button>
+
+                <button id="btnNo" class="btn btn-outline-danger px-4">
+                    No, I am a Job Seeker
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#userTypeModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        $('#userTypeModal').modal('show');
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        // YES → just close modal
+        $('#btnYes').click(function () {
+            $('#userTypeModal').modal('hide');
+        });
+
+        // NO → redirect
+        $('#btnNo').click(function () {
+            window.location.href = "<?= base_url('services/find-a-job'); ?>";
+        });
+
+    });
+</script>

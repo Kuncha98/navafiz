@@ -87,7 +87,15 @@ class Feed extends CI_Controller
 
     function post()
     {
-        LoginCheck(site_url('login'), current_url());
+        // LoginCheck(site_url('login'), current_url());
+
+        if (!$this->session->userdata('user_id')) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Please log in to your account to create a post on your feed.'
+            ]);
+            return;
+        }
 
         if (isset($_FILES['feed_image']['name'])) {
 
@@ -122,10 +130,22 @@ class Feed extends CI_Controller
                 $data['approval_status'] = 0;
             }
 
+            // if ($this->feed_model->Save($data)) {
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+
             if ($this->feed_model->Save($data)) {
-                return true;
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Post published successfully! Your post will appear on the feed once it is approved by a mentor.'
+                ]);
             } else {
-                return false;
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Something went wrong. Please try again.'
+                ]);
             }
         }
     }
@@ -256,17 +276,51 @@ class Feed extends CI_Controller
 
             if (!$exists) {
 
-                $reward = [
-                    'user_id' => $feed->user_id,
-                    'feed_id' => $feed_id,
-                    'points' => 10,
-                    'action_type' => 'post_approved',
-                    'status' => REWARD_STATUS_PENDING,
-                    'created_at' => datenow(),
-                    'created_by' => $this->session_user_id
-                ];
+                // Use post created date (NOT approval date)
+                $post_date = date('Y-m-d', strtotime($feed->added_on));
 
-                $this->feed_model->add_reward_points($reward);
+                // Count rewarded posts created on same day
+                $sql = "
+                    SELECT COUNT(rp.id) AS total
+                    FROM jb_reward_points rp
+                    JOIN jb_feed f ON f.feed_id = rp.feed_id
+                    WHERE rp.user_id = ?
+                    AND rp.action_type = 'post_approved'
+                    AND DATE(f.added_on) = ?
+                ";
+
+                $row = $this->db->query($sql, array($feed->user_id, $post_date))->row();
+
+                if ($row && $row->total < 5) {
+
+                    $reward = array(
+                        'user_id' => $feed->user_id,
+                        'feed_id' => $feed_id,
+                        'points' => 10,
+                        'action_type' => 'post_approved',
+                        'status' => REWARD_STATUS_PENDING,
+                        'created_at' => datenow(),
+                        'created_by' => $this->session_user_id
+                    );
+
+                    $this->feed_model->add_reward_points($reward);
+
+                } else {
+                    // Optional logging
+                    log_message('info', 'Reward skipped. Daily post reward limit reached for user ' . $feed->user_id);
+                }
+
+                // $reward = [
+                //     'user_id' => $feed->user_id,
+                //     'feed_id' => $feed_id,
+                //     'points' => 10,
+                //     'action_type' => 'post_approved',
+                //     'status' => REWARD_STATUS_PENDING,
+                //     'created_at' => datenow(),
+                //     'created_by' => $this->session_user_id
+                // ];
+
+                // $this->feed_model->add_reward_points($reward);
             }
         }
 
