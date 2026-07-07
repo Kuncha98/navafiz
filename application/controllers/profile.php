@@ -298,8 +298,8 @@ class Profile extends CI_Controller
         $getrow = $this->db->get('jb_member')->row();
 
         if (empty($getrow)) {
-            print_r($getrow);
-            exit;
+            // print_r($getrow);
+            // exit;
             _setError('No Profile Exist with Provide data');
             redirect(site_url('login'));
         }

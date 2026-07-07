@@ -15,8 +15,10 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Profession</th>
+                    <th>Email</th>
                     <th>Phone</th>
                     <th>Resume</th>
+                    <th>Profile</th>
                     <th>Submitted</th>
                     <!-- <th>Actions</th> -->
                 </tr>
@@ -39,6 +41,9 @@
                                 <?php echo $row->profession; ?>
                             </td>
                             <td>
+                                <?php echo $row->email; ?>
+                            </td>
+                            <td>
                                 <?php echo $row->phone; ?>
                             </td>
                             <td>
@@ -47,6 +52,12 @@
                                         data-file="<?= base_url('navassets/uploads/cv/' . $row->cv); ?>">
                                         Preview CV
                                     </button>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($row->profile_link)): ?>
+                                    <a href="<?= base_url('n/' . $row->profile_link); ?>" class="btn btn-sm btn-outline-primary"
+                                        role="button"> View </a>
                                 <?php endif; ?>
                             </td>
                             <td>

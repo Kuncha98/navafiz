@@ -341,6 +341,51 @@
                     </div>
                 `;
 
+                        // Populate modal
+                        $('#r_name').text(data.data.name);
+                        $('#r_email').text(data.data.email);
+                        $('#r_phone').text(data.data.phone);
+                        $('#r_password').text(data.data.password);
+
+                        $('#r_profile_link').html(
+                            `<a href="${data.data.profile_link}" target="_blank">
+            ${data.data.profile_link}
+        </a>`
+                        );
+
+                        const credentialMessage = `
+Dear ${data.data.name},
+
+We are pleased to inform you that your candidate profile has been successfully approved on Navafiz.
+
+Your login credentials are as follows:
+
+Email: ${data.data.email}
+Password: ${data.data.password}
+
+Profile URL: ${data.data.profile_link}
+
+You can access your account and manage your profile using the links below:
+Navafiz Login: https://www.navafiz.com/login
+
+For security reasons, we strongly recommend that you change your password upon your first login:
+Change Password: https://www.navafiz.com/user/change_password
+
+If you require any assistance, please feel free to contact our support team.
+
+Thank you,
+Navafiz Team
+`;
+
+                        $('#r_message').text(credentialMessage);
+
+                        // Show modal
+                        const statusModal = new bootstrap.Modal(
+                            document.getElementById('resumeStatusModal')
+                        );
+
+                        statusModal.show();
+
                         setTimeout(() => {
                             modal.hide();
                             form.reset();
@@ -353,7 +398,7 @@
                             // Enable button again
                             submitBtn.disabled = false;
                             submitBtn.innerHTML = 'Upload';
-                        }, 2000);
+                        }, 30000);
 
                     } else {
 
@@ -385,6 +430,33 @@
 
             });
 
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tooltipTrigger = document.querySelector('#copy_btn');
+            const tooltip = new bootstrap.Tooltip(tooltipTrigger);
+        });
+
+        document.getElementById("copy_btn").addEventListener("click", function () {
+            const text = document.getElementById("r_message").innerText;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = this;
+
+                // Change tooltip text
+                btn.setAttribute("data-bs-original-title", "Copied!");
+
+                const tooltipInstance = bootstrap.Tooltip.getInstance(btn);
+                tooltipInstance.show();
+
+                // Reset after 1.5s
+                setTimeout(() => {
+                    tooltipInstance.hide();
+                    btn.setAttribute("data-bs-original-title", "Copy");
+                }, 1500);
+            });
         });
     </script>
 

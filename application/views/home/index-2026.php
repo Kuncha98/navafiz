@@ -797,6 +797,145 @@
     </div>
 </div>
 
+<!-- <div class="modal fade" id="resumeStatusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal border-0 shadow-lg">
+
+            <div class="modal-header border-0">
+                <div>
+                    <h5 class="modal-title fw-semibold mb-1">Account Created Successfully</h5>
+                    <span id="r_status" class="badge bg-success">
+                        Profile approved & member account created
+                    </span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="info-group">
+
+                    <div class="info-item mb-2">
+                        <strong>Name:</strong>
+                        <span id="r_name"></span>
+                    </div>
+
+                    <div class="info-item mb-2">
+                        <strong>Email:</strong>
+                        <span id="r_email"></span>
+                    </div>
+
+                    <div class="info-item mb-2">
+                        <strong>Phone:</strong>
+                        <span id="r_phone"></span>
+                    </div>
+
+                    <div class="info-item mb-2">
+                        <strong>Password:</strong>
+                        <span id="r_password" class="text-danger fw-bold"></span>
+                    </div>
+
+                    <div class="info-item mb-2">
+                        <strong>Profile Link:</strong>
+                        <div id="r_profile_link"></div>
+                    </div>
+
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    Please save these credentials. You will need them to log in to your Navafiz account.
+                </div>
+
+                <div class="border rounded p-3 bg-light">
+                    <pre id="r_message" style="white-space: pre-wrap;margin:0;"></pre>
+                </div>
+
+            </div>
+
+            <div class="modal-footer border-0">
+
+                <button type="button" id="copyResumeCredentials" class="btn btn-outline-primary">
+                    Copy Credentials
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div> -->
+
+
+<!-- Created user details modal -->
+<div class="modal fade" id="resumeStatusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modern-modal border-0 shadow-lg">
+
+            <!-- HEADER -->
+            <div class="modal-header border-0">
+                <div>
+                    <h5 class="modal-title fw-semibold mb-1">User Details</h5>
+                    <span id="r_status" class="status-badge">
+                        Member account created
+                    </span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body pt-2">
+
+                <div class="info-group">
+                    <div class="info-item">
+                        <span class="label">Name</span>
+                        <span id="r_name" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Phone</span>
+                        <span id="r_phone" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Email</span>
+                        <span id="r_email" class="value"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Password</span>
+                        <span id="r_password" class="value text-danger fw-semibold"></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="label">Profile Link</span>
+                        <span id="r_profile_link" class="value text-primary fw-semibold"></span>
+                    </div>
+                </div>
+
+                <!-- Credential Box -->
+                <div class="credential-box mt-3">
+                    <p id="r_message" class="mb-0"></p>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 d-flex">
+
+                <button type="button" id="copy_btn" class="btn btn-light modern-btn px-3 py-2" data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Copy">
+                    <i class="fas fa-copy me-1"></i> Copy
+                </button>
+
+                <!-- <a href="#" target="_blank" id="whatsapp_btn" class="btn btn-success modern-btn">
+                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                </a> -->
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <style>
     .testimonial-section {
         background: #fff;
@@ -958,5 +1097,85 @@
         font-size: 14px;
         line-height: 1.6;
         color: #444;
+    }
+
+
+
+
+    /* Modal base */
+    .modern-modal {
+        border-radius: 16px;
+        padding: 10px;
+    }
+
+    /* Status badge */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+        background: rgba(25, 135, 84, 0.1);
+        color: #198754;
+        font-weight: 500;
+    }
+
+    /* Info group */
+    .info-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Each row */
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: #f9fafb;
+        border-radius: 10px;
+    }
+
+    /* Labels */
+    .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    /* Values */
+    .value {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #212529;
+    }
+
+    /* Credential message */
+    .credential-box {
+        background: #f1f3f5;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        white-space: pre-line;
+    }
+
+    /* Buttons */
+    .modern-btn {
+        border-radius: 10px;
+        padding: 6px 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .modern-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* Light button */
+    .btn-light {
+        border: 1px solid #e5e7eb;
+        background: #fff;
+    }
+
+    .btn-light:hover {
+        background: #f8f9fa;
     }
 </style>
