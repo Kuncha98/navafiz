@@ -38,6 +38,15 @@ $session_user_id = $this->session->userdata('user_id');
                 value="<?= $profile->m_name ?>">
             </div>
           </div>
+
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <label>Profession</label>
+              <input type="text" placeholder="" class="form-control" name="m_profession"
+                value="<?= $profile->m_profession ?>">
+            </div>
+          </div>
+          
           <div class="col-md-6 col-sm-12">
             <div class="form-group">
               <label>Email</label>
@@ -111,13 +120,7 @@ $session_user_id = $this->session->userdata('user_id');
 
 
 
-          <div class="col-md-6 col-sm-12">
-            <div class="form-group">
-              <label>Profession</label>
-              <input type="text" placeholder="" class="form-control" name="m_profession"
-                value="<?= $profile->m_profession ?>">
-            </div>
-          </div>
+         
           <div class="col-md-6 col-sm-12">
             <div class="form-group">
               <label>Experience</label>

@@ -9,9 +9,10 @@
                 Navafiz Management Consultancies, established in 2013, specializes in recruitment services in the
                 U.A.E.
             </p>
-            <a href="#services" class="btn btn-start">Get Started</a>
+            <a href="<?= site_url('/user/register') ?>" class=" btn btn-start">Create Candidate Profile</a>
+            <!-- <a href="#services" class="btn btn-start">Get Started</a>
             <a href="<?= site_url('professionals') ?>" class="btn btn-start ms-sm-3 mt-3 mt-sm-0">Find Professionals</a>
-            <a href="<?= site_url('feed'); ?>" class="btn btn-start ms-sm-3 mt-3 mt-sm-0">Find Jobs</a>
+            <a href="<?= site_url('feed'); ?>" class="btn btn-start ms-sm-3 mt-3 mt-sm-0">Find Jobs</a> -->
         </div>
     </div>
 </section>
@@ -30,14 +31,14 @@
         <ul class="nav nav-pills services-tabs mb-5 flex-column flex-lg-row" id="servicesTab" role="tablist">
 
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#hire">
-                    <i class="fas fa-credit-card"></i> Hire Talents
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#job">
+                    <i class="fas fa-file-invoice-dollar"></i> Find a Job
                 </button>
             </li>
 
             <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#job">
-                    <i class="fas fa-file-invoice-dollar"></i> Find a Job
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#hire">
+                    <i class="fas fa-credit-card"></i> Hire Talents
                 </button>
             </li>
 
@@ -65,7 +66,49 @@
         <div class="tab-content">
 
             <!-- Tab 1 -->
-            <div class="tab-pane fade show active" id="hire">
+            <div class="tab-pane fade show active" id="job">
+                <div class="service-content-wrapper">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold mb-4">Discover Career Opportunities That Match Your Skills</h3>
+                            <p>Explore job openings from trusted employers and apply directly through the platform.
+                                Build your professional profile and get noticed by recruiters actively hiring.</p>
+
+                            <ul class="service-list mt-4">
+                                <li>
+                                    <p>Search jobs by category, location, and experience level</p>
+                                </li>
+                                <li>
+                                    <p>Create a professional profile to attract recruiters</p>
+                                </li>
+                                <li>
+                                    <p>Apply instantly to verified job postings</p>
+                                </li>
+                                <li>
+                                    <p>Track applications and manage your career journey</p>
+                                </li>
+                            </ul>
+
+                            <!-- <a href=" <?= site_url('/services/find-a-job') ?>" class="btn view-btn">Send a request</a>
+
+                            <a href=" <?= site_url('/user/register') ?>" class="btn view-btn">Create a profile</a> -->
+
+                            <button type="button" class="btn view-btn" data-bs-toggle="modal"
+                                data-bs-target="#uploadResumeModal">
+                                Upload Resume
+                            </button>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="service-image-wrapper">
+                                <img src="<?= base_url('navassets/img/find-a-job.jpg') ?>" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2 -->
+            <div class="tab-pane fade" id="hire">
 
                 <div class="service-content-wrapper">
                     <div class="row align-items-center g-5">
@@ -106,48 +149,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <!-- Tab 2 -->
-            <div class="tab-pane fade" id="job">
-                <div class="service-content-wrapper">
-                    <div class="row align-items-center g-5">
-                        <div class="col-lg-6 mb-4 mb-lg-0">
-                            <h3 class="fw-bold mb-4">Discover Career Opportunities That Match Your Skills</h3>
-                            <p>Explore job openings from trusted employers and apply directly through the platform.
-                                Build your professional profile and get noticed by recruiters actively hiring.</p>
-
-                            <ul class="service-list mt-4">
-                                <li>
-                                    <p>Search jobs by category, location, and experience level</p>
-                                </li>
-                                <li>
-                                    <p>Create a professional profile to attract recruiters</p>
-                                </li>
-                                <li>
-                                    <p>Apply instantly to verified job postings</p>
-                                </li>
-                                <li>
-                                    <p>Track applications and manage your career journey</p>
-                                </li>
-                            </ul>
-
-                            <a href=" <?= site_url('/services/find-a-job') ?>" class="btn view-btn">Send a request</a>
-
-                            <a href=" <?= site_url('/user/register') ?>" class="btn view-btn">Create a profile</a>
-
-                            <button type="button" class="btn view-btn" data-bs-toggle="modal"
-                                data-bs-target="#uploadResumeModal">
-                                Upload Resume
-                            </button>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="service-image-wrapper">
-                                <img src="<?= base_url('navassets/img/find-a-job.jpg') ?>" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Tab 3 -->
